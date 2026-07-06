@@ -46,7 +46,8 @@ class IlanController extends Controller
 
         return Ilan::withCount('teklifler')->orderBy('id')->get()
             ->map(fn (Ilan $i) => Sunum::ilan($i))
-            ->sortBy(fn (array $o) => sprintf('%d-%08d', $oncelik[$o['durum']] ?? 9, $o['id']))
+            // Grup önceliği; grup içinde: lot no'su olanlar (açık artırma) lot no'ya göre 1,2,3…
+            ->sortBy(fn (array $o) => sprintf('%d-%08d', $oncelik[$o['durum']] ?? 9, $o['lotNo'] ?? $o['id']))
             ->values();
     }
 }
