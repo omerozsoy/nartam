@@ -7,11 +7,14 @@
         <h1>Kayıt Ol</h1>
         <form method="post" action="{{ route('kayit') }}">
             @csrf
-            <label>Ad
+            <label>Ad Soyad
                 <input type="text" name="name" value="{{ old('name') }}" required autofocus>
             </label>
             <label>E-posta
                 <input type="email" name="email" value="{{ old('email') }}" required>
+            </label>
+            <label>Cep Telefonu
+                <input type="tel" name="telefon" value="{{ old('telefon') }}" placeholder="05xx xxx xx xx" required>
             </label>
             <label>Şifre <small>(en az 6 karakter)</small>
                 <input type="password" name="password" minlength="6" required>

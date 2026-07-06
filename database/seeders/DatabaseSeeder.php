@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
 
         $ilan2 = Ilan::create([
             'baslik' => 'Yağlı Boya Tablo',
+            'lot_no' => 1,
             'alt_baslik' => 'Tuval üzerine, imzalı',
             'baslangic_fiyati' => 12000,
             'saatlik_dusus' => 500,

@@ -11,7 +11,7 @@
                 <div class="yer">İki fazlı · Fiyat düşer, ilk teklifle açık artırma başlar</div>
             </div>
             <div class="satis-eylem">
-                <div class="kapanis">{{ $ilanlar->count() }} lot · canlı</div>
+                <div class="kapanis">{{ $gruplar->flatten(1)->count() }} lot · canlı</div>
                 <div class="butonlar">
                     @guest
                         <a class="btn btn-dolu" href="{{ route('kayit') }}">Kayıt Ol</a>
@@ -23,22 +23,23 @@
             </div>
         </div>
 
-        <div class="sekmeler">
-            <a href="#lotlar" class="aktif">Lotlar ({{ $ilanlar->count() }})</a>
-            <a href="#lotlar">Genel Bakış</a>
-        </div>
-
-        <div class="filtre-pills">
-            <span class="pill"><span class="nokta"></span> Tümü</span>
-            <span class="pill"><span class="nokta"></span> Açık Artırma</span>
-            <span class="pill"><span class="nokta"></span> Düşen Fiyat</span>
-            <span class="pill"><span class="nokta"></span> Antika</span>
-            <span class="pill"><span class="nokta"></span> Sanat</span>
-        </div>
-
-        <main class="lot-izgara" id="lotlar">
-            @foreach ($ilanlar as $ilan)
-                @include('ilanlar._kart', ['ilan' => $ilan])
+        <main id="lotlar">
+            @php($bolumler = ['acik_artirma' => 'Açık Artırma', 'dusuyor' => 'Fiyat Düşüyor', 'kapandi' => 'Kapandı'])
+            @foreach ($bolumler as $durum => $bolumBaslik)
+                @php($grup = $gruplar[$durum] ?? collect())
+                @if ($grup->isNotEmpty())
+                    <section class="lot-bolum">
+                        <h2 class="bolum-baslik">
+                            {{ $bolumBaslik }}
+                            <span>{{ $grup->count() }} lot</span>
+                        </h2>
+                        <div class="lot-izgara">
+                            @foreach ($grup as $ilan)
+                                @include('ilanlar._kart', ['ilan' => $ilan])
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
             @endforeach
         </main>
     </div>

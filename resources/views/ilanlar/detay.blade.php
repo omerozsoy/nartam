@@ -23,7 +23,9 @@
             </div>
 
             <div class="detay-bilgi">
-                <div class="lot-no">LOT {{ $ozet['id'] }}</div>
+                @if ($ozet['lotNo'])
+                    <div class="lot-no">LOT {{ $ozet['lotNo'] }}</div>
+                @endif
                 <h1>{{ $ozet['baslik'] }}</h1>
                 @if ($ozet['altBaslik'])
                     <div class="alt">{{ $ozet['altBaslik'] }}</div>

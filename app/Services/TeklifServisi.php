@@ -38,8 +38,10 @@ class TeklifServisi
         DB::transaction(function () use ($ilan, $kullanici, $miktar, $now, $durum) {
             if ($durum === Durum::DUSUYOR) {
                 // İlk teklif: o anki düşmüş fiyat taban olur, açık artırma başlar.
+                // Ürün artık bir lot; sıradaki lot numarasını alır.
                 $ilan->ilk_teklif_zamani = $now;
                 $ilan->bitis_zamani = $now->addSeconds(Ilan::ACIK_ARTIRMA_SURESI);
+                $ilan->lot_no = (Ilan::max('lot_no') ?? 0) + 1;
             } else {
                 // Anti-snipe: bitişe çok az kala gelen teklif sayacı uzatır.
                 $kalan = $ilan->bitis_zamani->getTimestamp() - $now->getTimestamp();

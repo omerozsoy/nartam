@@ -31,6 +31,7 @@ class Ilan extends Model
 
     protected $fillable = [
         'baslik',
+        'lot_no',
         'gorsel_url',
         'alt_baslik',
         'aciklama',

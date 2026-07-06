@@ -200,6 +200,29 @@ img { max-width: 100%; }
 .pill:hover { border-color: var(--siyah); text-decoration: none; }
 .pill .nokta { width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #d8c7a8, #b9a06a); }
 
+/* ---------- Lot bölümleri ---------- */
+.lot-bolum { margin-bottom: 3rem; }
+
+.bolum-baslik {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.6rem;
+    margin: 2.5rem 0 0;
+    padding-bottom: .8rem;
+    border-bottom: 1px solid var(--cizgi);
+}
+
+.bolum-baslik span {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--soluk);
+}
+
 /* ---------- Lot grid ---------- */
 .lot-izgara {
     display: grid;

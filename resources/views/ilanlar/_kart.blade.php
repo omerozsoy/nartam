@@ -16,7 +16,9 @@
         @endif
     </a>
 
-    <div class="lot-no">LOT {{ $ilan['id'] }}</div>
+    @if ($ilan['lotNo'])
+        <div class="lot-no">LOT {{ $ilan['lotNo'] }}</div>
+    @endif
     <h2 class="lot-baslik"><a href="{{ $detayUrl }}">{{ $ilan['baslik'] }}</a></h2>
     @if ($ilan['altBaslik'])
         <div class="lot-alt">{{ $ilan['altBaslik'] }}</div>

@@ -46,12 +46,16 @@ class KimlikController extends Controller
         $veri = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'telefon' => ['required', 'string', 'regex:/^[0-9+\s()-]{7,20}$/'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ], [
+            'telefon.regex' => 'Geçerli bir cep telefonu girin.',
         ]);
 
         $kullanici = User::create([
             'name' => $veri['name'],
             'email' => $veri['email'],
+            'telefon' => $veri['telefon'],
             'password' => $veri['password'], // model 'hashed' cast'i ile hash'lenir
         ]);
 

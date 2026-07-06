@@ -14,7 +14,7 @@ class IlanController extends Controller
 {
     public function index(): View
     {
-        return view('ilanlar.liste', ['ilanlar' => $this->siraliOzetler()]);
+        return view('ilanlar.liste', ['gruplar' => $this->siraliOzetler()->groupBy('durum')]);
     }
 
     /** Tekil lot (detay) sayfası. */

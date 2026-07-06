@@ -26,6 +26,7 @@ class Sunum
 
         return [
             'id' => $ilan->id,
+            'lotNo' => $ilan->lot_no,
             'baslik' => $ilan->baslik,
             'altBaslik' => $ilan->alt_baslik,
             'gorselUrl' => $ilan->gorsel_url,
