@@ -268,13 +268,19 @@ class YonetimController extends Controller
         $veri = $request->validate([
             'baslik' => ['required', 'string', 'max:255'],
             'alt_baslik' => ['nullable', 'string', 'max:255'],
-            'gorsel_url' => ['nullable', 'url', 'max:1000'],
+            'gorsel_url' => ['nullable', 'string', 'max:1000'],
+            'gorsel_dosya' => ['nullable', 'image', 'max:10240'],
             'aciklama' => ['nullable', 'string', 'max:5000'],
             'baslangic_fiyati' => ['required', 'integer', 'min:1'],
             'saatlik_dusus' => ['required', 'integer', 'min:1'],
             'dusus_periyodu' => ['required', 'integer', 'in:1,60,3600'],
             'rezerv_fiyat' => ['required', 'integer', 'min:0', 'lte:baslangic_fiyati'],
         ]);
+
+        unset($veri['gorsel_dosya']);
+        if ($request->hasFile('gorsel_dosya')) {
+            $veri['gorsel_url'] = $this->gorselYukle($request->file('gorsel_dosya'), 'eser');
+        }
 
         Ilan::create([
             ...$veri,
@@ -294,13 +300,19 @@ class YonetimController extends Controller
         $veri = $request->validate([
             'baslik' => ['required', 'string', 'max:255'],
             'alt_baslik' => ['nullable', 'string', 'max:255'],
-            'gorsel_url' => ['nullable', 'url', 'max:1000'],
+            'gorsel_url' => ['nullable', 'string', 'max:1000'],
+            'gorsel_dosya' => ['nullable', 'image', 'max:10240'],
             'aciklama' => ['nullable', 'string', 'max:5000'],
             'baslangic_fiyati' => ['required', 'integer', 'min:1'],
             'saatlik_dusus' => ['required', 'integer', 'min:1'],
             'dusus_periyodu' => ['required', 'integer', 'in:1,60,3600'],
             'rezerv_fiyat' => ['required', 'integer', 'min:0', 'lte:baslangic_fiyati'],
         ]);
+
+        unset($veri['gorsel_dosya']);
+        if ($request->hasFile('gorsel_dosya')) {
+            $veri['gorsel_url'] = $this->gorselYukle($request->file('gorsel_dosya'), 'eser-' . $ilan->id);
+        }
 
         $ilan->update($veri);
 
@@ -313,6 +325,31 @@ class YonetimController extends Controller
         $ilan->delete(); // teklifler cascade ile silinir
 
         return back()->with('basari', 'İlan silindi: ' . $baslik);
+    }
+
+    /** Yüklenen görseli web boyutuna küçültüp public/urunler'e kaydeder, /urunler/... yolu döner. */
+    private function gorselYukle(\Illuminate\Http\UploadedFile $dosya, string $adBazi): string
+    {
+        $dizin = public_path('urunler');
+        if (!is_dir($dizin)) {
+            mkdir($dizin, 0777, true);
+        }
+
+        $img = imagecreatefromstring((string) file_get_contents($dosya->getRealPath()));
+        $w = imagesx($img);
+        $h = imagesy($img);
+        $maxG = 900;
+        if ($w > $maxG) {
+            $kucuk = imagescale($img, $maxG, (int) round($h * $maxG / $w));
+            imagedestroy($img);
+            $img = $kucuk;
+        }
+
+        $ad = $adBazi . '-' . substr(md5(uniqid('', true)), 0, 6) . '.jpg';
+        imagejpeg($img, $dizin . '/' . $ad, 82);
+        imagedestroy($img);
+
+        return '/urunler/' . $ad;
     }
 
     /** Üyeler (kayıtlı kullanıcılar). */

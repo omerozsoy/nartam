@@ -8,7 +8,7 @@
 
         <section class="kart">
             <h2>{{ $ilan->baslik }}</h2>
-            <form method="post" action="{{ route('yonetim.ilan.guncelle', $ilan) }}" class="izgara-form">
+            <form method="post" action="{{ route('yonetim.ilan.guncelle', $ilan) }}" enctype="multipart/form-data" class="izgara-form">
                 @csrf
                 <label class="genis">Başlık
                     <input type="text" name="baslik" value="{{ old('baslik', $ilan->baslik) }}" required>
@@ -16,9 +16,20 @@
                 <label class="genis">Alt Başlık
                     <input type="text" name="alt_baslik" value="{{ old('alt_baslik', $ilan->alt_baslik) }}">
                 </label>
-                <label class="genis">Görsel URL
-                    <input type="url" name="gorsel_url" value="{{ old('gorsel_url', $ilan->gorsel_url) }}" placeholder="https://...">
-                </label>
+                <div class="genis gorsel-alan">
+                    <span class="etiket">Görsel</span>
+                    @if ($ilan->gorsel_url)
+                        <img src="{{ $ilan->gorsel_url }}" alt="" class="gorsel-onizleme">
+                    @else
+                        <span class="alt-not">Görsel yok</span>
+                    @endif
+                    <label>Görsel yolu / URL
+                        <input type="text" name="gorsel_url" value="{{ old('gorsel_url', $ilan->gorsel_url) }}" placeholder="/urunler/lot-1.jpg veya https://...">
+                    </label>
+                    <label>Bilgisayardan görsel yükle
+                        <input type="file" name="gorsel_dosya" accept="image/*">
+                    </label>
+                </div>
                 <label class="genis">Açıklama
                     <textarea name="aciklama" rows="3">{{ old('aciklama', $ilan->aciklama) }}</textarea>
                 </label>

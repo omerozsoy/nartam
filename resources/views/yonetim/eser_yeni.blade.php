@@ -7,7 +7,7 @@
         <h1>Yeni Eser Ekle</h1>
 
         <section class="kart">
-            <form method="post" action="{{ route('yonetim.ilan') }}" class="izgara-form">
+            <form method="post" action="{{ route('yonetim.ilan') }}" enctype="multipart/form-data" class="izgara-form">
                 @csrf
                 <label class="genis">Başlık
                     <input type="text" name="baslik" value="{{ old('baslik') }}" required autofocus>
@@ -15,8 +15,11 @@
                 <label class="genis">Alt Başlık (eser/kısa açıklama)
                     <input type="text" name="alt_baslik" value="{{ old('alt_baslik') }}">
                 </label>
-                <label class="genis">Görsel URL
-                    <input type="url" name="gorsel_url" value="{{ old('gorsel_url') }}" placeholder="https://...">
+                <label class="genis">Görsel yolu / URL
+                    <input type="text" name="gorsel_url" value="{{ old('gorsel_url') }}" placeholder="/urunler/lot-1.jpg veya https://...">
+                </label>
+                <label class="genis">Bilgisayardan görsel yükle
+                    <input type="file" name="gorsel_dosya" accept="image/*">
                 </label>
                 <label class="genis">Açıklama
                     <textarea name="aciklama" rows="3">{{ old('aciklama') }}</textarea>
