@@ -310,9 +310,18 @@ img { max-width: 100%; }
 .durum-acik_artirma .rozet { border-color: #1a1a1a; color: #1a1a1a; }
 .durum-kapandi { opacity: .55; }
 
-.sayac-etiket { font-size: 10px; letter-spacing: .09em; text-transform: uppercase; color: var(--soluk); margin: .4rem 0 0; }
-.sayac { font-size: 1.05rem; font-variant-numeric: tabular-nums; margin: .1rem 0 .3rem; }
-.lot.kritik .sayac { color: var(--kritik); }
+.sayac-etiket { font-size: 10px; letter-spacing: .09em; text-transform: uppercase; color: var(--soluk); margin: .4rem 0 .35rem; }
+.sayac {
+    font-size: 2rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .03em;
+    text-align: center;
+    background: #fafafa;
+    border: 1px solid var(--cizgi);
+    padding: .55rem .4rem;
+    margin: 0 0 .5rem;
+}
+.kritik .sayac { color: var(--kritik); border-color: var(--kritik); background: #fdf3f2; }
 
 .lot-butonlar { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .8rem; }
 
