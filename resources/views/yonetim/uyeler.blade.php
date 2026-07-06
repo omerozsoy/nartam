@@ -1,11 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.yonetim')
 
 @section('baslik', 'Üyeler')
 
 @section('content')
     <main class="yonetim">
         <h1>Üyeler</h1>
-        @include('yonetim._nav')
 
         <section class="kart">
             <p class="alt-not">Toplam {{ $uyeler->count() }} üye.</p>

@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.yonetim')
 
 @section('baslik', 'Üye · ' . $uye->name)
 
 @section('content')
     <main class="yonetim">
         <h1>{{ $uye->name }} @if ($uye->engelli)<span class="rozet rozet-kapandi">Engelli</span>@endif</h1>
-        @include('yonetim._nav')
+        <p class="alt-not" style="margin-bottom:1rem"><a href="{{ route('yonetim.uyeler') }}">‹ Üyeler</a></p>
 
         <section class="kart">
             <table class="tablo">

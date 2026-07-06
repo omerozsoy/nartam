@@ -1,11 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.yonetim')
 
-@section('baslik', 'İlan Düzenle')
+@section('baslik', 'Eser Düzenle')
 
 @section('content')
     <main class="yonetim">
-        <h1>İlan Düzenle</h1>
-        @include('yonetim._nav')
+        <h1>Eser Düzenle</h1>
 
         <section class="kart">
             <h2>{{ $ilan->baslik }}</h2>
@@ -34,7 +33,7 @@
                 </label>
                 <button type="submit" class="btn btn-dolu">Kaydet</button>
             </form>
-            <p class="alt-not"><a href="{{ route('yonetim') }}">‹ İlanlara dön</a></p>
+            <p class="alt-not"><a href="{{ route('yonetim.eserler') }}">‹ Eserlere dön</a></p>
         </section>
     </main>
 @endsection

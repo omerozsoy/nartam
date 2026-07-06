@@ -1,11 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.yonetim')
 
 @section('baslik', 'Teklifler')
 
 @section('content')
     <main class="yonetim">
         <h1>Teklifler @if ($ilan)<small style="font-size:1rem;color:var(--soluk)">· {{ $ilan->baslik }}</small>@endif</h1>
-        @include('yonetim._nav')
 
         <section class="kart">
             <p class="alt-not">

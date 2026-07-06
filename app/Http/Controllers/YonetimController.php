@@ -15,10 +15,11 @@ use Illuminate\View\View;
 
 class YonetimController extends Controller
 {
+    /** Panel (dashboard) — özet istatistik. */
     public function index(): View
     {
-        $ilanlar = Ilan::withCount('teklifler')->orderBy('id')->get()
-            ->map(fn (Ilan $i) => Sunum::ilan($i) + ['teklifSayisi' => $i->teklifler_count]);
+        $ilanlar = Ilan::withCount('teklifler')->get()
+            ->map(fn (Ilan $i) => Sunum::ilan($i));
 
         $istatistik = [
             'uye' => User::where('rol', '!=', 'yonetici')->count(),
@@ -29,7 +30,16 @@ class YonetimController extends Controller
             'toplamDeger' => number_format((int) $ilanlar->sum('guncelFiyat'), 0, ',', '.') . ' ₺',
         ];
 
-        return view('yonetim.index', ['ilanlar' => $ilanlar, 'istatistik' => $istatistik]);
+        return view('yonetim.panel', ['istatistik' => $istatistik]);
+    }
+
+    /** Eserler — liste + yeni eser formu. */
+    public function eserler(): View
+    {
+        $ilanlar = Ilan::withCount('teklifler')->orderBy('id')->get()
+            ->map(fn (Ilan $i) => Sunum::ilan($i) + ['teklifSayisi' => $i->teklifler_count]);
+
+        return view('yonetim.eserler', ['ilanlar' => $ilanlar]);
     }
 
     /** Üye detayı: bilgileri, adresleri, teklifleri. */
@@ -95,7 +105,7 @@ class YonetimController extends Controller
 
         $ilan->update($veri);
 
-        return redirect()->route('yonetim')->with('basari', 'İlan güncellendi: ' . $ilan->baslik);
+        return redirect()->route('yonetim.eserler')->with('basari', 'Eser güncellendi: ' . $ilan->baslik);
     }
 
     public function ilanSil(Ilan $ilan): RedirectResponse

@@ -1,23 +1,13 @@
-@extends('layouts.app')
+@extends('layouts.yonetim')
 
-@section('baslik', 'Yönetim')
+@section('baslik', 'Eserler')
 
 @section('content')
     <main class="yonetim">
-        <h1>Yönetim Paneli</h1>
-        @include('yonetim._nav')
-
-        <div class="istatistik">
-            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['uye'] }}</span><span class="etiket">Üye</span></div>
-            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['ilan'] }}</span><span class="etiket">İlan</span></div>
-            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['acikArtirma'] }}</span><span class="etiket">Açık Artırma</span></div>
-            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['dusuyor'] }}</span><span class="etiket">Düşen Fiyat</span></div>
-            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['teklif'] }}</span><span class="etiket">Teklif</span></div>
-            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['toplamDeger'] }}</span><span class="etiket">Toplam Değer</span></div>
-        </div>
+        <h1>Eserler</h1>
 
         <section class="kart">
-            <h2>Yeni İlan</h2>
+            <h2>Yeni Eser</h2>
             <form method="post" action="{{ route('yonetim.ilan') }}" class="izgara-form">
                 @csrf
                 <label class="genis">Başlık
@@ -41,13 +31,13 @@
                 <label>Rezerv (Taban) Fiyat (₺)
                     <input type="number" name="rezerv_fiyat" min="0" value="{{ old('rezerv_fiyat', 500) }}" required>
                 </label>
-                <button type="submit" class="btn btn-dolu">İlan Oluştur</button>
+                <button type="submit" class="btn btn-dolu">Eser Oluştur</button>
             </form>
-            <p class="alt-not">İlan hemen "düşen fiyat" fazında başlar; ilk teklifle açık artırmaya döner.</p>
+            <p class="alt-not">Eser hemen "düşen fiyat" fazında başlar; ilk teklifle açık artırmaya döner.</p>
         </section>
 
         <section class="kart">
-            <h2>Mevcut İlanlar</h2>
+            <h2>Mevcut Eserler</h2>
             <table class="tablo">
                 <thead>
                 <tr><th>#</th><th>Lot</th><th>Başlık</th><th>Durum</th><th>Güncel Fiyat</th><th>Teklif</th><th></th></tr>
@@ -70,7 +60,7 @@
                         <td style="white-space:nowrap">
                             <a href="{{ route('yonetim.ilan.duzenle', $ilan['id']) }}">Düzenle</a>
                             <form method="post" action="{{ route('yonetim.ilan.sil', $ilan['id']) }}" style="display:inline;margin-left:.6rem"
-                                  onsubmit="return confirm('Bu ilanı ve tekliflerini silmek istediğinize emin misiniz?')">
+                                  onsubmit="return confirm('Bu eseri ve tekliflerini silmek istediğinize emin misiniz?')">
                                 @csrf
                                 <button type="submit" class="baglanti-buton" style="color:var(--kritik)">Sil</button>
                             </form>

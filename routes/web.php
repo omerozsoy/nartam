@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
 // Yönetim paneli (yalnızca yönetici)
 Route::middleware(['auth', 'yonetici'])->prefix('yonetim')->group(function () {
     Route::get('/', [YonetimController::class, 'index'])->name('yonetim');
+    Route::get('/eserler', [YonetimController::class, 'eserler'])->name('yonetim.eserler');
     Route::post('/ilan', [YonetimController::class, 'ilanOlustur'])->name('yonetim.ilan');
     Route::get('/ilan/{ilan}/duzenle', [YonetimController::class, 'ilanDuzenle'])->name('yonetim.ilan.duzenle');
     Route::post('/ilan/{ilan}/guncelle', [YonetimController::class, 'ilanGuncelle'])->name('yonetim.ilan.guncelle');
