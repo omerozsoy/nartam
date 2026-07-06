@@ -20,6 +20,7 @@
     </nav>
     <div class="ust-sag">
         @auth
+            <a href="{{ route('hesabim') }}">Hesabım</a>
             @if (auth()->user()->yonetici())
                 <a href="{{ route('yonetim') }}">Yönetim</a>
             @endif

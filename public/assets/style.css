@@ -367,6 +367,36 @@ input:focus, textarea:focus { outline: none; border-color: var(--siyah); }
 .tablo th, .tablo td { text-align: left; padding: .6rem; border-bottom: 1px solid var(--cizgi); font-size: 14px; }
 .tablo th { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--soluk); font-weight: 400; }
 
+/* ---------- Hesap paneli ---------- */
+.hesap { padding: 2rem 0 4rem; }
+.hesap-baslik { font-family: var(--serif); font-weight: 600; font-size: 2rem; text-transform: uppercase; letter-spacing: .01em; margin: .5rem 0 1.5rem; }
+.hesap-bos { color: var(--soluk); }
+
+.hesap-tablo { width: 100%; border-collapse: collapse; }
+.hesap-tablo th, .hesap-tablo td { text-align: left; padding: 1rem .75rem; border-bottom: 1px solid var(--cizgi); vertical-align: middle; }
+.hesap-tablo th { font-size: 10px; letter-spacing: .09em; text-transform: uppercase; color: var(--soluk); font-weight: 500; }
+.hesap-tablo .h-gorsel { width: 72px; }
+.hesap-tablo .h-gorsel img { width: 64px; height: 64px; object-fit: cover; display: block; background: #fafafa; }
+.hesap-tablo .h-bos {
+    width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;
+    background: #f4f2ee; color: #c9bfa9; font-family: var(--serif); font-size: 1.5rem;
+}
+.hesap-tablo .h-ad { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; text-transform: uppercase; line-height: 1.1; }
+.hesap-tablo .h-tutar { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.durum-etiket { display: inline-block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: .3rem .6rem; border: 1px solid; }
+.durum-etiket.d-onde { color: #2e7d32; border-color: #2e7d32; }
+.durum-etiket.d-kazandi { color: #fff; background: #2e7d32; border-color: #2e7d32; }
+.durum-etiket.d-geride { color: #b26a00; border-color: #b26a00; }
+.durum-etiket.d-kaybetti { color: var(--kritik); border-color: var(--kritik); }
+
+@media (max-width: 640px) {
+    .hesap-tablo thead { display: none; }
+    .hesap-tablo, .hesap-tablo tbody, .hesap-tablo tr, .hesap-tablo td { display: block; width: 100%; }
+    .hesap-tablo tr { border-bottom: 1px solid var(--cizgi); padding: .5rem 0; }
+    .hesap-tablo td { border: 0; padding: .35rem .75rem; }
+}
+
 /* ---------- Footer ---------- */
 .alt-bilgi { background: var(--koyu); color: #e8e8e8; margin-top: 3rem; padding: 3rem 2rem 2rem; }
 .alt-bilgi .sutunlar { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2rem; }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HesapController;
 use App\Http\Controllers\IlanController;
 use App\Http\Controllers\KimlikController;
 use App\Http\Controllers\TeklifController;
@@ -23,6 +24,9 @@ Route::post('/cikis', [KimlikController::class, 'cikis'])->name('cikis')->middle
 
 // Teklif verme (giriş zorunlu)
 Route::post('/teklif', [TeklifController::class, 'store'])->name('teklif')->middleware('auth');
+
+// Üye paneli — pey verilen eserler
+Route::get('/hesabim', [HesapController::class, 'index'])->name('hesabim')->middleware('auth');
 
 // Yönetim paneli (yalnızca yönetici)
 Route::middleware(['auth', 'yonetici'])->prefix('yonetim')->group(function () {

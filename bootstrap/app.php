@@ -14,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'yonetici' => \App\Http\Middleware\YoneticiOl::class,
         ]);
+        // Giriş yapmamış kullanıcıları kendi giriş sayfamıza yönlendir ('login' değil).
+        $middleware->redirectGuestsTo(fn () => route('giris'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
