@@ -40,7 +40,7 @@
                 <input type="hidden" name="ilan_id" value="{{ $ilan['id'] }}">
                 <input type="hidden" name="miktar" value="{{ $ilan['minTeklif'] }}" data-alan="miktar">
                 <button type="submit" class="btn btn-dolu tek-dugme">
-                    {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyata Al' : 'Teklif Ver' }} ·
+                    {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyata Müzayedeyi Başlat' : 'Teklif Ver' }} ·
                     <span data-alan="btn-tutar">{{ $ilan['minTeklifBicim'] }}</span>
                 </button>
                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>

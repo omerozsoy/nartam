@@ -45,7 +45,10 @@ Route::middleware(['auth', 'yonetici'])->prefix('yonetim')->group(function () {
     Route::get('/eserler', [YonetimController::class, 'eserler'])->name('yonetim.eserler');
     Route::get('/eser/yeni', [YonetimController::class, 'eserYeni'])->name('yonetim.eser.yeni');
     Route::get('/toplu', [YonetimController::class, 'toplu'])->name('yonetim.toplu');
+    Route::post('/toplu/onizle', [YonetimController::class, 'topluOnizle'])->name('yonetim.toplu.onizle');
+    Route::post('/toplu/onayla', [YonetimController::class, 'topluOnayla'])->name('yonetim.toplu.onayla');
     Route::post('/toplu', [YonetimController::class, 'topluKaydet'])->name('yonetim.toplu.kaydet');
+    Route::post('/toplu/geri-al', [YonetimController::class, 'topluGeriAl'])->name('yonetim.toplu.gerial');
     Route::post('/ilan', [YonetimController::class, 'ilanOlustur'])->name('yonetim.ilan');
     Route::get('/ilan/{ilan}/duzenle', [YonetimController::class, 'ilanDuzenle'])->name('yonetim.ilan.duzenle');
     Route::post('/ilan/{ilan}/guncelle', [YonetimController::class, 'ilanGuncelle'])->name('yonetim.ilan.guncelle');

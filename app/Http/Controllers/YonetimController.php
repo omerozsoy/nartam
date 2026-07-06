@@ -11,6 +11,7 @@ use App\Support\Sunum;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -49,51 +50,114 @@ class YonetimController extends Controller
         return view('yonetim.eser_yeni');
     }
 
-    /** Toplu ürün girişi formu. */
+    /** Toplu ürün girişi formu + son içe aktarımlar. */
     public function toplu(): View
     {
-        return view('yonetim.toplu');
+        $partiler = Ilan::whereNotNull('ithal_kodu')
+            ->selectRaw('ithal_kodu, count(*) as adet, max(created_at) as tarih')
+            ->groupBy('ithal_kodu')
+            ->orderByDesc('tarih')
+            ->get();
+
+        return view('yonetim.toplu', ['partiler' => $partiler]);
     }
 
-    /** Toplu ürün girişi — Excel yükleme veya satır satır. */
+    /** Excel yükle -> önizleme (henüz kaydetmez). */
+    public function topluOnizle(Request $request): View|RedirectResponse
+    {
+        $request->validate(['excel' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:10240']]);
+
+        $yol = $request->file('excel')->store('toplu');
+        $sonuc = $this->exceldenOku(Storage::path($yol));
+
+        if (empty($sonuc['items'])) {
+            Storage::delete($yol);
+            return back()->with('basari', "Excel'de geçerli satır bulunamadı.");
+        }
+
+        return view('yonetim.toplu_onizleme', [
+            'items' => $sonuc['items'],
+            'atlanan' => $sonuc['atlanan'],
+            'dosya' => basename($yol),
+        ]);
+    }
+
+    /** Önizleme onayı -> gerçekten ekle (parti kodu ile). */
+    public function topluOnayla(Request $request): RedirectResponse
+    {
+        $request->validate(['dosya' => ['required', 'string']]);
+        $yol = 'toplu/' . basename($request->input('dosya')); // path traversal koruması
+
+        if (!Storage::exists($yol)) {
+            return redirect()->route('yonetim.toplu')->with('basari', 'Yükleme bulunamadı, tekrar deneyin.');
+        }
+
+        $sonuc = $this->exceldenOku(Storage::path($yol));
+        Storage::delete($yol);
+
+        $kod = 'IMP-' . CarbonImmutable::now()->format('ymd-His');
+        foreach ($sonuc['items'] as $it) {
+            $this->itemKaydet($it, $kod);
+        }
+
+        return redirect()->route('yonetim.eserler')
+            ->with('basari', count($sonuc['items']) . " eser eklendi. Parti: {$kod} (Toplu Ürün Girişi'nden geri alınabilir).");
+    }
+
+    /** Elle yapıştırma — önizlemesiz, ama parti koduyla geri alınabilir. */
     public function topluKaydet(Request $request): RedirectResponse
     {
-        $request->validate([
-            'excel' => ['nullable', 'file', 'mimes:xlsx,xls,csv', 'max:10240'],
-            'satirlar' => ['nullable', 'string'],
-        ]);
+        $request->validate(['satirlar' => ['required', 'string']]);
 
-        // Varsayılan oranlar; her ürünün düşüş/rezervi sonradan "Düzenle"den tek tek ayarlanır.
-        $dususY = 5;
-        $rezervY = 50;
-
-        if ($request->hasFile('excel')) {
-            [$eklenen, $hatali] = $this->exceldenAktar($request->file('excel')->getRealPath(), $dususY, $rezervY);
-        } elseif (trim((string) $request->input('satirlar')) !== '') {
-            [$eklenen, $hatali] = $this->satirdanAktar((string) $request->input('satirlar'), $dususY, $rezervY);
-        } else {
-            return back()->with('basari', 'Bir Excel dosyası yükleyin ya da satırları girin.');
+        $kod = 'IMP-' . CarbonImmutable::now()->format('ymd-His');
+        $eklenen = 0;
+        $atlanan = 0;
+        foreach (preg_split('/\r\n|\r|\n/', trim((string) $request->input('satirlar'))) as $satir) {
+            $satir = trim($satir);
+            if ($satir === '') {
+                continue;
+            }
+            $p = array_map('trim', explode('|', $satir));
+            $fiyat = (int) preg_replace('/\D/', '', (string) ($p[2] ?? ''));
+            if (($p[0] ?? '') === '' || $fiyat < 1) {
+                $atlanan++;
+                continue;
+            }
+            $this->itemKaydet([
+                'baslik' => $p[0], 'alt' => $p[1] ?? '', 'aciklama' => $p[3] ?? '',
+                'fiyat' => $fiyat, 'gorsel' => null,
+            ], $kod);
+            $eklenen++;
         }
 
         $mesaj = "{$eklenen} eser eklendi.";
-        if ($hatali > 0) {
-            $mesaj .= " {$hatali} satır atlandı (başlık/fiyat eksik).";
+        if ($atlanan > 0) {
+            $mesaj .= " {$atlanan} satır atlandı.";
         }
 
         return redirect()->route('yonetim.eserler')->with('basari', $mesaj);
     }
 
+    /** Bir içe aktarım partisini geri al (o partideki eserleri sil). */
+    public function topluGeriAl(Request $request): RedirectResponse
+    {
+        $kod = (string) $request->input('kod');
+        $adet = Ilan::where('ithal_kodu', $kod)->count();
+        Ilan::where('ithal_kodu', $kod)->delete(); // teklifler cascade ile silinir
+
+        return back()->with('basari', "{$adet} eser geri alındı (silindi).");
+    }
+
     /**
-     * Excel'den aktar. Sütunlar başlık adına göre bulunur:
-     * Sanatçı Adı -> başlık, Eserin Adı -> alt başlık, Açıklama(+Provenance) -> açıklama, fiyat -> başlangıç.
+     * Excel'i okur, geçerli satırları düz diziye çevirir (KAYDETMEZ — önizleme için).
      *
-     * @return array{0: int, 1: int} [eklenen, atlanan]
+     * @return array{items: list<array>, atlanan: int}
      */
-    private function exceldenAktar(string $yol, int $dususY, int $rezervY): array
+    private function exceldenOku(string $yol): array
     {
         $satirlar = IOFactory::load($yol)->getSheet(0)->toArray(null, true, true, false);
         if (count($satirlar) < 2) {
-            return [0, 0];
+            return ['items' => [], 'atlanan' => 0];
         }
 
         $basliklar = array_map(fn ($h) => mb_strtolower(trim((string) $h)), array_shift($satirlar));
@@ -114,11 +178,10 @@ class YonetimController extends Controller
         $iFiyat = $bul(['fiyat']);
         $iProv = $bul(['provenance', 'literature', 'not']);
         $iLot = $bul(['lot']);
-
         $al = static fn (array $r, ?int $i): string => $i !== null ? trim((string) ($r[$i] ?? '')) : '';
 
-        $eklenen = 0;
-        $hatali = 0;
+        $items = [];
+        $atlanan = 0;
         foreach ($satirlar as $r) {
             $eser = $al($r, $iEser);
             $sanatci = $al($r, $iSanatci);
@@ -127,64 +190,52 @@ class YonetimController extends Controller
 
             $baslik = $sanatci !== '' ? $sanatci : $eser;
             if ($baslik === '' || $fiyat < 1) {
-                $hatali++;
+                $atlanan++;
                 continue;
             }
 
-            // Lot no'ya göre görsel: public/urunler/lot-{N}.jpg
             $gorsel = null;
+            $lot = null;
             $lotRaw = $iLot !== null ? ($r[$iLot] ?? null) : null;
             if (is_numeric($lotRaw)) {
                 $lot = (int) $lotRaw;
-                if (is_file(public_path("urunler/lot-{$lot}.jpg"))) {
+                if (!is_file(public_path("urunler/lot-{$lot}.jpg"))) {
+                    $gorsel = null;
+                } else {
                     $gorsel = "/urunler/lot-{$lot}.jpg";
                 }
             }
 
-            $this->eserOlustur($baslik, $eser, $al($r, $iAciklama), $al($r, $iProv), $fiyat, $dususY, $rezervY, $gorsel);
-            $eklenen++;
+            $prov = $al($r, $iProv);
+            $aciklama = trim($al($r, $iAciklama) . ($prov !== '' ? "\n\n" . $prov : ''));
+
+            $items[] = [
+                'baslik' => $baslik,
+                'alt' => $eser,
+                'aciklama' => $aciklama,
+                'fiyat' => $fiyat,
+                'lot' => $lot,
+                'gorsel' => $gorsel,
+            ];
         }
 
-        return [$eklenen, $hatali];
+        return ['items' => $items, 'atlanan' => $atlanan];
     }
 
-    /** @return array{0: int, 1: int} [eklenen, atlanan] */
-    private function satirdanAktar(string $metin, int $dususY, int $rezervY): array
+    /** Bir önizleme öğesini kaydeder (düşüş %5, rezerv %50 — sonra Düzenle'den ayarlanır). */
+    private function itemKaydet(array $it, string $kod): void
     {
-        $eklenen = 0;
-        $hatali = 0;
-        foreach (preg_split('/\r\n|\r|\n/', trim($metin)) as $satir) {
-            $satir = trim($satir);
-            if ($satir === '') {
-                continue;
-            }
-            // Başlık | Alt başlık | Fiyat | Açıklama(ops.)
-            $p = array_map('trim', explode('|', $satir));
-            $baslik = $p[0] ?? '';
-            $fiyat = (int) preg_replace('/\D/', '', (string) ($p[2] ?? ''));
-            if ($baslik === '' || $fiyat < 1) {
-                $hatali++;
-                continue;
-            }
-            $this->eserOlustur($baslik, $p[1] ?? '', $p[3] ?? '', '', $fiyat, $dususY, $rezervY);
-            $eklenen++;
-        }
-
-        return [$eklenen, $hatali];
-    }
-
-    private function eserOlustur(string $baslik, string $altBaslik, string $aciklama, string $prov, int $fiyat, int $dususY, int $rezervY, ?string $gorselUrl = null): void
-    {
-        $tamAciklama = trim($aciklama . ($prov !== '' ? "\n\n" . $prov : ''));
+        $fiyat = (int) $it['fiyat'];
         Ilan::create([
-            'baslik' => $baslik,
-            'alt_baslik' => $altBaslik !== '' ? $altBaslik : null,
-            'aciklama' => $tamAciklama !== '' ? $tamAciklama : null,
-            'gorsel_url' => $gorselUrl,
+            'baslik' => $it['baslik'],
+            'alt_baslik' => ($it['alt'] ?? '') !== '' ? $it['alt'] : null,
+            'aciklama' => ($it['aciklama'] ?? '') !== '' ? $it['aciklama'] : null,
+            'gorsel_url' => $it['gorsel'] ?? null,
             'baslangic_fiyati' => $fiyat,
-            'saatlik_dusus' => max(1, (int) round($fiyat * $dususY / 100)),
-            'rezerv_fiyat' => (int) round($fiyat * $rezervY / 100),
+            'saatlik_dusus' => max(1, (int) round($fiyat * 0.05)),
+            'rezerv_fiyat' => (int) round($fiyat * 0.5),
             'baslangic_zamani' => CarbonImmutable::now(),
+            'ithal_kodu' => $kod,
         ]);
     }
 

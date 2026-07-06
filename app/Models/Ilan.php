@@ -44,6 +44,7 @@ class Ilan extends Model
         'guncel_teklif',
         'son_teklif_sahibi',
         'bildirildi',
+        'ithal_kodu',
     ];
 
     protected function casts(): array
