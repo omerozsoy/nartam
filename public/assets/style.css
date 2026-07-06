@@ -383,10 +383,10 @@ img { max-width: 100%; }
 /* Yeni teklif gelince sayaç kırmızı yanıp söner (fade in/out) */
 @keyframes teklifFlash {
     0%, 100% { background: #fafafa; color: inherit; border-color: var(--cizgi); }
-    25%, 75% { background: var(--kritik); color: #fff; border-color: var(--kritik); }
-    50% { background: #fafafa; color: inherit; border-color: var(--cizgi); }
+    50% { background: var(--kritik); color: #fff; border-color: var(--kritik); }
 }
-.sayac.yeni-teklif { animation: sayacNabiz 1s ease-in-out infinite, teklifFlash 1.4s ease-out; }
+/* Teklif gelince ~20 sn boyunca (JS sınıfı kaldırana dek) yanıp söner */
+.sayac.yeni-teklif { animation: sayacNabiz 1s ease-in-out infinite, teklifFlash 1.1s ease-in-out infinite; }
 
 /* Fiyat: büyük ve ortalı */
 .fiyat-satir { text-align: center; margin: .3rem 0 .5rem; }

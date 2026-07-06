@@ -108,7 +108,7 @@ function ozetUygula(kalem, o) {
             sayac.classList.remove('yeni-teklif');
             void sayac.offsetWidth; // animasyonu yeniden tetikle
             sayac.classList.add('yeni-teklif');
-            setTimeout(() => sayac.classList.remove('yeni-teklif'), 1400);
+            setTimeout(() => sayac.classList.remove('yeni-teklif'), 20000);
         }
     }
 }
