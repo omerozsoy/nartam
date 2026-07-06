@@ -52,11 +52,10 @@
                             <form class="teklif-form" data-alan="teklif-form">
                                 @csrf
                                 <input type="hidden" name="ilan_id" value="{{ $ozet['id'] }}">
-                                <input type="number" name="miktar" step="1"
-                                       min="{{ $ozet['minTeklif'] }}" value="{{ $ozet['minTeklif'] }}"
-                                       data-alan="miktar" required>
-                                <button type="submit" class="btn btn-dolu">
-                                    {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyata Al' : 'Teklif Ver' }}
+                                <input type="hidden" name="miktar" value="{{ $ozet['minTeklif'] }}" data-alan="miktar">
+                                <button type="submit" class="btn btn-dolu tek-dugme">
+                                    {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyata Al' : 'Teklif Ver' }} ·
+                                    <span data-alan="btn-tutar">{{ $ozet['minTeklifBicim'] }}</span>
                                 </button>
                                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
                             </form>

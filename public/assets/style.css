@@ -341,8 +341,23 @@ img { max-width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .sayac, .kritik .sayac { animation: none; }
+    .sayac, .kritik .sayac, .sayac.yeni-teklif { animation: none; }
 }
+
+/* Yeni teklif gelince sayaç kırmızı yanıp söner (fade in/out) */
+@keyframes teklifFlash {
+    0%, 100% { background: #fafafa; color: inherit; border-color: var(--cizgi); }
+    25%, 75% { background: var(--kritik); color: #fff; border-color: var(--kritik); }
+    50% { background: #fafafa; color: inherit; border-color: var(--cizgi); }
+}
+.sayac.yeni-teklif { animation: sayacNabiz 1s ease-in-out infinite, teklifFlash 1.4s ease-out; }
+
+/* Fiyat: büyük ve ortalı */
+.fiyat-satir { text-align: center; margin: .3rem 0 .5rem; }
+.fiyat-satir .fiyat { font-size: 1.75rem; }
+
+/* Tek "Teklif Ver" düğmesi: tam genişlik */
+.teklif-form .tek-dugme { flex: 1 1 100%; padding: .8rem; }
 
 .lot-butonlar { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .8rem; }
 

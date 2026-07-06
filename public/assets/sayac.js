@@ -58,6 +58,7 @@ function sayaclariGuncelle() {
 // --- 2) Polling ---
 function ozetUygula(kalem, o) {
     const oncekiDurum = kalem.dataset.durum;
+    const oncekiMin = Number(kalem.dataset.min || 0);
 
     kalem.classList.remove('durum-dusuyor', 'durum-acik_artirma', 'durum-kapandi');
     kalem.classList.add('durum-' + o.durum);
@@ -90,11 +91,24 @@ function ozetUygula(kalem, o) {
         return;
     }
 
+    // Tek düğme: gizli miktarı ve düğmedeki tutarı güncelle
     const miktar = kalem.querySelector('[data-alan="miktar"]');
     if (miktar) {
-        miktar.min = o.minTeklif;
-        if (Number(miktar.value) < o.minTeklif) {
-            miktar.value = o.minTeklif;
+        miktar.value = o.minTeklif;
+    }
+    const btnTutar = kalem.querySelector('[data-alan="btn-tutar"]');
+    if (btnTutar) {
+        btnTutar.textContent = o.minTeklifBicim;
+    }
+
+    // Yeni teklif geldiyse (min yükseldiyse) sayacı kırmızı yanıp söndür (fade in/out)
+    if (oncekiMin > 0 && o.minTeklif > oncekiMin) {
+        const sayac = kalem.querySelector('[data-alan="sayac"]');
+        if (sayac) {
+            sayac.classList.remove('yeni-teklif');
+            void sayac.offsetWidth; // animasyonu yeniden tetikle
+            sayac.classList.add('yeni-teklif');
+            setTimeout(() => sayac.classList.remove('yeni-teklif'), 1400);
         }
     }
 }
@@ -123,6 +137,14 @@ function teklifBagla() {
         form.addEventListener('submit', async (olay) => {
             olay.preventDefault();
             const mesaj = form.querySelector('[data-alan="teklif-mesaj"]');
+
+            // Onay penceresi
+            const tutar = Number(form.querySelector('[data-alan="miktar"]')?.value || 0);
+            const tutarBicim = new Intl.NumberFormat('tr-TR').format(tutar) + ' ₺';
+            if (!window.confirm(tutarBicim + ' teklif vermek istediğinize emin misiniz?')) {
+                return;
+            }
+
             const veri = new FormData(form);
 
             try {

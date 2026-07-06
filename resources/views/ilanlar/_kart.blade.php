@@ -25,16 +25,10 @@
     <span class="rozet">{{ $ilan['durumEtiket'] }}</span>
 
     @if ($ilan['durum'] !== 'kapandi')
-        <p class="sayac-etiket" data-alan="sayac-etiket">
-            {{ $ilan['durum'] === 'dusuyor' ? 'Sonraki düşüşe' : 'Bitişe kalan' }}
-        </p>
         <p class="sayac" role="timer" data-alan="sayac">--:--</p>
     @endif
 
-    <div class="lot-satir">
-        <div class="etiket" data-alan="fiyat-etiket">
-            {{ $ilan['durum'] === 'dusuyor' ? 'Düşen fiyat' : ($ilan['durum'] === 'kapandi' ? 'Kapanış fiyatı' : 'Güncel teklif') }}
-        </div>
+    <div class="lot-satir fiyat-satir">
         <div class="fiyat" data-alan="fiyat" data-deger="{{ $ilan['guncelFiyat'] }}">{{ $ilan['guncelFiyatBicim'] }}</div>
     </div>
 
@@ -51,11 +45,10 @@
             <form class="teklif-form" data-alan="teklif-form">
                 @csrf
                 <input type="hidden" name="ilan_id" value="{{ $ilan['id'] }}">
-                <input type="number" name="miktar" step="1"
-                       min="{{ $ilan['minTeklif'] }}" value="{{ $ilan['minTeklif'] }}"
-                       data-alan="miktar" required>
-                <button type="submit" class="btn btn-dolu">
-                    {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyata Al' : 'Teklif Ver' }}
+                <input type="hidden" name="miktar" value="{{ $ilan['minTeklif'] }}" data-alan="miktar">
+                <button type="submit" class="btn btn-dolu tek-dugme">
+                    {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyata Al' : 'Teklif Ver' }} ·
+                    <span data-alan="btn-tutar">{{ $ilan['minTeklifBicim'] }}</span>
                 </button>
                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
             </form>
