@@ -207,8 +207,8 @@ img { max-width: 100%; }
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    font-family: 'Bodoni Moda', Georgia, 'Times New Roman', serif;
-    font-weight: 600;
+    font-family: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+    font-weight: 400;
     font-size: 1.7rem;
     margin: 2.5rem 0 0;
     padding-bottom: .8rem;
