@@ -61,12 +61,11 @@ class YonetimController extends Controller
         $request->validate([
             'excel' => ['nullable', 'file', 'mimes:xlsx,xls,csv', 'max:10240'],
             'satirlar' => ['nullable', 'string'],
-            'dusus_yuzde' => ['required', 'integer', 'min:1', 'max:100'],
-            'rezerv_yuzde' => ['required', 'integer', 'min:0', 'max:100'],
         ]);
 
-        $dususY = (int) $request->input('dusus_yuzde');
-        $rezervY = (int) $request->input('rezerv_yuzde');
+        // Varsayılan oranlar; her ürünün düşüş/rezervi sonradan "Düzenle"den tek tek ayarlanır.
+        $dususY = 5;
+        $rezervY = 50;
 
         if ($request->hasFile('excel')) {
             [$eklenen, $hatali] = $this->exceldenAktar($request->file('excel')->getRealPath(), $dususY, $rezervY);

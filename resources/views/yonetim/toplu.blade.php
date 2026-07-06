@@ -18,14 +18,9 @@
                 <label class="genis">Excel Dosyası (.xlsx, .xls, .csv)
                     <input type="file" name="excel" accept=".xlsx,.xls,.csv" required>
                 </label>
-                <label>Saatlik Düşüş (başlangıç fiyatının %'si)
-                    <input type="number" name="dusus_yuzde" min="1" max="100" value="{{ old('dusus_yuzde', 5) }}" required>
-                </label>
-                <label>Rezerv / Taban (başlangıç fiyatının %'si)
-                    <input type="number" name="rezerv_yuzde" min="0" max="100" value="{{ old('rezerv_yuzde', 50) }}" required>
-                </label>
                 <button type="submit" class="btn btn-dolu">Excel'i Yükle ve Ekle</button>
             </form>
+            <p class="alt-not">Saatlik düşüş ve rezerv (taban) fiyatı, her eser için <strong>Eserler → Düzenle</strong> sayfasından tek tek ayarlanır.</p>
         </section>
 
         <section class="kart">
@@ -36,8 +31,6 @@
             </p>
             <form method="post" action="{{ route('yonetim.toplu.kaydet') }}" class="izgara-form">
                 @csrf
-                <input type="hidden" name="dusus_yuzde" value="5">
-                <input type="hidden" name="rezerv_yuzde" value="50">
                 <label class="genis">Satırlar
                     <textarea name="satirlar" rows="8" placeholder="Nejad Melih Devrim (1923-1995) | Soyut | 150000 | Kağıt üzerine guaj, imzalı.
 Ömer Uluç (1931-2010) | Nü | 80000 | Kağıt üzerine karışık teknik.">{{ old('satirlar') }}</textarea>
