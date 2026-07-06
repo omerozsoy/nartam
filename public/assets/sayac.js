@@ -78,7 +78,15 @@ function ozetUygula(kalem, o) {
 
     const fiyat = kalem.querySelector('[data-alan="fiyat"]');
     if (fiyat) {
+        const oncekiFiyat = Number(fiyat.dataset.deger || 0);
         rakamGuncelle(fiyat, o.guncelFiyat);
+        // Düşüş fazında periyot tamamlanıp fiyat düşünce yeşil flash
+        if (o.durum === 'dusuyor' && oncekiFiyat > 0 && o.guncelFiyat < oncekiFiyat) {
+            fiyat.classList.remove('dustu');
+            void fiyat.offsetWidth; // animasyonu yeniden tetikle
+            fiyat.classList.add('dustu');
+            setTimeout(() => fiyat.classList.remove('dustu'), 1600);
+        }
     }
     const rozet = kalem.querySelector('.rozet');
     if (rozet) {

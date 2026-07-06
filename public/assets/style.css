@@ -404,6 +404,14 @@ img { max-width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { .durum-dusuyor .fiyat { animation: none; } }
 
+/* Periyot tamamlanıp fiyat düşünce yeşil flash (bir kerelik) */
+@keyframes fiyatDustu {
+    0% { color: #16a34a; transform: scale(1.22); }
+    45% { color: #16a34a; transform: scale(1.1); }
+    100% { color: var(--kritik); transform: scale(1); }
+}
+.fiyat.dustu { animation: fiyatDustu 1.6s ease-out !important; }
+
 /* Tek "Teklif Ver" düğmesi: tam genişlik */
 .teklif-form .tek-dugme { flex: 1 1 100%; padding: .8rem; }
 
