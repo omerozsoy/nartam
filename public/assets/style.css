@@ -226,10 +226,12 @@ img { max-width: 100%; }
 /* ---------- Lot grid ---------- */
 .lot-izgara {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(3, 1fr); /* sırada en fazla 3 ürün */
     gap: 2.5rem 2rem;
     padding: 1rem 0 4rem;
 }
+@media (max-width: 820px) { .lot-izgara { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .lot-izgara { grid-template-columns: 1fr; } }
 
 .lot { display: flex; flex-direction: column; }
 
