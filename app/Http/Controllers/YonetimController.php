@@ -114,6 +114,7 @@ class YonetimController extends Controller
         $iAciklama = $bul(['açıkla', 'aciklama']);
         $iFiyat = $bul(['fiyat']);
         $iProv = $bul(['provenance', 'literature', 'not']);
+        $iLot = $bul(['lot']);
 
         $al = static fn (array $r, ?int $i): string => $i !== null ? trim((string) ($r[$i] ?? '')) : '';
 
@@ -131,7 +132,17 @@ class YonetimController extends Controller
                 continue;
             }
 
-            $this->eserOlustur($baslik, $eser, $al($r, $iAciklama), $al($r, $iProv), $fiyat, $dususY, $rezervY);
+            // Lot no'ya göre görsel: public/urunler/lot-{N}.jpg
+            $gorsel = null;
+            $lotRaw = $iLot !== null ? ($r[$iLot] ?? null) : null;
+            if (is_numeric($lotRaw)) {
+                $lot = (int) $lotRaw;
+                if (is_file(public_path("urunler/lot-{$lot}.jpg"))) {
+                    $gorsel = "/urunler/lot-{$lot}.jpg";
+                }
+            }
+
+            $this->eserOlustur($baslik, $eser, $al($r, $iAciklama), $al($r, $iProv), $fiyat, $dususY, $rezervY, $gorsel);
             $eklenen++;
         }
 
@@ -163,13 +174,14 @@ class YonetimController extends Controller
         return [$eklenen, $hatali];
     }
 
-    private function eserOlustur(string $baslik, string $altBaslik, string $aciklama, string $prov, int $fiyat, int $dususY, int $rezervY): void
+    private function eserOlustur(string $baslik, string $altBaslik, string $aciklama, string $prov, int $fiyat, int $dususY, int $rezervY, ?string $gorselUrl = null): void
     {
         $tamAciklama = trim($aciklama . ($prov !== '' ? "\n\n" . $prov : ''));
         Ilan::create([
             'baslik' => $baslik,
             'alt_baslik' => $altBaslik !== '' ? $altBaslik : null,
             'aciklama' => $tamAciklama !== '' ? $tamAciklama : null,
+            'gorsel_url' => $gorselUrl,
             'baslangic_fiyati' => $fiyat,
             'saatlik_dusus' => max(1, (int) round($fiyat * $dususY / 100)),
             'rezerv_fiyat' => (int) round($fiyat * $rezervY / 100),

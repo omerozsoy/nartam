@@ -12,14 +12,6 @@
             </div>
             <div class="satis-eylem">
                 <div class="kapanis">{{ $gruplar->flatten(1)->count() }} lot · canlı</div>
-                <div class="butonlar">
-                    @guest
-                        <a class="btn btn-dolu" href="{{ route('kayit') }}">Kayıt Ol</a>
-                        <a class="btn" href="{{ route('giris') }}">Giriş</a>
-                    @else
-                        <a class="btn" href="#lotlar">Lotları Gör</a>
-                    @endguest
-                </div>
             </div>
         </div>
 
