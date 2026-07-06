@@ -77,7 +77,7 @@ function ozetUygula(kalem, o) {
 
     const fiyat = kalem.querySelector('[data-alan="fiyat"]');
     if (fiyat) {
-        fiyat.textContent = o.guncelFiyatBicim;
+        rakamGuncelle(fiyat, o.guncelFiyat);
     }
     const rozet = kalem.querySelector('.rozet');
     if (rozet) {
@@ -154,6 +154,78 @@ function teklifBagla() {
         });
     });
 }
+
+// --- Kayan rakam (sliding digits) efekti ---
+// Her hane 0-9'luk dikey bir şerittir; değer değişince translateY ile yeni rakama kayar.
+const trBicim = new Intl.NumberFormat('tr-TR');
+
+function rakamModel(el, sayi, animasyonlu) {
+    const metin = trBicim.format(sayi) + ' ₺';
+    const oncekiMetin = el.dataset.metin || '';
+
+    // Yapı (uzunluk) aynıysa yalnızca şeritleri kaydır -> pürüzsüz animasyon.
+    if (animasyonlu && el._seritler && oncekiMetin.length === metin.length) {
+        let i = 0;
+        for (const ch of metin) {
+            if (ch >= '0' && ch <= '9') {
+                el._seritler[i++].style.transform = 'translateY(-' + Number(ch) + 'em)';
+            }
+        }
+        el.dataset.metin = metin;
+        el.dataset.deger = sayi;
+        return;
+    }
+
+    // Hane sayısı değişti (ya da ilk kurulum): baştan çiz.
+    el.classList.add('rakam');
+    el.innerHTML = '';
+    el._seritler = [];
+
+    for (const ch of metin) {
+        if (ch >= '0' && ch <= '9') {
+            const hane = document.createElement('span');
+            hane.className = 'hane';
+            const serit = document.createElement('span');
+            serit.className = 'serit';
+            if (!animasyonlu) {
+                serit.style.transition = 'none';
+            }
+            for (let d = 0; d <= 9; d++) {
+                const r = document.createElement('span');
+                r.textContent = String(d);
+                serit.appendChild(r);
+            }
+            serit.style.transform = 'translateY(-' + Number(ch) + 'em)';
+            hane.appendChild(serit);
+            el.appendChild(hane);
+            el._seritler.push(serit);
+            if (!animasyonlu) {
+                requestAnimationFrame(() => { serit.style.transition = ''; });
+            }
+        } else {
+            const sabit = document.createElement('span');
+            sabit.className = 'sabit';
+            sabit.textContent = ch;
+            el.appendChild(sabit);
+        }
+    }
+
+    el.dataset.metin = metin;
+    el.dataset.deger = sayi;
+}
+
+function rakamKur(el) {
+    rakamModel(el, Number(el.dataset.deger || 0), false);
+}
+
+function rakamGuncelle(el, sayi) {
+    if (!el._seritler) {
+        rakamKur(el);
+    }
+    rakamModel(el, sayi, true);
+}
+
+document.querySelectorAll('[data-alan="fiyat"]').forEach(rakamKur);
 
 sayaclariGuncelle();
 setInterval(sayaclariGuncelle, 1000);

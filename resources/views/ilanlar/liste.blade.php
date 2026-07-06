@@ -21,7 +21,7 @@
                 <span class="rozet">{{ $ilan['durumEtiket'] }}</span>
                 <h2>{{ $ilan['baslik'] }}</h2>
 
-                <p class="fiyat" data-alan="fiyat">{{ $ilan['guncelFiyatBicim'] }}</p>
+                <p class="fiyat" data-alan="fiyat" data-deger="{{ $ilan['guncelFiyat'] }}">{{ $ilan['guncelFiyatBicim'] }}</p>
 
                 <p class="sayac-etiket" data-alan="sayac-etiket">
                     @if ($ilan['durum'] === 'dusuyor')
