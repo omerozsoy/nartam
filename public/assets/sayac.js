@@ -80,12 +80,13 @@ function ozetUygula(kalem, o) {
     if (fiyat) {
         const oncekiFiyat = Number(fiyat.dataset.deger || 0);
         rakamGuncelle(fiyat, o.guncelFiyat);
-        // Düşüş fazında periyot tamamlanıp fiyat düşünce yeşil flash
-        if (o.durum === 'dusuyor' && oncekiFiyat > 0 && o.guncelFiyat < oncekiFiyat) {
-            fiyat.classList.remove('dustu');
+        // Fiyat değişince flash: düşünce yeşil, yükselince kırmızı
+        if (oncekiFiyat > 0 && o.guncelFiyat !== oncekiFiyat) {
+            const sinif = o.guncelFiyat < oncekiFiyat ? 'dustu' : 'yukseldi';
+            fiyat.classList.remove('dustu', 'yukseldi');
             void fiyat.offsetWidth; // animasyonu yeniden tetikle
-            fiyat.classList.add('dustu');
-            setTimeout(() => fiyat.classList.remove('dustu'), 1600);
+            fiyat.classList.add(sinif);
+            setTimeout(() => fiyat.classList.remove(sinif), 1600);
         }
     }
     const rozet = kalem.querySelector('.rozet');

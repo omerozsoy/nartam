@@ -392,25 +392,21 @@ img { max-width: 100%; }
 .fiyat-satir { text-align: center; margin: .3rem 0 .5rem; }
 .fiyat-satir .fiyat { font-size: 1.75rem; }
 
-/* Düşüş fazında fiyat kırmızı yanıp söner (fiyat düşüyor vurgusu) */
-@keyframes fiyatDususu {
-    0%, 100% { color: var(--kritik); transform: scale(1); }
-    50% { color: #ff6b52; transform: scale(1.06); }
-}
-.durum-dusuyor .fiyat {
-    color: var(--kritik);
-    animation: fiyatDususu 1.4s ease-in-out infinite;
-    transform-origin: center;
-}
-@media (prefers-reduced-motion: reduce) { .durum-dusuyor .fiyat { animation: none; } }
-
-/* Periyot tamamlanıp fiyat düşünce yeşil flash (bir kerelik) */
+/* Fiyat değişince tek seferlik flash: DÜŞÜNCE yeşil, YÜKSELİNCE kırmızı. Normalde nötr renk. */
+.fiyat { transform-origin: center; }
 @keyframes fiyatDustu {
-    0% { color: #16a34a; transform: scale(1.22); }
-    45% { color: #16a34a; transform: scale(1.1); }
-    100% { color: var(--kritik); transform: scale(1); }
+    0% { color: #16a34a; transform: scale(1.25); }
+    50% { color: #16a34a; }
+    100% { color: var(--vurgu); transform: scale(1); }
 }
-.fiyat.dustu { animation: fiyatDustu 1.6s ease-out !important; }
+@keyframes fiyatYukseldi {
+    0% { color: var(--kritik); transform: scale(1.25); }
+    50% { color: var(--kritik); }
+    100% { color: var(--vurgu); transform: scale(1); }
+}
+.fiyat.dustu { animation: fiyatDustu 1.6s ease-out; }
+.fiyat.yukseldi { animation: fiyatYukseldi 1.6s ease-out; }
+@media (prefers-reduced-motion: reduce) { .fiyat.dustu, .fiyat.yukseldi { animation: none; } }
 
 /* Tek "Teklif Ver" düğmesi: tam genişlik */
 .teklif-form .tek-dugme { flex: 1 1 100%; padding: .8rem; }
