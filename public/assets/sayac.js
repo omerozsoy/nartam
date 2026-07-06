@@ -87,6 +87,17 @@ function ozetUygula(kalem, o) {
             void fiyat.offsetWidth; // animasyonu yeniden tetikle
             fiyat.classList.add(sinif);
             setTimeout(() => fiyat.classList.remove(sinif), 20000);
+
+            // Fiyat düşünce sayacı da yeşil yak
+            if (sinif === 'dustu') {
+                const sayacEl = kalem.querySelector('[data-alan="sayac"]');
+                if (sayacEl) {
+                    sayacEl.classList.remove('dustu');
+                    void sayacEl.offsetWidth;
+                    sayacEl.classList.add('dustu');
+                    setTimeout(() => sayacEl.classList.remove('dustu'), 20000);
+                }
+            }
         }
     }
     const rozet = kalem.querySelector('.rozet');
