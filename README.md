@@ -20,30 +20,53 @@ alıcı bekler; ilk teklif geldiği an klasik açık artırmaya döner.
   çeker — son saniye kapışları önlenir.
 - Süre dolunca en yüksek teklif kazanır.
 
+## Özellikler
+
+- İki fazlı ilan yaşam döngüsü (düşen fiyat → açık artırma)
+- Kullanıcı kayıt / giriş (oturum + `password_hash`, CSRF korumalı formlar)
+- Teklif verme akışı (AJAX; domen kuralları sunucuda doğrulanır)
+- **Canlı güncelleme:** ana sayfa `/api/ilanlar`'ı periyodik yoklar; fiyat, durum ve
+  sayaçlar sayfa yenilemeden güncellenir
+- Yönetim paneli (yönetici): yeni ilan oluşturma, ilan listesi
+- SQLite veritabanı (kurulum gerektirmez)
+
 ## Klasör yapısı
 
 ```
-public/           Web kök dizini
-  index.php       Giriş noktası + örnek ilanlar
-  assets/         style.css, sayac.js (iki fazlı canlı sayaç)
-src/              Uygulama kodu (App\ namespace)
-  Ilan.php        İlan yaşam döngüsü / durum makinesi (Dutch → English)
-  Durum.php       DUSUYOR | ACIK_ARTIRMA | KAPANDI
-  views/          HTML şablonları
-tests/
-  ilan_test.php   Durum makinesi testleri (php tests/ilan_test.php)
-composer.json     PSR-4 autoload tanımı
+public/
+  index.php          Ön denetleyici (router) + statik dosya geçişi
+  assets/            style.css, sayac.js (sayaç + polling + AJAX teklif)
+src/
+  onyukleme.php      Autoloader, oturum, yapılandırma
+  yardimcilar.php    e(), para(), CSRF, flash, yönlendirme
+  Ilan.php           İlan durum makinesi (Dutch → English)
+  Durum.php          DUSUYOR | ACIK_ARTIRMA | KAPANDI
+  Kimlik.php         Kayıt / giriş / çıkış
+  TeklifServisi.php  Teklif akışı (domen + kalıcılaştırma, transaction)
+  Sunum.php          Ilan -> ekran/JSON özeti
+  Cekirdek/          Veritabani (PDO), Gorunum (view motoru)
+  Depo/              IlanDepo, KullaniciDepo (repository)
+  views/             duzen, liste, giris, kayit, yonetim, hata404
+db/schema.sql        Tablolar: kullanicilar, ilanlar, teklifler
+bin/kur.php          Veritabanı kurulumu + örnek veri
+tests/ilan_test.php  Durum makinesi testleri
+data/                SQLite dosyası (git dışı)
 ```
 
-## Çalıştırma
-
-Composer olmadan da çalışır (basit autoloader devrede):
+## Kurulum ve çalıştırma
 
 ```bash
-php -S localhost:8000 -t public
+# 1) Veritabanını kur + örnek veri ekle
+php bin/kur.php
+
+# 2) Sunucuyu başlat (router script olarak index.php)
+php -S localhost:8000 -t public public/index.php
 ```
 
 Tarayıcıda: http://localhost:8000
+
+Demo yönetici: `admin@nartam.test` / `admin123`
+Veritabanını sıfırlamak: `php bin/kur.php --sifirla`
 
 ## Test
 
@@ -56,9 +79,13 @@ php tests/ilan_test.php
 - [x] İki fazlı ilan modeli (düşen fiyat → açık artırma)
 - [x] Rezerv taban, kademeli artırım, anti-snipe
 - [x] İki fazlı canlı sayaç (ön yüz)
-- [ ] Veritabanı (ilanlar, teklifler, kullanıcılar)
-- [ ] Gerçek teklif verme akışı (form + sunucu doğrulaması)
-- [ ] Canlı güncelleme (WebSocket / SSE) — teklifler anlık yayılsın
-- [ ] Yönetim paneli (ilan oluşturma/yönetme)
-- [ ] Kullanıcı kayıt / kimlik doğrulama
+- [x] Veritabanı (SQLite) — ilanlar, teklifler, kullanıcılar
+- [x] Kullanıcı kayıt / giriş (oturum, CSRF)
+- [x] Teklif verme akışı (AJAX + sunucu doğrulaması)
+- [x] Canlı güncelleme (polling)
+- [x] Yönetim paneli (ilan oluşturma)
+- [ ] Gerçek zamanlı yayın (WebSocket / SSE) — polling yerine anlık itme
+- [ ] Teklif geçmişi görünümü (ilan detay sayfası)
+- [ ] E-posta bildirimleri (teklif geçildi / kazandın)
+- [ ] Testleri PHPUnit'e taşımak
 ```

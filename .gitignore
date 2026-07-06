@@ -1,6 +1,9 @@
 # Bağımlılıklar
 /vendor/
 
+# Veritabanı (SQLite)
+/data/
+
 # IDE
 /.idea/
 /.claude/

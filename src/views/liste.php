@@ -1,66 +1,65 @@
 <?php
 /**
- * @var \App\Ilan[] $ilanlar
- * @var \DateTimeImmutable $now
+ * @var array[] $ilanlar  Sunum::ilan() özetleri
+ * @var array|null $kullanici
  */
 declare(strict_types=1);
-
-use App\Durum;
-
 ?>
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nartam — Müzayede</title>
-    <link rel="stylesheet" href="/assets/style.css">
-</head>
-<body>
-<header>
+<header class="sayfa-baslik">
     <h1>nartam Müzayede</h1>
     <p>Teklif gelene kadar fiyat düşer; ilk teklifle açık artırma başlar.</p>
 </header>
 
-<main class="kalemler">
+<main class="kalemler" id="ilanlar">
     <?php foreach ($ilanlar as $ilan): ?>
-        <?php
-        $durum = $ilan->durum($now);
-        $bitis = $ilan->bitisZamani();
-        $sonrakiDusus = $ilan->sonrakiDususZamani($now);
-        ?>
         <article
-            class="kalem durum-<?= $durum->value ?>"
-            data-durum="<?= $durum->value ?>"
-            <?php if ($bitis !== null): ?>data-bitis="<?= $bitis->getTimestamp() ?>"<?php endif; ?>
-            <?php if ($sonrakiDusus !== null): ?>data-sonraki-dusus="<?= $sonrakiDusus->getTimestamp() ?>"<?php endif; ?>
+            class="kalem durum-<?= e($ilan['durum']) ?>"
+            data-id="<?= (int) $ilan['id'] ?>"
+            data-durum="<?= e($ilan['durum']) ?>"
+            <?php if ($ilan['bitisTs'] !== null): ?>data-bitis="<?= (int) $ilan['bitisTs'] ?>"<?php endif; ?>
+            <?php if ($ilan['sonrakiDususTs'] !== null): ?>data-sonraki-dusus="<?= (int) $ilan['sonrakiDususTs'] ?>"<?php endif; ?>
+            data-min="<?= (int) $ilan['minTeklif'] ?>"
         >
-            <span class="rozet"><?= htmlspecialchars($durum->etiket()) ?></span>
-            <h2><?= htmlspecialchars($ilan->baslik) ?></h2>
+            <span class="rozet"><?= e($ilan['durumEtiket']) ?></span>
+            <h2><?= e($ilan['baslik']) ?></h2>
 
-            <p class="fiyat">
-                <?= number_format($ilan->guncelFiyat($now), 0, ',', '.') ?> ₺
+            <p class="fiyat" data-alan="fiyat"><?= e($ilan['guncelFiyatBicim']) ?></p>
+
+            <p class="sayac-etiket" data-alan="sayac-etiket">
+                <?php if ($ilan['durum'] === 'dusuyor'): ?>
+                    Sonraki düşüşe
+                <?php elseif ($ilan['durum'] === 'acik_artirma'): ?>
+                    Bitişe kalan
+                <?php else: ?>
+                    Kazanan: <?= e($ilan['sonTeklifSahibi'] ?? '—') ?>
+                <?php endif; ?>
             </p>
-
-            <?php if ($durum === Durum::DUSUYOR): ?>
-                <p class="sayac-etiket">Sonraki düşüşe</p>
-                <p class="sayac" role="timer">--:--</p>
-            <?php elseif ($durum === Durum::ACIK_ARTIRMA): ?>
-                <p class="sayac-etiket">Bitişe kalan</p>
-                <p class="sayac" role="timer">--:--:--</p>
-            <?php else: ?>
-                <p class="sayac-etiket">
-                    Kazanan: <?= htmlspecialchars($ilan->sonTeklifSahibi() ?? '—') ?>
-                </p>
+            <?php if ($ilan['durum'] !== 'kapandi'): ?>
+                <p class="sayac" role="timer" data-alan="sayac">--:--</p>
             <?php endif; ?>
 
-            <button type="button" <?= $durum === Durum::KAPANDI ? 'disabled' : '' ?>>
-                <?= $durum === Durum::DUSUYOR ? 'Bu Fiyata Al' : 'Teklif Ver' ?>
-            </button>
+            <?php if ($ilan['durum'] !== 'kapandi'): ?>
+                <?php if ($kullanici !== null): ?>
+                    <form class="teklif-form" data-alan="teklif-form">
+                        <?= csrf_alani() ?>
+                        <input type="hidden" name="ilan_id" value="<?= (int) $ilan['id'] ?>">
+                        <input
+                            type="number" name="miktar" step="1"
+                            min="<?= (int) $ilan['minTeklif'] ?>"
+                            value="<?= (int) $ilan['minTeklif'] ?>"
+                            data-alan="miktar" required
+                        >
+                        <button type="submit">
+                            <?= $ilan['durum'] === 'dusuyor' ? 'Bu Fiyata Al' : 'Teklif Ver' ?>
+                        </button>
+                        <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
+                    </form>
+                <?php else: ?>
+                    <a class="baglanti-buton dolu" href="/giris">Teklif için giriş yap</a>
+                <?php endif; ?>
+            <?php endif; ?>
         </article>
     <?php endforeach; ?>
 </main>
 
 <script src="/assets/sayac.js"></script>
-</body>
-</html>

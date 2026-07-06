@@ -43,7 +43,36 @@ final class Ilan
         public readonly int $saatlikDusus,
         public readonly int $rezervFiyat,
         public readonly DateTimeImmutable $baslangicZamani,
+        public readonly ?int $id = null,
     ) {
+    }
+
+    /**
+     * Veritabanı satırından (kalıcı durumdan) bir Ilan yeniden canlandırır.
+     *
+     * @param array{
+     *     id: int, baslik: string, baslangicFiyati: int, saatlikDusus: int,
+     *     rezervFiyat: int, baslangicZamani: DateTimeImmutable,
+     *     ilkTeklifZamani: ?DateTimeImmutable, bitisZamani: ?DateTimeImmutable,
+     *     guncelTeklif: ?int, sonTeklifSahibi: ?string
+     * } $d
+     */
+    public static function fromState(array $d): self
+    {
+        $ilan = new self(
+            $d['baslik'],
+            $d['baslangicFiyati'],
+            $d['saatlikDusus'],
+            $d['rezervFiyat'],
+            $d['baslangicZamani'],
+            $d['id'],
+        );
+        $ilan->ilkTeklifZamani = $d['ilkTeklifZamani'];
+        $ilan->bitisZamani = $d['bitisZamani'];
+        $ilan->guncelTeklif = $d['guncelTeklif'];
+        $ilan->sonTeklifSahibi = $d['sonTeklifSahibi'];
+
+        return $ilan;
     }
 
     public function durum(DateTimeImmutable $now): Durum
@@ -128,6 +157,17 @@ final class Ilan
     public function bitisZamani(): ?DateTimeImmutable
     {
         return $this->bitisZamani;
+    }
+
+    public function ilkTeklifZamani(): ?DateTimeImmutable
+    {
+        return $this->ilkTeklifZamani;
+    }
+
+    /** En yüksek teklifin tutarı (henüz teklif yoksa null). */
+    public function guncelTeklifDegeri(): ?int
+    {
+        return $this->guncelTeklif;
     }
 
     /** Düşüş fazında bir sonraki fiyat düşüşünün zamanı (taban değilse). */
