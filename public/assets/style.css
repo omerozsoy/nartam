@@ -7,7 +7,7 @@
     --cizgi: #e3e3e3;
     --siyah: #111111;
     --koyu: #1a1a1a;
-    --serif: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+    --serif: 'Outfit', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
     --sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
     --kritik: #b00020;
 }
