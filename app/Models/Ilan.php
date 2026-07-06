@@ -37,6 +37,7 @@ class Ilan extends Model
         'aciklama',
         'baslangic_fiyati',
         'saatlik_dusus',
+        'dusus_periyodu',
         'rezerv_fiyat',
         'baslangic_zamani',
         'ilk_teklif_zamani',
@@ -55,6 +56,7 @@ class Ilan extends Model
             'bitis_zamani' => 'immutable_datetime',
             'baslangic_fiyati' => 'integer',
             'saatlik_dusus' => 'integer',
+            'dusus_periyodu' => 'integer',
             'rezerv_fiyat' => 'integer',
             'guncel_teklif' => 'integer',
             'bildirildi' => 'boolean',
@@ -77,12 +79,18 @@ class Ilan extends Model
         return $now->greaterThanOrEqualTo($this->bitis_zamani) ? Durum::KAPANDI : Durum::ACIK_ARTIRMA;
     }
 
+    /** Düşüş periyodu (saniye). 1=saniye, 60=dakika, 3600=saat. */
+    public function periyot(): int
+    {
+        return $this->dusus_periyodu ?: 3600;
+    }
+
     /** Düşüş fazındaki anlık fiyat (rezervde taban yapar). */
     public function dusenFiyat(?CarbonImmutable $now = null): int
     {
         $now ??= CarbonImmutable::now();
-        $gecenSaat = intdiv(max(0, $now->getTimestamp() - $this->baslangic_zamani->getTimestamp()), 3600);
-        $fiyat = $this->baslangic_fiyati - ($gecenSaat * $this->saatlik_dusus);
+        $gecen = intdiv(max(0, $now->getTimestamp() - $this->baslangic_zamani->getTimestamp()), $this->periyot());
+        $fiyat = $this->baslangic_fiyati - ($gecen * $this->saatlik_dusus);
 
         return max($this->rezerv_fiyat, $fiyat);
     }
@@ -128,8 +136,8 @@ class Ilan extends Model
             return null;
         }
 
-        $gecenSaat = intdiv(max(0, $now->getTimestamp() - $this->baslangic_zamani->getTimestamp()), 3600);
+        $gecen = intdiv(max(0, $now->getTimestamp() - $this->baslangic_zamani->getTimestamp()), $this->periyot());
 
-        return $this->baslangic_zamani->addHours($gecenSaat + 1);
+        return $this->baslangic_zamani->addSeconds(($gecen + 1) * $this->periyot());
     }
 }

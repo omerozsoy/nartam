@@ -24,8 +24,15 @@
                 <label>Başlangıç Fiyatı (₺)
                     <input type="number" name="baslangic_fiyati" min="1" value="{{ old('baslangic_fiyati', 1000) }}" required>
                 </label>
-                <label>Saatlik Düşüş (₺)
+                <label>Düşüş Miktarı (₺)
                     <input type="number" name="saatlik_dusus" min="1" value="{{ old('saatlik_dusus', 100) }}" required>
+                </label>
+                <label>Düşüş Periyodu
+                    <select name="dusus_periyodu" required>
+                        <option value="1" @selected(old('dusus_periyodu') == 1)>Saniyede bir</option>
+                        <option value="60" @selected(old('dusus_periyodu') == 60)>Dakikada bir</option>
+                        <option value="3600" @selected(old('dusus_periyodu', 3600) == 3600)>Saatte bir</option>
+                    </select>
                 </label>
                 <label>Rezerv (Taban) Fiyat (₺)
                     <input type="number" name="rezerv_fiyat" min="0" value="{{ old('rezerv_fiyat', 500) }}" required>
