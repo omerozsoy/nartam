@@ -33,21 +33,36 @@ location / {
 > Not: "Additional nginx directives" alanı görünüyor ama "Additional Apache directives"
 > görünmüyorsa, kurulum büyük olasılıkla **sadece nginx**'tir → (B) şıkkını uygula.
 
-## 3) Veritabanını hazırla
+## 3) MySQL veritabanını hazırla
 
-SQLite dosyası `data/` içinde ve git'e dahil değil. Şema ilk istekte otomatik oluşur,
-ama **örnek veri + yönetici hesabı** için bir kez kur script'ini çalıştır:
+**a) Plesk'te veritabanı oluştur:** Plesk → **Databases → Add Database**.
+- Veritabanı adı: örn. `nartam`
+- Kullanıcı ekle: örn. `nartam_user` + güçlü bir şifre
+- Not al: veritabanı adı, kullanıcı, şifre, host (genelde `localhost` / `127.0.0.1`)
 
-- **SSH varsa:**
-  ```bash
-  cd ~/httpdocs        # deponun kökü
-  php bin/kur.php
-  ```
-- **SSH yoksa:** Plesk → **Scheduled Tasks → Add Task** → "Run a PHP script" →
-  `bin/kur.php` seç → **Run Now**.
+**b) `.env` dosyasını oluştur:** Depo kökünde (`.env.example`'ı kopyalayarak) bir `.env`
+oluştur ve Plesk'ten aldığın bilgileri yaz:
 
-`data/` dizininin web kullanıcısı (psacln) tarafından yazılabilir olduğundan emin ol
-(genelde otomatik oluşur; sorun olursa Plesk File Manager'da `data/` izinlerini kontrol et).
+```
+DB_DRIVER=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=nartam
+DB_USER=nartam_user
+DB_PASS=buraya-sifre
+```
+
+> `.env` git'e dahil değildir; sunucuda Plesk **File Manager** ile oluşturabilir veya
+> SFTP ile yükleyebilirsin. Alternatif: bu değerleri Plesk'te ortam değişkeni olarak da
+> tanımlayabilirsin (ortam değişkenleri `.env`'e göre önceliklidir).
+
+**c) Tabloları oluştur + örnek veri ekle:** kur script'ini bir kez çalıştır:
+- **SSH varsa:** `cd ~/httpdocs && php bin/kur.php`
+- **SSH yoksa:** Plesk → **Scheduled Tasks → Add Task → Run a PHP script** →
+  `bin/kur.php` → **Run Now**
+
+Bu, `admin@nartam.test / admin123` yöneticisini ve 2 örnek ilanı ekler.
+(Sıfırlamak için: `php bin/kur.php --sifirla`)
 
 ## 4) Git deploy
 

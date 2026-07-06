@@ -26,6 +26,9 @@ spl_autoload_register(static function (string $class): void {
     }
 });
 
+// Ortam yapılandırması (.env varsa yüklenir; gerçek ortam değişkenleri önceliklidir).
+\App\Cekirdek\Config::yukle(dirname(__DIR__) . '/.env');
+
 require __DIR__ . '/yardimcilar.php';
 
 // Oturum yalnızca web bağlamında başlar (CLI'de header gönderilemez).

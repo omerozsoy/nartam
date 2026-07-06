@@ -44,22 +44,33 @@ src/
   Kimlik.php         Kayıt / giriş / çıkış
   TeklifServisi.php  Teklif akışı (domen + kalıcılaştırma, transaction)
   Sunum.php          Ilan -> ekran/JSON özeti
-  Cekirdek/          Veritabani (PDO), Gorunum (view motoru)
+  Cekirdek/          Veritabani (PDO), Gorunum (view), Config (.env)
   Depo/              IlanDepo, KullaniciDepo (repository)
   views/             duzen, liste, giris, kayit, yonetim, hata404
-db/schema.sql        Tablolar: kullanicilar, ilanlar, teklifler
-bin/kur.php          Veritabanı kurulumu + örnek veri
+db/
+  schema.mysql.sql   MySQL şeması (üretim)
+  schema.sqlite.sql  SQLite şeması (yerel)
+.env.example         Ortam yapılandırma örneği (.env git dışı)
+bin/kur.php          Veritabanı kurulumu + örnek veri (her iki sürücü)
 tests/ilan_test.php  Durum makinesi testleri
 data/                SQLite dosyası (git dışı)
 ```
 
 ## Kurulum ve çalıştırma
 
+Veritabanı sürücüsü `.env`'deki `DB_DRIVER` ile seçilir: **mysql** (üretim) veya
+**sqlite** (yerel geliştirme, kurulum gerektirmez).
+
 ```bash
-# 1) Veritabanını kur + örnek veri ekle
+# 1) Ortam dosyasını hazırla
+cp .env.example .env
+#   Yerel geliştirme için hızlı yol: .env içinde DB_DRIVER=sqlite yeterli.
+#   MySQL için DB_HOST/DB_NAME/DB_USER/DB_PASS doldur.
+
+# 2) Veritabanını kur + örnek veri ekle
 php bin/kur.php
 
-# 2) Sunucuyu başlat (router script olarak index.php)
+# 3) Sunucuyu başlat (router script olarak index.php)
 php -S localhost:8000 -t public public/index.php
 ```
 
@@ -67,6 +78,7 @@ Tarayıcıda: http://localhost:8000
 
 Demo yönetici: `admin@nartam.test` / `admin123`
 Veritabanını sıfırlamak: `php bin/kur.php --sifirla`
+Sunucuya (Plesk) dağıtım: bkz. [DEPLOY.md](DEPLOY.md)
 
 ## Test
 
