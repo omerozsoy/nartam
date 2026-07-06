@@ -1,0 +1,90 @@
+:root {
+    --bg: #14151a;
+    --kart: #1e2029;
+    --metin: #e8e8ea;
+    --vurgu: #c9a35b;
+    --kritik: #e0533d;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--metin);
+}
+
+header {
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid #2a2c37;
+}
+
+header h1 {
+    margin: 0 0 .25rem;
+    color: var(--vurgu);
+}
+
+.kalemler {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.kalem {
+    background: var(--kart);
+    border: 1px solid #2a2c37;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.kalem h2 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.fiyat {
+    color: var(--vurgu);
+    margin: 0;
+}
+
+.sayac {
+    font-size: 1.8rem;
+    font-variant-numeric: tabular-nums;
+    margin: .25rem 0;
+    letter-spacing: 1px;
+}
+
+.kalem.kritik .sayac {
+    color: var(--kritik);
+}
+
+.kalem.kapali {
+    opacity: .55;
+}
+
+button {
+    margin-top: auto;
+    padding: .6rem;
+    border: 0;
+    border-radius: 8px;
+    background: var(--vurgu);
+    color: #14151a;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: #3a3c47;
+    color: #888;
+    cursor: not-allowed;
+}

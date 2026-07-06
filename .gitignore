@@ -1,0 +1,19 @@
+# Bağımlılıklar
+/vendor/
+
+# IDE
+/.idea/
+/.claude/
+
+# Ortam
+.env
+.env.local
+
+# Log & önbellek
+*.log
+/cache/
+/tmp/
+
+# İşletim sistemi
+Thumbs.db
+.DS_Store
