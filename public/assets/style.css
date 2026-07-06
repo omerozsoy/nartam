@@ -392,6 +392,18 @@ img { max-width: 100%; }
 .fiyat-satir { text-align: center; margin: .3rem 0 .5rem; }
 .fiyat-satir .fiyat { font-size: 1.75rem; }
 
+/* Düşüş fazında fiyat kırmızı yanıp söner (fiyat düşüyor vurgusu) */
+@keyframes fiyatDususu {
+    0%, 100% { color: var(--kritik); transform: scale(1); }
+    50% { color: #ff6b52; transform: scale(1.06); }
+}
+.durum-dusuyor .fiyat {
+    color: var(--kritik);
+    animation: fiyatDususu 1.4s ease-in-out infinite;
+    transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) { .durum-dusuyor .fiyat { animation: none; } }
+
 /* Tek "Teklif Ver" düğmesi: tam genişlik */
 .teklif-form .tek-dugme { flex: 1 1 100%; padding: .8rem; }
 

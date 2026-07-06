@@ -25,6 +25,15 @@ class Sunum
         $fiyat = $ilan->guncelFiyat($now);
         $minTeklif = $durum === Durum::KAPANDI ? $fiyat : $ilan->minTeklif($now);
 
+        // Düşüş fazında etiket periyodu belirtir: "Her Dakika Fiyat Düşüyor" vb.
+        $durumEtiket = $durum === Durum::DUSUYOR
+            ? match ($ilan->periyot()) {
+                1 => 'Her Saniye Fiyat Düşüyor',
+                60 => 'Her Dakika Fiyat Düşüyor',
+                default => 'Her Saat Fiyat Düşüyor',
+            }
+            : $durum->etiket();
+
         return [
             'id' => $ilan->id,
             'lotNo' => $ilan->lot_no,
@@ -32,7 +41,7 @@ class Sunum
             'altBaslik' => $ilan->alt_baslik,
             'gorselUrl' => $ilan->gorsel_url,
             'durum' => $durum->value,
-            'durumEtiket' => $durum->etiket(),
+            'durumEtiket' => $durumEtiket,
             'guncelFiyat' => $fiyat,
             'guncelFiyatBicim' => number_format($fiyat, 0, ',', '.') . ' ₺',
             'baslangicFiyatiBicim' => number_format($ilan->baslangic_fiyati, 0, ',', '.') . ' ₺',
