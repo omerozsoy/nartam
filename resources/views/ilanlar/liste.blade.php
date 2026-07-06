@@ -6,8 +6,8 @@
     <div class="kap">
         <div class="satis-basligi">
             <div>
-                <div class="satis-tarih">Çevrimiçi Müzayede · nartam</div>
-                <h1>nartam Sanat &amp; Antika Müzayedesi</h1>
+                <div class="satis-tarih">Yeni Müzayede · Çevrimiçi</div>
+                <h1>Yeni Müzayede — Sanat &amp; Antika</h1>
                 <div class="yer">İki fazlı · Fiyat düşer, ilk teklifle açık artırma başlar</div>
             </div>
             <div class="satis-eylem">

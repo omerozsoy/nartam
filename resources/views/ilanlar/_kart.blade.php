@@ -12,7 +12,7 @@
             <img src="{{ $ilan['gorselUrl'] }}" alt="{{ $ilan['baslik'] }}">
         @else
             {{ mb_strtoupper(mb_substr($ilan['baslik'], 0, 1)) }}
-            <small>nartam</small>
+            <small>Yeni Müzayede</small>
         @endif
     </a>
 
