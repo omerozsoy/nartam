@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         // --- İlan 1: hâlâ düşüş fazında (3 saat önce başladı, 1000 -> 700) ---
         Ilan::create([
             'baslik' => 'Antika Porselen Vazo',
+            'alt_baslik' => 'Çin, el boyaması',
             'baslangic_fiyati' => 1000,
             'saatlik_dusus' => 100,
             'rezerv_fiyat' => 500,
@@ -47,6 +48,7 @@ class DatabaseSeeder extends Seeder
 
         $ilan2 = Ilan::create([
             'baslik' => 'Yağlı Boya Tablo',
+            'alt_baslik' => 'Tuval üzerine, imzalı',
             'baslangic_fiyati' => 12000,
             'saatlik_dusus' => 500,
             'rezerv_fiyat' => 8000,

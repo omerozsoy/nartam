@@ -24,6 +24,9 @@ class YonetimController extends Controller
     {
         $veri = $request->validate([
             'baslik' => ['required', 'string', 'max:255'],
+            'alt_baslik' => ['nullable', 'string', 'max:255'],
+            'gorsel_url' => ['nullable', 'url', 'max:1000'],
+            'aciklama' => ['nullable', 'string', 'max:5000'],
             'baslangic_fiyati' => ['required', 'integer', 'min:1'],
             'saatlik_dusus' => ['required', 'integer', 'min:1'],
             'rezerv_fiyat' => ['required', 'integer', 'min:0', 'lte:baslangic_fiyati'],

@@ -26,7 +26,7 @@ let yenilemeGerekli = false;
 function sayaclariGuncelle() {
     const simdi = Math.floor(Date.now() / 1000);
 
-    document.querySelectorAll('.kalem').forEach((kalem) => {
+    document.querySelectorAll('[data-id][data-durum]').forEach((kalem) => {
         const sayac = kalem.querySelector('[data-alan="sayac"]');
         if (!sayac) {
             return;
@@ -107,7 +107,7 @@ async function ilanlariCek() {
         }
         const ilanlar = await yanit.json();
         ilanlar.forEach((o) => {
-            const kalem = document.querySelector('.kalem[data-id="' + o.id + '"]');
+            const kalem = document.querySelector('[data-id="' + o.id + '"][data-durum]');
             if (kalem) {
                 ozetUygula(kalem, o);
             }
@@ -140,7 +140,7 @@ function teklifBagla() {
                 if (yanit.ok && sonuc.ok) {
                     mesaj.textContent = '✓ Teklif alındı';
                     mesaj.className = 'teklif-mesaj basarili';
-                    ozetUygula(form.closest('.kalem'), sonuc.ilan);
+                    ozetUygula(form.closest('[data-id]'), sonuc.ilan);
                 } else {
                     // Laravel doğrulama hatası: { message, errors: { miktar: [...] } }
                     const hata = sonuc.errors?.miktar?.[0] ?? sonuc.message ?? 'Teklif reddedildi';

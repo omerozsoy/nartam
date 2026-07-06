@@ -27,15 +27,19 @@ class Sunum
         return [
             'id' => $ilan->id,
             'baslik' => $ilan->baslik,
+            'altBaslik' => $ilan->alt_baslik,
+            'gorselUrl' => $ilan->gorsel_url,
             'durum' => $durum->value,
             'durumEtiket' => $durum->etiket(),
             'guncelFiyat' => $fiyat,
             'guncelFiyatBicim' => number_format($fiyat, 0, ',', '.') . ' ₺',
+            'baslangicFiyatiBicim' => number_format($ilan->baslangic_fiyati, 0, ',', '.') . ' ₺',
             'minTeklif' => $minTeklif,
             'minTeklifBicim' => number_format($minTeklif, 0, ',', '.') . ' ₺',
             'bitisTs' => $bitis?->getTimestamp(),
             'sonrakiDususTs' => $sonrakiDusus?->getTimestamp(),
             'sonTeklifSahibi' => $ilan->son_teklif_sahibi,
+            'teklifSayisi' => $ilan->teklifler_count ?? $ilan->teklifler()->count(),
         ];
     }
 }

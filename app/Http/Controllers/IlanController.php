@@ -17,6 +17,19 @@ class IlanController extends Controller
         return view('ilanlar.liste', ['ilanlar' => $this->siraliOzetler()]);
     }
 
+    /** Tekil lot (detay) sayfası. */
+    public function goster(Ilan $ilan): View
+    {
+        $ilan->loadCount('teklifler');
+        $teklifler = $ilan->teklifler()->with('kullanici')->orderByDesc('miktar')->take(20)->get();
+
+        return view('ilanlar.detay', [
+            'ilan' => $ilan,
+            'ozet' => Sunum::ilan($ilan),
+            'teklifler' => $teklifler,
+        ]);
+    }
+
     /** Canlı güncelleme (polling) için JSON. */
     public function api(): JsonResponse
     {
@@ -31,7 +44,7 @@ class IlanController extends Controller
     {
         $oncelik = ['acik_artirma' => 0, 'dusuyor' => 1, 'kapandi' => 2];
 
-        return Ilan::orderBy('id')->get()
+        return Ilan::withCount('teklifler')->orderBy('id')->get()
             ->map(fn (Ilan $i) => Sunum::ilan($i))
             ->sortBy(fn (array $o) => sprintf('%d-%08d', $oncelik[$o['durum']] ?? 9, $o['id']))
             ->values();

@@ -10,8 +10,17 @@
             <h2>Yeni İlan</h2>
             <form method="post" action="{{ route('yonetim.ilan') }}" class="izgara-form">
                 @csrf
-                <label>Başlık
+                <label class="genis">Başlık
                     <input type="text" name="baslik" value="{{ old('baslik') }}" required>
+                </label>
+                <label class="genis">Alt Başlık (eser/kısa açıklama)
+                    <input type="text" name="alt_baslik" value="{{ old('alt_baslik') }}">
+                </label>
+                <label class="genis">Görsel URL
+                    <input type="url" name="gorsel_url" value="{{ old('gorsel_url') }}" placeholder="https://...">
+                </label>
+                <label class="genis">Açıklama
+                    <textarea name="aciklama" rows="3">{{ old('aciklama') }}</textarea>
                 </label>
                 <label>Başlangıç Fiyatı (₺)
                     <input type="number" name="baslangic_fiyati" min="1" value="{{ old('baslangic_fiyati', 1000) }}" required>
