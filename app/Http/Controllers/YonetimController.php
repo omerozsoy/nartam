@@ -314,6 +314,12 @@ class YonetimController extends Controller
             $veri['gorsel_url'] = $this->gorselYukle($request->file('gorsel_dosya'), 'eser-' . $ilan->id);
         }
 
+        // Henüz teklif almamış (düşüş fazındaki) eser düzenlenince fiyat düşüşü baştan başlar
+        // (yeni periyot/fiyatla; aksi halde eski başlangıç zamanı yüzünden hemen tabana iner).
+        if ($ilan->ilk_teklif_zamani === null) {
+            $veri['baslangic_zamani'] = CarbonImmutable::now();
+        }
+
         $ilan->update($veri);
 
         return redirect()->route('yonetim.eserler')->with('basari', 'Eser güncellendi: ' . $ilan->baslik);
