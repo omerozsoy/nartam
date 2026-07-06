@@ -320,8 +320,29 @@ img { max-width: 100%; }
     border: 1px solid var(--cizgi);
     padding: .55rem .4rem;
     margin: 0 0 .5rem;
+    animation: sayacNabiz 1s ease-in-out infinite;
+    will-change: transform;
 }
-.kritik .sayac { color: var(--kritik); border-color: var(--kritik); background: #fdf3f2; }
+.kritik .sayac {
+    color: var(--kritik);
+    border-color: var(--kritik);
+    background: #fdf3f2;
+    animation: sayacNabizKritik .85s ease-in-out infinite;
+}
+
+@keyframes sayacNabiz {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.035); }
+}
+
+@keyframes sayacNabizKritik {
+    0%, 100% { transform: scale(1); background: #fdf3f2; border-color: var(--kritik); }
+    50% { transform: scale(1.05); background: #f6c9c4; border-color: #e0533d; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sayac, .kritik .sayac { animation: none; }
+}
 
 .lot-butonlar { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .8rem; }
 

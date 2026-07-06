@@ -24,6 +24,13 @@
 
     <span class="rozet">{{ $ilan['durumEtiket'] }}</span>
 
+    @if ($ilan['durum'] !== 'kapandi')
+        <p class="sayac-etiket" data-alan="sayac-etiket">
+            {{ $ilan['durum'] === 'dusuyor' ? 'Sonraki düşüşe' : 'Bitişe kalan' }}
+        </p>
+        <p class="sayac" role="timer" data-alan="sayac">--:--</p>
+    @endif
+
     <div class="lot-satir">
         <div class="etiket" data-alan="fiyat-etiket">
             {{ $ilan['durum'] === 'dusuyor' ? 'Düşen fiyat' : ($ilan['durum'] === 'kapandi' ? 'Kapanış fiyatı' : 'Güncel teklif') }}
@@ -35,12 +42,7 @@
         <div class="lot-satir"><span class="etiket">{{ $ilan['teklifSayisi'] }} teklif</span></div>
     @endif
 
-    @if ($ilan['durum'] !== 'kapandi')
-        <p class="sayac-etiket" data-alan="sayac-etiket">
-            {{ $ilan['durum'] === 'dusuyor' ? 'Sonraki düşüşe' : 'Bitişe kalan' }}
-        </p>
-        <p class="sayac" role="timer" data-alan="sayac">--:--</p>
-    @else
+    @if ($ilan['durum'] === 'kapandi')
         <p class="sayac-etiket">Kazanan: {{ $ilan['sonTeklifSahibi'] ?? '—' }}</p>
     @endif
 
