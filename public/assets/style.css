@@ -233,7 +233,38 @@ img { max-width: 100%; }
 @media (max-width: 820px) { .lot-izgara { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .lot-izgara { grid-template-columns: 1fr; } }
 
-.lot { display: flex; flex-direction: column; }
+.lot { display: flex; flex-direction: column; text-align: center; }
+
+/* Durum rozeti: tam genişlik kutu (referans tasarım) */
+.lot .rozet {
+    display: block;
+    width: 100%;
+    align-self: stretch;
+    text-align: center;
+    font-size: 11px;
+    padding: .6rem;
+    margin: 0 0 .6rem;
+}
+
+/* Lot no: büyük ve belirgin */
+.lot .lot-no {
+    font-family: var(--serif);
+    font-size: 1.45rem;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--metin);
+    margin: .3rem 0 .1rem;
+}
+
+.lot > a.btn { width: 100%; }
+
+.teklif-sayisi {
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--soluk);
+    margin-top: .7rem;
+}
 
 .lot-gorsel {
     aspect-ratio: 1 / 1;

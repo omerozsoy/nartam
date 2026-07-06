@@ -16,29 +16,22 @@
         @endif
     </a>
 
-    @if ($ilan['lotNo'])
-        <div class="lot-no">LOT {{ $ilan['lotNo'] }}</div>
-    @endif
-    <h2 class="lot-baslik"><a href="{{ $detayUrl }}">{{ $ilan['baslik'] }}</a></h2>
-    <div class="lot-alt">{{ $ilan['altBaslik'] }}</div>
-
     <span class="rozet">{{ $ilan['durumEtiket'] }}</span>
 
     @if ($ilan['durum'] !== 'kapandi')
         <p class="sayac" role="timer" data-alan="sayac">--:--</p>
     @endif
 
+    @if ($ilan['lotNo'])
+        <div class="lot-no">Lot {{ $ilan['lotNo'] }}</div>
+    @endif
+
+    <h2 class="lot-baslik"><a href="{{ $detayUrl }}">{{ $ilan['baslik'] }}</a></h2>
+    <div class="lot-alt">{{ $ilan['altBaslik'] }}</div>
+
     <div class="lot-satir fiyat-satir">
         <div class="fiyat" data-alan="fiyat" data-deger="{{ $ilan['guncelFiyat'] }}">{{ $ilan['guncelFiyatBicim'] }}</div>
     </div>
-
-    @if ($ilan['durum'] === 'acik_artirma')
-        <div class="lot-satir"><span class="etiket">{{ $ilan['teklifSayisi'] }} teklif</span></div>
-    @endif
-
-    @if ($ilan['durum'] === 'kapandi')
-        <p class="sayac-etiket">Kazanan: {{ $ilan['sonTeklifSahibi'] ?? '—' }}</p>
-    @endif
 
     @if ($ilan['durum'] !== 'kapandi')
         @auth
@@ -55,5 +48,11 @@
         @else
             <a class="btn btn-dolu" href="{{ route('giris') }}">Teklif için giriş</a>
         @endauth
+    @endif
+
+    @if ($ilan['durum'] === 'acik_artirma')
+        <div class="teklif-sayisi">Teklifler: {{ $ilan['teklifSayisi'] }}</div>
+    @elseif ($ilan['durum'] === 'kapandi')
+        <div class="teklif-sayisi">Kazanan: {{ $ilan['sonTeklifSahibi'] ?? '—' }}</div>
     @endif
 </article>

@@ -18,7 +18,7 @@ enum Durum: string
         return match ($this) {
             self::DUSUYOR => 'Fiyat Düşüyor',
             self::ACIK_ARTIRMA => 'Açık Artırma',
-            self::KAPANDI => 'Kapandı',
+            self::KAPANDI => 'Müzayede Bitmiştir',
         };
     }
 }
