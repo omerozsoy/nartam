@@ -54,7 +54,7 @@
                                 <input type="hidden" name="ilan_id" value="{{ $ozet['id'] }}">
                                 <input type="hidden" name="miktar" value="{{ $ozet['minTeklif'] }}" data-alan="miktar">
                                 <button type="submit" class="btn btn-dolu tek-dugme">
-                                    {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyata Müzayedeyi Başlat' : 'Teklif Ver' }} ·
+                                    {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyattan 24 Saatlik Müzayedeyi Başlat' : 'Teklif Ver' }} ·
                                     <span data-alan="btn-tutar">{{ $ozet['minTeklifBicim'] }}</span>
                                 </button>
                                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
