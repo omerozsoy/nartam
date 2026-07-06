@@ -5,6 +5,7 @@
 @section('content')
     <main class="yonetim">
         <h1>Yönetim Paneli</h1>
+        @include('yonetim._nav')
 
         <section class="kart">
             <h2>Yeni İlan</h2>
@@ -31,7 +32,7 @@
                 <label>Rezerv (Taban) Fiyat (₺)
                     <input type="number" name="rezerv_fiyat" min="0" value="{{ old('rezerv_fiyat', 500) }}" required>
                 </label>
-                <button type="submit">İlan Oluştur</button>
+                <button type="submit" class="btn btn-dolu">İlan Oluştur</button>
             </form>
             <p class="alt-not">İlan hemen "düşen fiyat" fazında başlar; ilk teklifle açık artırmaya döner.</p>
         </section>
@@ -40,16 +41,30 @@
             <h2>Mevcut İlanlar</h2>
             <table class="tablo">
                 <thead>
-                <tr><th>#</th><th>Başlık</th><th>Durum</th><th>Güncel Fiyat</th><th>Son Teklif</th></tr>
+                <tr><th>#</th><th>Lot</th><th>Başlık</th><th>Durum</th><th>Güncel Fiyat</th><th>Teklif</th><th></th></tr>
                 </thead>
                 <tbody>
                 @foreach ($ilanlar as $ilan)
                     <tr>
                         <td>{{ $ilan['id'] }}</td>
+                        <td>{{ $ilan['lotNo'] ?? '—' }}</td>
                         <td>{{ $ilan['baslik'] }}</td>
                         <td><span class="rozet rozet-{{ $ilan['durum'] }}">{{ $ilan['durumEtiket'] }}</span></td>
                         <td>{{ $ilan['guncelFiyatBicim'] }}</td>
-                        <td>{{ $ilan['sonTeklifSahibi'] ?? '—' }}</td>
+                        <td>
+                            @if ($ilan['teklifSayisi'] > 0)
+                                <a href="{{ route('yonetim.teklifler', ['ilan' => $ilan['id']]) }}">{{ $ilan['teklifSayisi'] }} teklif</a>
+                            @else
+                                0
+                            @endif
+                        </td>
+                        <td>
+                            <form method="post" action="{{ route('yonetim.ilan.sil', $ilan['id']) }}"
+                                  onsubmit="return confirm('Bu ilanı ve tekliflerini silmek istediğinize emin misiniz?')">
+                                @csrf
+                                <button type="submit" class="baglanti-buton" style="color:var(--kritik)">Sil</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

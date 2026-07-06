@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Ilan;
+use App\Models\Teklif;
+use App\Models\User;
 use App\Support\Sunum;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +17,8 @@ class YonetimController extends Controller
 {
     public function index(): View
     {
-        $ilanlar = Ilan::orderBy('id')->get()->map(fn (Ilan $i) => Sunum::ilan($i));
+        $ilanlar = Ilan::withCount('teklifler')->orderBy('id')->get()
+            ->map(fn (Ilan $i) => Sunum::ilan($i) + ['teklifSayisi' => $i->teklifler_count]);
 
         return view('yonetim.index', ['ilanlar' => $ilanlar]);
     }
@@ -38,5 +41,37 @@ class YonetimController extends Controller
         ]);
 
         return back()->with('basari', 'İlan oluşturuldu: ' . $veri['baslik']);
+    }
+
+    public function ilanSil(Ilan $ilan): RedirectResponse
+    {
+        $baslik = $ilan->baslik;
+        $ilan->delete(); // teklifler cascade ile silinir
+
+        return back()->with('basari', 'İlan silindi: ' . $baslik);
+    }
+
+    /** Üyeler (kayıtlı kullanıcılar). */
+    public function uyeler(): View
+    {
+        $uyeler = User::withCount('teklifler')->orderByDesc('id')->get();
+
+        return view('yonetim.uyeler', ['uyeler' => $uyeler]);
+    }
+
+    /** Pey verenler — tüm teklifler (isteğe bağlı ilana göre filtreli). */
+    public function teklifler(Request $request): View
+    {
+        $ilanId = $request->integer('ilan') ?: null;
+
+        $sorgu = Teklif::with(['kullanici', 'ilan'])->latest('zaman');
+        if ($ilanId) {
+            $sorgu->where('ilan_id', $ilanId);
+        }
+
+        return view('yonetim.teklifler', [
+            'teklifler' => $sorgu->get(),
+            'ilan' => $ilanId ? Ilan::find($ilanId) : null,
+        ]);
     }
 }
