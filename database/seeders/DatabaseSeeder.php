@@ -66,5 +66,8 @@ class DatabaseSeeder extends Seeder
 
         // Düşüş fazında 5 örnek ürün daha
         $this->call(DusenUrunlerSeeder::class);
+
+        // Ürünlere görsel ata (public/urunler/)
+        $this->call(GorselAtaSeeder::class);
     }
 }
