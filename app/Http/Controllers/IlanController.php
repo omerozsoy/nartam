@@ -7,22 +7,33 @@ namespace App\Http\Controllers;
 use App\Models\Ilan;
 use App\Support\Sunum;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class IlanController extends Controller
 {
     public function index(): View
     {
-        $ilanlar = Ilan::orderBy('id')->get()->map(fn (Ilan $i) => Sunum::ilan($i));
-
-        return view('ilanlar.liste', ['ilanlar' => $ilanlar]);
+        return view('ilanlar.liste', ['ilanlar' => $this->siraliOzetler()]);
     }
 
     /** Canlı güncelleme (polling) için JSON. */
     public function api(): JsonResponse
     {
-        $ilanlar = Ilan::orderBy('id')->get()->map(fn (Ilan $i) => Sunum::ilan($i));
+        return response()->json($this->siraliOzetler());
+    }
 
-        return response()->json($ilanlar);
+    /**
+     * İlanları duruma göre sıralar: açık artırmalar üstte, düşen fiyatlar altta,
+     * kapananlar en sonda. Aynı grup içinde id'ye göre.
+     */
+    private function siraliOzetler(): Collection
+    {
+        $oncelik = ['acik_artirma' => 0, 'dusuyor' => 1, 'kapandi' => 2];
+
+        return Ilan::orderBy('id')->get()
+            ->map(fn (Ilan $i) => Sunum::ilan($i))
+            ->sortBy(fn (array $o) => sprintf('%d-%08d', $oncelik[$o['durum']] ?? 9, $o['id']))
+            ->values();
     }
 }

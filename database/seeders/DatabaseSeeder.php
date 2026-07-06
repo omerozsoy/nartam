@@ -61,5 +61,8 @@ class DatabaseSeeder extends Seeder
             ['kullanici_id' => $mehmet->id, 'miktar' => 12000, 'zaman' => $t1],
             ['kullanici_id' => $ayse->id, 'miktar' => 12500, 'zaman' => $t2],
         ]);
+
+        // Düşüş fazında 5 örnek ürün daha
+        $this->call(DusenUrunlerSeeder::class);
     }
 }
