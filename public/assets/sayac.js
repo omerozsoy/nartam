@@ -86,7 +86,7 @@ function ozetUygula(kalem, o) {
             fiyat.classList.remove('dustu', 'yukseldi');
             void fiyat.offsetWidth; // animasyonu yeniden tetikle
             fiyat.classList.add(sinif);
-            setTimeout(() => fiyat.classList.remove(sinif), 1600);
+            setTimeout(() => fiyat.classList.remove(sinif), 20000);
         }
     }
     const rozet = kalem.querySelector('.rozet');

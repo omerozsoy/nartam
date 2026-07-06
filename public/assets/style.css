@@ -395,17 +395,16 @@ img { max-width: 100%; }
 /* Fiyat değişince tek seferlik flash: DÜŞÜNCE yeşil, YÜKSELİNCE kırmızı. Normalde nötr renk. */
 .fiyat { transform-origin: center; }
 @keyframes fiyatDustu {
-    0% { color: #16a34a; transform: scale(1.25); }
-    50% { color: #16a34a; }
-    100% { color: var(--vurgu); transform: scale(1); }
+    0%, 100% { color: var(--vurgu); transform: scale(1); }
+    50% { color: #16a34a; transform: scale(1.15); }
 }
 @keyframes fiyatYukseldi {
-    0% { color: var(--kritik); transform: scale(1.25); }
-    50% { color: var(--kritik); }
-    100% { color: var(--vurgu); transform: scale(1); }
+    0%, 100% { color: var(--vurgu); transform: scale(1); }
+    50% { color: var(--kritik); transform: scale(1.15); }
 }
-.fiyat.dustu { animation: fiyatDustu 1.6s ease-out; }
-.fiyat.yukseldi { animation: fiyatYukseldi 1.6s ease-out; }
+/* ~20 sn boyunca (JS sınıfı kaldırana dek) yanıp söner */
+.fiyat.dustu { animation: fiyatDustu 1.2s ease-in-out infinite; }
+.fiyat.yukseldi { animation: fiyatYukseldi 1.2s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .fiyat.dustu, .fiyat.yukseldi { animation: none; } }
 
 /* Tek "Teklif Ver" düğmesi: tam genişlik */
