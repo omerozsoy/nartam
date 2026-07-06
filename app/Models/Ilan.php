@@ -43,6 +43,7 @@ class Ilan extends Model
         'bitis_zamani',
         'guncel_teklif',
         'son_teklif_sahibi',
+        'bildirildi',
     ];
 
     protected function casts(): array
@@ -55,6 +56,7 @@ class Ilan extends Model
             'saatlik_dusus' => 'integer',
             'rezerv_fiyat' => 'integer',
             'guncel_teklif' => 'integer',
+            'bildirildi' => 'boolean',
         ];
     }
 

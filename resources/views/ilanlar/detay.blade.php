@@ -85,7 +85,7 @@
                             <tbody>
                             @foreach ($teklifler as $teklif)
                                 <tr>
-                                    <td>{{ $teklif->kullanici->name ?? '—' }}</td>
+                                    <td>{{ \App\Support\Ad::gizle($teklif->kullanici->name ?? '—') }}</td>
                                     <td>{{ number_format($teklif->miktar, 0, ',', '.') }} ₺</td>
                                     <td>{{ $teklif->zaman->format('d.m.Y H:i') }}</td>
                                 </tr>

@@ -7,7 +7,7 @@
     --cizgi: #e3e3e3;
     --siyah: #111111;
     --koyu: #1a1a1a;
-    --serif: 'Bodoni Moda', Georgia, 'Times New Roman', serif;
+    --serif: 'DM Serif Display', Georgia, 'Times New Roman', serif;
     --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
     --kritik: #b00020;
 }
@@ -47,7 +47,7 @@ img { max-width: 100%; }
 .marka {
     font-family: var(--serif);
     font-size: 1.7rem;
-    font-weight: 600;
+    font-weight: 400;
     letter-spacing: .18em;
     text-transform: uppercase;
     line-height: 1;
@@ -263,7 +263,7 @@ img { max-width: 100%; }
 .lot-baslik {
     font-family: var(--serif);
     font-size: 1.6rem;
-    font-weight: 600;
+    font-weight: 400;
     line-height: 1.12;
     letter-spacing: .01em;
     text-transform: uppercase;
@@ -331,7 +331,7 @@ img { max-width: 100%; }
 .detay-gorsel img { max-height: 560px; object-fit: contain; }
 .geri-bag { display: inline-block; margin: 1.5rem 0 0; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--soluk); }
 
-.detay-bilgi h1 { font-family: var(--serif); font-weight: 600; font-size: 2.6rem; line-height: 1.1; letter-spacing: .01em; text-transform: uppercase; margin: .3rem 0 .2rem; }
+.detay-bilgi h1 { font-family: var(--serif); font-weight: 400; font-size: 2.6rem; line-height: 1.1; letter-spacing: .01em; text-transform: uppercase; margin: .3rem 0 .2rem; }
 .detay-bilgi .alt { color: var(--soluk); font-size: 15px; margin-bottom: 1.5rem; }
 .detay-kutu { border: 1px solid var(--cizgi); padding: 1.4rem; margin: 1.5rem 0; }
 .detay-kutu .fiyat { font-size: 1.6rem; }
@@ -369,7 +369,7 @@ input:focus, textarea:focus { outline: none; border-color: var(--siyah); }
 
 /* ---------- Hesap paneli ---------- */
 .hesap { padding: 2rem 0 4rem; }
-.hesap-baslik { font-family: var(--serif); font-weight: 600; font-size: 2rem; text-transform: uppercase; letter-spacing: .01em; margin: .5rem 0 1.5rem; }
+.hesap-baslik { font-family: var(--serif); font-weight: 400; font-size: 2rem; text-transform: uppercase; letter-spacing: .01em; margin: .5rem 0 1.5rem; }
 .hesap-bos { color: var(--soluk); }
 
 .hesap-tablo { width: 100%; border-collapse: collapse; }
@@ -381,7 +381,7 @@ input:focus, textarea:focus { outline: none; border-color: var(--siyah); }
     width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;
     background: #f4f2ee; color: #c9bfa9; font-family: var(--serif); font-size: 1.5rem;
 }
-.hesap-tablo .h-ad { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; text-transform: uppercase; line-height: 1.1; }
+.hesap-tablo .h-ad { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; text-transform: uppercase; line-height: 1.1; }
 .hesap-tablo .h-tutar { font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 .durum-etiket { display: inline-block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: .3rem .6rem; border: 1px solid; }

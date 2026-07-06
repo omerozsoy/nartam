@@ -6,6 +6,7 @@ namespace App\Support;
 
 use App\Enums\Durum;
 use App\Models\Ilan;
+use App\Support\Ad;
 use Carbon\CarbonImmutable;
 
 /**
@@ -39,7 +40,7 @@ class Sunum
             'minTeklifBicim' => number_format($minTeklif, 0, ',', '.') . ' ₺',
             'bitisTs' => $bitis?->getTimestamp(),
             'sonrakiDususTs' => $sonrakiDusus?->getTimestamp(),
-            'sonTeklifSahibi' => $ilan->son_teklif_sahibi,
+            'sonTeklifSahibi' => Ad::gizle($ilan->son_teklif_sahibi),
             'teklifSayisi' => $ilan->teklifler_count ?? $ilan->teklifler()->count(),
         ];
     }

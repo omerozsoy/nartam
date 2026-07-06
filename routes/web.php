@@ -3,6 +3,7 @@
 use App\Http\Controllers\HesapController;
 use App\Http\Controllers\IlanController;
 use App\Http\Controllers\KimlikController;
+use App\Http\Controllers\OdemeController;
 use App\Http\Controllers\TeklifController;
 use App\Http\Controllers\YonetimController;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,11 @@ Route::post('/cikis', [KimlikController::class, 'cikis'])->name('cikis')->middle
 Route::post('/teklif', [TeklifController::class, 'store'])->name('teklif')->middleware('auth');
 
 // Üye paneli — pey verilen eserler
-Route::get('/hesabim', [HesapController::class, 'index'])->name('hesabim')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/hesabim', [HesapController::class, 'index'])->name('hesabim');
+    Route::get('/api/hesabim', [HesapController::class, 'api'])->name('hesabim.api');
+    Route::get('/odeme/{ilan}', [OdemeController::class, 'goster'])->name('odeme');
+});
 
 // Yönetim paneli (yalnızca yönetici)
 Route::middleware(['auth', 'yonetici'])->prefix('yonetim')->group(function () {

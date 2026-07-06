@@ -6,8 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\Durum;
 use App\Models\Ilan;
+use App\Models\User;
 use App\Support\Sunum;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class HesapController extends Controller
@@ -15,11 +18,26 @@ class HesapController extends Controller
     /** Kullanıcının pey verdiği (teklif verdiği) eserler. */
     public function index(Request $request): View
     {
-        $kullanici = $request->user();
+        $satirlar = $this->satirlar($request->user());
 
+        return view('hesap.index', [
+            'kazandiklarim' => $satirlar->where('durumum', 'kazandi')->values(),
+            'diger' => $satirlar->where('durumum', '!=', 'kazandi')->values(),
+        ]);
+    }
+
+    /** Canlı güncelleme için JSON. */
+    public function api(Request $request): JsonResponse
+    {
+        return response()->json($this->satirlar($request->user()));
+    }
+
+    /** @return Collection<int, array> */
+    private function satirlar(User $kullanici): Collection
+    {
         $ilanIdleri = $kullanici->teklifler()->pluck('ilan_id')->unique();
 
-        $satirlar = Ilan::whereIn('id', $ilanIdleri)
+        return Ilan::whereIn('id', $ilanIdleri)
             ->withCount('teklifler')
             ->get()
             ->map(function (Ilan $ilan) use ($kullanici) {
@@ -40,10 +58,7 @@ class HesapController extends Controller
 
                 return $ozet;
             })
-            // Açık artırmadakiler üstte, kapananlar altta; sonra teklifime göre
             ->sortBy(fn (array $o) => sprintf('%d-%012d', $o['durum'] === 'kapandi' ? 1 : 0, PHP_INT_MAX - $o['benimTeklifim']))
             ->values();
-
-        return view('hesap.index', ['satirlar' => $satirlar]);
     }
 }
