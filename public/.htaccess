@@ -1,0 +1,17 @@
+# Front controller yönlendirmesi (Apache / nginx+Apache Plesk kurulumları)
+# Document root bu klasörü (public) göstermelidir.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Var olan dosya veya dizinleri doğrudan sun (assets vb.)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Geri kalan tüm istekleri index.php'ye ilet
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Dizin listelemeyi kapat
+Options -Indexes

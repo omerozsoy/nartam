@@ -28,6 +28,13 @@ final class Veritabani
             $pdo->exec('PRAGMA foreign_keys = ON');
 
             self::$pdo = $pdo;
+
+            // Şema yoksa otomatik uygula (yeni sunucuda 500 yerine boş ama çalışan
+            // uygulama). Örnek veri/yönetici için yine `php bin/kur.php` çalıştırın.
+            $sema = \dirname(__DIR__, 2) . '/db/schema.sql';
+            if (is_file($sema)) {
+                $pdo->exec(file_get_contents($sema));
+            }
         }
 
         return self::$pdo;
