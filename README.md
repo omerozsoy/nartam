@@ -1,24 +1,37 @@
 # nartam — Müzayede Evi Yazılımı
 
-Canlı müzayede yönetimi için PHP tabanlı web uygulaması. Her kalem (lot) için geri sayım sayacı ile teklif süresi takibi.
+Klasik olmayan, **iki fazlı** bir müzayede sistemi. Bir ilan önce fiyatı düşerek
+alıcı bekler; ilk teklif geldiği an klasik açık artırmaya döner.
 
-## Özellikler (başlangıç)
+## Nasıl çalışır
 
-- Müzayede oturumu ve kalem (lot) modeli
-- Kalem başına canlı geri sayım **sayacı** (JavaScript, saniyede bir güncellenir)
-- Süre bitince kalem otomatik "KAPANDI" durumuna geçer, teklif butonu kilitlenir
-- Son 30 saniyede sayaç kırmızıya döner (kritik uyarı)
+**Faz 1 — Düşen fiyat (Dutch):**
+- İlan başlangıç fiyatından açılır (örn. 1000 ₺).
+- Teklif gelmedikçe fiyat her saat sabit tutar düşer (örn. −100 ₺/saat).
+- Fiyat **rezerv (taban) fiyatın** altına inmez; orada bekler.
+
+**Faz 2 — Açık artırma (English), ilk teklifle:**
+- İlk teklif geldiği an, **o anki düşmüş fiyat taban** olur (örn. 700'e düşmüşse
+  açık artırma 700'den başlar).
+- İlk tekliften itibaren **24 saatlik geri sayım** başlar.
+- Sonraki teklifler **kademeli artırım adımıyla** yükselir:
+  `<1000 → +50`, `<5000 → +100`, `5000+ → +250`.
+- **Anti-snipe:** bitişe son 2 dakika kala gelen teklif, sayacı yeniden 2 dakikaya
+  çeker — son saniye kapışları önlenir.
+- Süre dolunca en yüksek teklif kazanır.
 
 ## Klasör yapısı
 
 ```
-public/           Web kök dizini (sunucu buraya bakar)
-  index.php       Giriş noktası
-  assets/         style.css, sayac.js
+public/           Web kök dizini
+  index.php       Giriş noktası + örnek ilanlar
+  assets/         style.css, sayac.js (iki fazlı canlı sayaç)
 src/              Uygulama kodu (App\ namespace)
-  Muzayede.php    Müzayede oturumu
-  Kalem.php       Satışa çıkan kalem (lot)
+  Ilan.php        İlan yaşam döngüsü / durum makinesi (Dutch → English)
+  Durum.php       DUSUYOR | ACIK_ARTIRMA | KAPANDI
   views/          HTML şablonları
+tests/
+  ilan_test.php   Durum makinesi testleri (php tests/ilan_test.php)
 composer.json     PSR-4 autoload tanımı
 ```
 
@@ -30,18 +43,22 @@ Composer olmadan da çalışır (basit autoloader devrede):
 php -S localhost:8000 -t public
 ```
 
-Ardından tarayıcıda: http://localhost:8000
+Tarayıcıda: http://localhost:8000
 
-İleride bağımlılık eklenince:
+## Test
 
 ```bash
-composer install
+php tests/ilan_test.php
 ```
 
 ## Yol haritası
 
-- [ ] Veritabanı (kalemler, teklifler, kullanıcılar)
-- [ ] Gerçek teklif verme akışı + sunucu tarafı sayaç doğrulaması
-- [ ] Canlı güncelleme (WebSocket / SSE) ile teklifler anlık yayılsın
-- [ ] Yönetim paneli (müzayede ve kalem yönetimi)
+- [x] İki fazlı ilan modeli (düşen fiyat → açık artırma)
+- [x] Rezerv taban, kademeli artırım, anti-snipe
+- [x] İki fazlı canlı sayaç (ön yüz)
+- [ ] Veritabanı (ilanlar, teklifler, kullanıcılar)
+- [ ] Gerçek teklif verme akışı (form + sunucu doğrulaması)
+- [ ] Canlı güncelleme (WebSocket / SSE) — teklifler anlık yayılsın
+- [ ] Yönetim paneli (ilan oluşturma/yönetme)
 - [ ] Kullanıcı kayıt / kimlik doğrulama
+```

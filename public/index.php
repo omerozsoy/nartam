@@ -22,15 +22,25 @@ if (is_file($autoload)) {
     });
 }
 
-use App\Kalem;
-use App\Muzayede;
+use App\Ilan;
 
 date_default_timezone_set('Europe/Istanbul');
+$now = new DateTimeImmutable();
 
-// Örnek müzayede verisi (ileride veritabanından gelecek)
-$muzayede = new Muzayede('Temmuz Sanat Müzayedesi');
-$muzayede->kalemEkle(new Kalem(1, 'Antika Porselen Vazo', 5000, new DateTimeImmutable('+2 minutes')));
-$muzayede->kalemEkle(new Kalem(2, 'Yağlı Boya Tablo', 12000, new DateTimeImmutable('+5 minutes')));
-$muzayede->kalemEkle(new Kalem(3, 'Gümüş Cep Saati', 3500, new DateTimeImmutable('+8 minutes')));
+/*
+ * Örnek ilanlar (ileride veritabanından gelecek). Her iki fazı da göstermek için
+ * başlangıç zamanlarını geçmişe alıyoruz.
+ */
+$ilanlar = [];
+
+// 1) Düşüş fazında: 3 saat önce başladı, fiyat 1000 → 700.
+$ilanlar[] = new Ilan('Antika Porselen Vazo', 1000, 100, 500, $now->modify('-3 hours'));
+
+// 2) Açık artırmada: düşüş sırasında teklif geldi, 24 saatlik sayaç işliyor.
+//    -90 dk'da fiyat henüz 12000'di; ilk teklif o tabanı alır, üzerine çıkıldı.
+$acikArtirma = new Ilan('Yağlı Boya Tablo', 12000, 500, 8000, $now->modify('-2 hours'));
+$acikArtirma->teklifVer('mehmet', 12000, $now->modify('-90 minutes'));
+$acikArtirma->teklifVer('ayse', 12500, $now->modify('-40 minutes'));
+$ilanlar[] = $acikArtirma;
 
 require __DIR__ . '/../src/views/liste.php';
