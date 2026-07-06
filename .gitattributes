@@ -1,7 +1,11 @@
-# Depoda satır sonlarını LF olarak normalize et (Windows CRLF uyarılarını önler)
 * text=auto eol=lf
-*.php text eol=lf
-*.js text eol=lf
-*.css text eol=lf
-*.sql text eol=lf
-*.md text eol=lf
+
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+
+/.github export-ignore
+CHANGELOG.md export-ignore
+.styleci.yml export-ignore

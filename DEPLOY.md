@@ -1,80 +1,105 @@
-# Plesk'e Dağıtım (nginx)
+# Plesk'e Dağıtım (Laravel 12 + nginx + MySQL)
 
-Uygulamanın giriş noktası `public/index.php`, statik yolları `/assets/...`. Bu yüzden
-**document root `public` klasörünü göstermelidir.** Aksi halde nginx repo kökünde index
-bulamaz → 403, ve alt yollar (`/giris`, `/api/ilanlar`) → 404 olur.
+Laravel'in giriş noktası `public/index.php`. Document root **`public`** klasörünü
+göstermelidir. Ayrıca sunucuda `composer install`, `.env` + `APP_KEY` ve `migrate`
+gerekir (bunlar git'e dahil değildir).
 
-## 1) Document root'u `public` yap
+## 1) Kodu çek
 
-Plesk → **Websites & Domains → ozsoy.net → Hosting Settings** (veya **Hosting & DNS →
-Hosting Settings**) → **Document root** alanını şu yap:
+Plesk → **Git** → depo bağlı → **Pull Now**. (Kod `httpdocs` altına gelir.)
+
+## 2) Document root'u `public` yap
+
+Plesk → **Websites & Domains → ozsoy.net → Hosting Settings** → **Document root**:
 
 ```
 httpdocs/public
 ```
 
-(Git deposu `httpdocs` içine çekiliyorsa. Deponun çekildiği dizin farklıysa o dizinin
-altındaki `public`'i göster.) Kaydet.
+## 3) Bağımlılıkları kur (composer)
 
-## 2) Tüm istekleri index.php'ye yönlendir
+`vendor/` git'e dahil değildir; sunucuda kurulmalı.
+- **SSH varsa:** `cd ~/httpdocs && composer install --no-dev --optimize-autoloader`
+- **SSH yoksa:** Plesk → **PHP Composer** aracıyla depo kökünde `install` çalıştır.
 
-**A. Apache stack'i varsa** (Plesk'te Apache + nginx): repodaki `public/.htaccess`
-bunu otomatik yapar. Ek işlem gerekmez.
+> PHP sürümü **8.2+** olmalı (Plesk → PHP Settings).
 
-**B. Sadece nginx (PHP-FPM) ise:** Plesk → **Apache & nginx Settings** →
-**Additional nginx directives** alanına şunu ekle ve kaydet:
+## 4) `.env` oluştur ve anahtar üret
+
+Depo kökünde `.env` oluştur (`.env.example`'ı kopyala) ve doldur:
+
+```
+APP_NAME=nartam
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://www.ozsoy.net
+
+APP_KEY=            # bir sonraki adımda üretilecek
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nartam
+DB_USERNAME=nartam_user
+DB_PASSWORD=buraya-sifre
+```
+
+Sonra uygulama anahtarını üret:
+```bash
+php artisan key:generate
+```
+
+**MySQL veritabanı:** Plesk → **Databases → Add Database** ile `nartam` veritabanı +
+kullanıcı oluştur; bilgileri yukarıdaki `.env`'e yaz.
+
+## 5) Tabloları oluştur + örnek veri
+
+```bash
+php artisan migrate --seed --force
+```
+
+(`admin@nartam.test / admin123` yöneticisi ve 2 örnek ilan eklenir.
+Yeniden sıfırlamak için: `php artisan migrate:fresh --seed --force`.)
+
+## 6) İzinler ve önbellek
+
+`storage/` ve `bootstrap/cache/` web kullanıcısı tarafından yazılabilir olmalı
+(Plesk'te genelde otomatik). Üretimde önbellek:
+
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+> Not: `.env` veya route değişince `php artisan optimize:clear` ile önbelleği temizle.
+
+## 7) Yönlendirme
+
+Laravel `public/.htaccess` ile gelir; **Apache stack'i** varsa ek işlem gerekmez.
+**Sadece nginx** ise Plesk → **Apache & nginx Settings → Additional nginx directives**:
 
 ```nginx
 location / {
-    try_files $uri $uri/ /index.php?$args;
+    try_files $uri $uri/ /index.php?$query_string;
 }
 ```
 
-> Not: "Additional nginx directives" alanı görünüyor ama "Additional Apache directives"
-> görünmüyorsa, kurulum büyük olasılıkla **sadece nginx**'tir → (B) şıkkını uygula.
-
-## 3) MySQL veritabanını hazırla
-
-**a) Plesk'te veritabanı oluştur:** Plesk → **Databases → Add Database**.
-- Veritabanı adı: örn. `nartam`
-- Kullanıcı ekle: örn. `nartam_user` + güçlü bir şifre
-- Not al: veritabanı adı, kullanıcı, şifre, host (genelde `localhost` / `127.0.0.1`)
-
-**b) `.env` dosyasını oluştur:** Depo kökünde (`.env.example`'ı kopyalayarak) bir `.env`
-oluştur ve Plesk'ten aldığın bilgileri yaz:
-
-```
-DB_DRIVER=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_NAME=nartam
-DB_USER=nartam_user
-DB_PASS=buraya-sifre
-```
-
-> `.env` git'e dahil değildir; sunucuda Plesk **File Manager** ile oluşturabilir veya
-> SFTP ile yükleyebilirsin. Alternatif: bu değerleri Plesk'te ortam değişkeni olarak da
-> tanımlayabilirsin (ortam değişkenleri `.env`'e göre önceliklidir).
-
-**c) Tabloları oluştur + örnek veri ekle:** kur script'ini bir kez çalıştır:
-- **SSH varsa:** `cd ~/httpdocs && php bin/kur.php`
-- **SSH yoksa:** Plesk → **Scheduled Tasks → Add Task → Run a PHP script** →
-  `bin/kur.php` → **Run Now**
-
-Bu, `admin@nartam.test / admin123` yöneticisini ve 2 örnek ilanı ekler.
-(Sıfırlamak için: `php bin/kur.php --sifirla`)
-
-## 4) Git deploy
-
-Plesk → **Git** → **Pull Now** (son commit'i çeker) → **Deploy Now**.
-Deployment yolu ile document root aynı depoyu göstermeli.
-
 ## Kontrol listesi
 
-- [ ] Document root = `.../public`
-- [ ] Yönlendirme: `.htaccess` (Apache) **veya** nginx `try_files` yönergesi
-- [ ] `php bin/kur.php` çalıştırıldı (admin@nartam.test / admin123)
-- [ ] `data/` yazılabilir
-- [ ] Pull Now + Deploy Now
+- [ ] Document root = `httpdocs/public`
+- [ ] `composer install --no-dev` çalıştı (vendor/ oluştu)
+- [ ] `.env` dolu + `php artisan key:generate` (APP_KEY set)
+- [ ] MySQL DB oluşturuldu, `.env`'e yazıldı
+- [ ] `php artisan migrate --seed --force`
+- [ ] `storage/` ve `bootstrap/cache/` yazılabilir
+- [ ] Yönlendirme: `.htaccess` (Apache) veya nginx `try_files`
 
-Sonrasında https://www.ozsoy.net açılmalı; `/giris`, `/api/ilanlar` çalışmalı.
+## Otomatik dağıtım (opsiyonel)
+
+Plesk → **Git → Deployment actions** ile Pull sonrası şunları otomatikleştirebilirsin:
+```bash
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan optimize
+```

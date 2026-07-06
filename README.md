@@ -1,103 +1,73 @@
-# nartam — Müzayede Evi Yazılımı
+# nartam — Müzayede Evi Yazılımı (Laravel 12)
 
 Klasik olmayan, **iki fazlı** bir müzayede sistemi. Bir ilan önce fiyatı düşerek
 alıcı bekler; ilk teklif geldiği an klasik açık artırmaya döner.
 
 ## Nasıl çalışır
 
-**Faz 1 — Düşen fiyat (Dutch):**
-- İlan başlangıç fiyatından açılır (örn. 1000 ₺).
-- Teklif gelmedikçe fiyat her saat sabit tutar düşer (örn. −100 ₺/saat).
-- Fiyat **rezerv (taban) fiyatın** altına inmez; orada bekler.
+**Faz 1 — Düşen fiyat (Dutch):** İlan başlangıç fiyatından açılır, teklif gelmedikçe
+fiyat her saat sabit tutar düşer, **rezerv (taban) fiyatta** durur.
 
-**Faz 2 — Açık artırma (English), ilk teklifle:**
-- İlk teklif geldiği an, **o anki düşmüş fiyat taban** olur (örn. 700'e düşmüşse
-  açık artırma 700'den başlar).
-- İlk tekliften itibaren **24 saatlik geri sayım** başlar.
-- Sonraki teklifler **kademeli artırım adımıyla** yükselir:
-  `<1000 → +50`, `<5000 → +100`, `5000+ → +250`.
-- **Anti-snipe:** bitişe son 2 dakika kala gelen teklif, sayacı yeniden 2 dakikaya
-  çeker — son saniye kapışları önlenir.
-- Süre dolunca en yüksek teklif kazanır.
+**Faz 2 — Açık artırma (English):** İlk teklif geldiği an **o anki düşmüş fiyat taban**
+olur ve **24 saatlik** geri sayım başlar. Sonraki teklifler kademeli artırımla yükselir
+(`<1000 → +50`, `<5000 → +100`, `5000+ → +250`). **Anti-snipe:** bitişe son 2 dk kala
+gelen teklif sayacı yeniden 2 dk'ya çeker. Süre dolunca en yüksek teklif kazanır.
 
-## Özellikler
+## Teknoloji
 
-- İki fazlı ilan yaşam döngüsü (düşen fiyat → açık artırma)
-- Kullanıcı kayıt / giriş (oturum + `password_hash`, CSRF korumalı formlar)
-- Teklif verme akışı (AJAX; domen kuralları sunucuda doğrulanır)
-- **Canlı güncelleme:** ana sayfa `/api/ilanlar`'ı periyodik yoklar; fiyat, durum ve
-  sayaçlar sayfa yenilemeden güncellenir
-- Yönetim paneli (yönetici): yeni ilan oluşturma, ilan listesi
-- SQLite veritabanı (kurulum gerektirmez)
+- **Laravel 12** (PHP 8.2+)
+- MySQL (üretim) / SQLite (yerel geliştirme)
+- Blade şablonları + saf JS (canlı sayaç + polling ile güncelleme)
+- Oturum tabanlı kimlik doğrulama, CSRF, yönetici middleware
 
-## Klasör yapısı
+## Önemli dosyalar
 
 ```
-public/
-  index.php          Ön denetleyici (router) + statik dosya geçişi
-  assets/            style.css, sayac.js (sayaç + polling + AJAX teklif)
-src/
-  onyukleme.php      Autoloader, oturum, yapılandırma
-  yardimcilar.php    e(), para(), CSRF, flash, yönlendirme
-  Ilan.php           İlan durum makinesi (Dutch → English)
-  Durum.php          DUSUYOR | ACIK_ARTIRMA | KAPANDI
-  Kimlik.php         Kayıt / giriş / çıkış
-  TeklifServisi.php  Teklif akışı (domen + kalıcılaştırma, transaction)
-  Sunum.php          Ilan -> ekran/JSON özeti
-  Cekirdek/          Veritabani (PDO), Gorunum (view), Config (.env)
-  Depo/              IlanDepo, KullaniciDepo (repository)
-  views/             duzen, liste, giris, kayit, yonetim, hata404
-db/
-  schema.mysql.sql   MySQL şeması (üretim)
-  schema.sqlite.sql  SQLite şeması (yerel)
-.env.example         Ortam yapılandırma örneği (.env git dışı)
-bin/kur.php          Veritabanı kurulumu + örnek veri (her iki sürücü)
-tests/ilan_test.php  Durum makinesi testleri
-data/                SQLite dosyası (git dışı)
+app/
+  Models/Ilan.php          İki fazlı durum makinesi (Eloquent)
+  Models/Teklif.php, User.php
+  Enums/Durum.php          DUSUYOR | ACIK_ARTIRMA | KAPANDI
+  Services/TeklifServisi.php  Teklif akışı (domen kuralı + transaction)
+  Support/Sunum.php        Ilan -> ekran/JSON özeti
+  Http/Controllers/        Ilan, Teklif, Kimlik, Yonetim
+  Http/Middleware/YoneticiOl.php
+database/migrations/       users(+rol), ilanlar, teklifler
+database/seeders/          örnek veri (admin + 2 ilan)
+resources/views/           layouts, ilanlar, auth, yonetim (Blade)
+public/assets/             style.css, sayac.js
+routes/web.php
+tests/                     Unit\IlanTest, Feature\TeklifTest
 ```
 
-## Kurulum ve çalıştırma
-
-Veritabanı sürücüsü `.env`'deki `DB_DRIVER` ile seçilir: **mysql** (üretim) veya
-**sqlite** (yerel geliştirme, kurulum gerektirmez).
+## Yerel kurulum
 
 ```bash
-# 1) Ortam dosyasını hazırla
-cp .env.example .env
-#   Yerel geliştirme için hızlı yol: .env içinde DB_DRIVER=sqlite yeterli.
-#   MySQL için DB_HOST/DB_NAME/DB_USER/DB_PASS doldur.
-
-# 2) Veritabanını kur + örnek veri ekle
-php bin/kur.php
-
-# 3) Sunucuyu başlat (router script olarak index.php)
-php -S localhost:8000 -t public public/index.php
+composer install
+cp .env.example .env          # DB_CONNECTION=sqlite yerel için yeterli
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate --seed
+php artisan serve             # http://127.0.0.1:8000
 ```
 
-Tarayıcıda: http://localhost:8000
-
 Demo yönetici: `admin@nartam.test` / `admin123`
-Veritabanını sıfırlamak: `php bin/kur.php --sifirla`
-Sunucuya (Plesk) dağıtım: bkz. [DEPLOY.md](DEPLOY.md)
 
 ## Test
 
 ```bash
-php tests/ilan_test.php
+php artisan test
 ```
+
+## Sunucuya (Plesk) dağıtım
+
+Bkz. [DEPLOY.md](DEPLOY.md).
 
 ## Yol haritası
 
-- [x] İki fazlı ilan modeli (düşen fiyat → açık artırma)
-- [x] Rezerv taban, kademeli artırım, anti-snipe
-- [x] İki fazlı canlı sayaç (ön yüz)
-- [x] Veritabanı (SQLite) — ilanlar, teklifler, kullanıcılar
-- [x] Kullanıcı kayıt / giriş (oturum, CSRF)
-- [x] Teklif verme akışı (AJAX + sunucu doğrulaması)
-- [x] Canlı güncelleme (polling)
-- [x] Yönetim paneli (ilan oluşturma)
-- [ ] Gerçek zamanlı yayın (WebSocket / SSE) — polling yerine anlık itme
-- [ ] Teklif geçmişi görünümü (ilan detay sayfası)
-- [ ] E-posta bildirimleri (teklif geçildi / kazandın)
-- [ ] Testleri PHPUnit'e taşımak
-```
+- [x] İki fazlı müzayede (düşen fiyat → açık artırma), rezerv, kademeli artırım, anti-snipe
+- [x] Laravel 12 + Eloquent + migration'lar
+- [x] Kimlik doğrulama, teklif akışı, canlı güncelleme (polling), yönetim paneli
+- [ ] Gerçek zamanlı yayın (Laravel Reverb / WebSocket) — polling yerine anlık itme
+- [ ] E-posta bildirimleri (teklifin geçildi / kazandın) — Mail + Queue
+- [ ] İlan detay sayfası + teklif geçmişi
+- [ ] Güçlü yönetim paneli (Filament)
