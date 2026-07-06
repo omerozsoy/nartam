@@ -12,7 +12,10 @@
 </head>
 <body>
 <header class="ust-bar">
-    <a class="marka" href="{{ route('ilanlar.liste') }}">Yeni Müzayede</a>
+    <div class="marka-kutu">
+        <a class="marka" href="{{ route('ilanlar.liste') }}">Yeni Müzayede</a>
+        <span class="marka-slogan">Fiyat hep düşer, ilk teklifle 24 saatlik açık artırma başlar</span>
+    </div>
     <nav class="ust-nav">
         <a href="{{ route('ilanlar.liste') }}">Müzayedeler</a>
         <a href="{{ route('ilanlar.liste') }}">Nasıl Çalışır</a>

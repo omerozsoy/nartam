@@ -16,8 +16,9 @@
         <nav class="yk-menu">
             <a href="{{ route('yonetim') }}" class="{{ request()->routeIs('yonetim') ? 'aktif' : '' }}">Panel</a>
             <a href="{{ route('yonetim.eserler') }}" class="{{ request()->routeIs('yonetim.eserler') || request()->routeIs('yonetim.ilan.duzenle') ? 'aktif' : '' }}">Eserler</a>
+            <a href="{{ route('yonetim.eser.yeni') }}" class="{{ request()->routeIs('yonetim.eser.yeni') ? 'aktif' : '' }}">Yeni Eser Ekle</a>
+            <a href="{{ route('yonetim.toplu') }}" class="{{ request()->routeIs('yonetim.toplu') ? 'aktif' : '' }}">Toplu Ürün Girişi</a>
             <a href="{{ route('yonetim.uyeler') }}" class="{{ request()->routeIs('yonetim.uyeler') || request()->routeIs('yonetim.uye') ? 'aktif' : '' }}">Üyeler</a>
-            <a href="{{ route('yonetim.teklifler') }}" class="{{ request()->routeIs('yonetim.teklifler') ? 'aktif' : '' }}">Teklifler</a>
         </nav>
         <div class="yk-dip">
             <a href="{{ route('ilanlar.liste') }}">← Siteye dön</a>

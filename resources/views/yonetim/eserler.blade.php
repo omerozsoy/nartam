@@ -4,40 +4,15 @@
 
 @section('content')
     <main class="yonetim">
-        <h1>Eserler</h1>
+        <div class="yonetim-ust">
+            <h1>Eserler</h1>
+            <div class="yonetim-eylem">
+                <a class="btn btn-dolu" href="{{ route('yonetim.eser.yeni') }}">Yeni Eser Ekle</a>
+                <a class="btn" href="{{ route('yonetim.toplu') }}">Toplu Ürün Girişi</a>
+            </div>
+        </div>
 
         <section class="kart">
-            <h2>Yeni Eser</h2>
-            <form method="post" action="{{ route('yonetim.ilan') }}" class="izgara-form">
-                @csrf
-                <label class="genis">Başlık
-                    <input type="text" name="baslik" value="{{ old('baslik') }}" required>
-                </label>
-                <label class="genis">Alt Başlık (eser/kısa açıklama)
-                    <input type="text" name="alt_baslik" value="{{ old('alt_baslik') }}">
-                </label>
-                <label class="genis">Görsel URL
-                    <input type="url" name="gorsel_url" value="{{ old('gorsel_url') }}" placeholder="https://...">
-                </label>
-                <label class="genis">Açıklama
-                    <textarea name="aciklama" rows="3">{{ old('aciklama') }}</textarea>
-                </label>
-                <label>Başlangıç Fiyatı (₺)
-                    <input type="number" name="baslangic_fiyati" min="1" value="{{ old('baslangic_fiyati', 1000) }}" required>
-                </label>
-                <label>Saatlik Düşüş (₺)
-                    <input type="number" name="saatlik_dusus" min="1" value="{{ old('saatlik_dusus', 100) }}" required>
-                </label>
-                <label>Rezerv (Taban) Fiyat (₺)
-                    <input type="number" name="rezerv_fiyat" min="0" value="{{ old('rezerv_fiyat', 500) }}" required>
-                </label>
-                <button type="submit" class="btn btn-dolu">Eser Oluştur</button>
-            </form>
-            <p class="alt-not">Eser hemen "düşen fiyat" fazında başlar; ilk teklifle açık artırmaya döner.</p>
-        </section>
-
-        <section class="kart">
-            <h2>Mevcut Eserler</h2>
             <table class="tablo">
                 <thead>
                 <tr><th>#</th><th>Lot</th><th>Başlık</th><th>Durum</th><th>Güncel Fiyat</th><th>Teklif</th><th></th></tr>
