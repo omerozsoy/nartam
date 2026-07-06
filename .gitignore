@@ -20,3 +20,6 @@
 # İşletim sistemi
 Thumbs.db
 .DS_Store
+
+# Yanlislikla eklenen Laravel gecici kurulumu
+/_laravel_tmp/
