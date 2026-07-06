@@ -7,6 +7,15 @@
         <h1>Yönetim Paneli</h1>
         @include('yonetim._nav')
 
+        <div class="istatistik">
+            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['uye'] }}</span><span class="etiket">Üye</span></div>
+            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['ilan'] }}</span><span class="etiket">İlan</span></div>
+            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['acikArtirma'] }}</span><span class="etiket">Açık Artırma</span></div>
+            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['dusuyor'] }}</span><span class="etiket">Düşen Fiyat</span></div>
+            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['teklif'] }}</span><span class="etiket">Teklif</span></div>
+            <div class="ist-kart"><span class="ist-sayi">{{ $istatistik['toplamDeger'] }}</span><span class="etiket">Toplam Değer</span></div>
+        </div>
+
         <section class="kart">
             <h2>Yeni İlan</h2>
             <form method="post" action="{{ route('yonetim.ilan') }}" class="izgara-form">
@@ -58,8 +67,9 @@
                                 0
                             @endif
                         </td>
-                        <td>
-                            <form method="post" action="{{ route('yonetim.ilan.sil', $ilan['id']) }}"
+                        <td style="white-space:nowrap">
+                            <a href="{{ route('yonetim.ilan.duzenle', $ilan['id']) }}">Düzenle</a>
+                            <form method="post" action="{{ route('yonetim.ilan.sil', $ilan['id']) }}" style="display:inline;margin-left:.6rem"
                                   onsubmit="return confirm('Bu ilanı ve tekliflerini silmek istediğinize emin misiniz?')">
                                 @csrf
                                 <button type="submit" class="baglanti-buton" style="color:var(--kritik)">Sil</button>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdresController;
 use App\Http\Controllers\HesapController;
 use App\Http\Controllers\IlanController;
 use App\Http\Controllers\KimlikController;
@@ -31,13 +32,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/hesabim', [HesapController::class, 'index'])->name('hesabim');
     Route::get('/api/hesabim', [HesapController::class, 'api'])->name('hesabim.api');
     Route::get('/odeme/{ilan}', [OdemeController::class, 'goster'])->name('odeme');
+
+    // Adreslerim
+    Route::get('/adreslerim', [AdresController::class, 'index'])->name('adresler');
+    Route::post('/adreslerim', [AdresController::class, 'store'])->name('adresler.ekle');
+    Route::post('/adreslerim/{adres}/sil', [AdresController::class, 'destroy'])->name('adresler.sil');
 });
 
 // Yönetim paneli (yalnızca yönetici)
 Route::middleware(['auth', 'yonetici'])->prefix('yonetim')->group(function () {
     Route::get('/', [YonetimController::class, 'index'])->name('yonetim');
     Route::post('/ilan', [YonetimController::class, 'ilanOlustur'])->name('yonetim.ilan');
+    Route::get('/ilan/{ilan}/duzenle', [YonetimController::class, 'ilanDuzenle'])->name('yonetim.ilan.duzenle');
+    Route::post('/ilan/{ilan}/guncelle', [YonetimController::class, 'ilanGuncelle'])->name('yonetim.ilan.guncelle');
     Route::post('/ilan/{ilan}/sil', [YonetimController::class, 'ilanSil'])->name('yonetim.ilan.sil');
     Route::get('/uyeler', [YonetimController::class, 'uyeler'])->name('yonetim.uyeler');
+    Route::get('/uye/{user}', [YonetimController::class, 'uye'])->name('yonetim.uye');
+    Route::post('/uye/{user}/engelle', [YonetimController::class, 'uyeEngelle'])->name('yonetim.uye.engelle');
     Route::get('/teklifler', [YonetimController::class, 'teklifler'])->name('yonetim.teklifler');
 });

@@ -17,7 +17,9 @@
                 @foreach ($uyeler as $uye)
                     <tr>
                         <td>{{ $uye->id }}</td>
-                        <td>{{ $uye->name }}</td>
+                        <td><a href="{{ route('yonetim.uye', $uye) }}">{{ $uye->name }}</a>
+                            @if ($uye->engelli)<span class="rozet rozet-kapandi">Engelli</span>@endif
+                        </td>
                         <td>{{ $uye->email }}</td>
                         <td>{{ $uye->telefon ?? '—' }}</td>
                         <td>

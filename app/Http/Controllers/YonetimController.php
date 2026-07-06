@@ -20,7 +20,40 @@ class YonetimController extends Controller
         $ilanlar = Ilan::withCount('teklifler')->orderBy('id')->get()
             ->map(fn (Ilan $i) => Sunum::ilan($i) + ['teklifSayisi' => $i->teklifler_count]);
 
-        return view('yonetim.index', ['ilanlar' => $ilanlar]);
+        $istatistik = [
+            'uye' => User::where('rol', '!=', 'yonetici')->count(),
+            'ilan' => $ilanlar->count(),
+            'acikArtirma' => $ilanlar->where('durum', 'acik_artirma')->count(),
+            'dusuyor' => $ilanlar->where('durum', 'dusuyor')->count(),
+            'teklif' => Teklif::count(),
+            'toplamDeger' => number_format((int) $ilanlar->sum('guncelFiyat'), 0, ',', '.') . ' ₺',
+        ];
+
+        return view('yonetim.index', ['ilanlar' => $ilanlar, 'istatistik' => $istatistik]);
+    }
+
+    /** Üye detayı: bilgileri, adresleri, teklifleri. */
+    public function uye(User $user): View
+    {
+        $user->loadCount('teklifler');
+        $teklifler = $user->teklifler()->with('ilan')->latest('zaman')->get();
+
+        return view('yonetim.uye', [
+            'uye' => $user,
+            'teklifler' => $teklifler,
+            'adresler' => $user->adresler()->latest()->get(),
+        ]);
+    }
+
+    public function uyeEngelle(User $user): RedirectResponse
+    {
+        if ($user->yonetici()) {
+            return back()->with('basari', 'Yönetici engellenemez.');
+        }
+
+        $user->update(['engelli' => !$user->engelli]);
+
+        return back()->with('basari', $user->engelli ? 'Üye engellendi.' : 'Üye engeli kaldırıldı.');
     }
 
     public function ilanOlustur(Request $request): RedirectResponse
@@ -41,6 +74,28 @@ class YonetimController extends Controller
         ]);
 
         return back()->with('basari', 'İlan oluşturuldu: ' . $veri['baslik']);
+    }
+
+    public function ilanDuzenle(Ilan $ilan): View
+    {
+        return view('yonetim.duzenle', ['ilan' => $ilan]);
+    }
+
+    public function ilanGuncelle(Request $request, Ilan $ilan): RedirectResponse
+    {
+        $veri = $request->validate([
+            'baslik' => ['required', 'string', 'max:255'],
+            'alt_baslik' => ['nullable', 'string', 'max:255'],
+            'gorsel_url' => ['nullable', 'url', 'max:1000'],
+            'aciklama' => ['nullable', 'string', 'max:5000'],
+            'baslangic_fiyati' => ['required', 'integer', 'min:1'],
+            'saatlik_dusus' => ['required', 'integer', 'min:1'],
+            'rezerv_fiyat' => ['required', 'integer', 'min:0', 'lte:baslangic_fiyati'],
+        ]);
+
+        $ilan->update($veri);
+
+        return redirect()->route('yonetim')->with('basari', 'İlan güncellendi: ' . $ilan->baslik);
     }
 
     public function ilanSil(Ilan $ilan): RedirectResponse

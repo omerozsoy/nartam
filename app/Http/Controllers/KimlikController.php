@@ -25,12 +25,20 @@ class KimlikController extends Controller
             'password' => ['required'],
         ]);
 
-        if (!Auth::attempt($veri, $request->boolean('beni_hatirla'))) {
+        if (!Auth::validate($veri)) {
             throw ValidationException::withMessages([
                 'email' => 'E-posta veya şifre hatalı.',
             ]);
         }
 
+        $kullanici = User::where('email', $veri['email'])->first();
+        if ($kullanici->engelli) {
+            throw ValidationException::withMessages([
+                'email' => 'Hesabınız engellenmiştir. Lütfen bizimle iletişime geçin.',
+            ]);
+        }
+
+        Auth::login($kullanici, $request->boolean('beni_hatirla'));
         $request->session()->regenerate();
 
         return redirect()->intended('/')->with('basari', 'Giriş yapıldı.');

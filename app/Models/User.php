@@ -25,6 +25,7 @@ class User extends Authenticatable
         'telefon',
         'password',
         'rol',
+        'engelli',
     ];
 
     public function yonetici(): bool
@@ -35,6 +36,11 @@ class User extends Authenticatable
     public function teklifler(): HasMany
     {
         return $this->hasMany(Teklif::class, 'kullanici_id');
+    }
+
+    public function adresler(): HasMany
+    {
+        return $this->hasMany(Adres::class, 'user_id');
     }
 
     /**
@@ -57,6 +63,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'engelli' => 'boolean',
         ];
     }
 }

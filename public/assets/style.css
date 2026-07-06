@@ -397,6 +397,34 @@ input:focus, textarea:focus { outline: none; border-color: var(--siyah); }
     .hesap-tablo td { border: 0; padding: .35rem .75rem; }
 }
 
+/* ---------- Yönetim istatistik ---------- */
+.istatistik {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.ist-kart {
+    border: 1px solid var(--cizgi);
+    padding: 1.2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+.ist-sayi { font-family: var(--serif); font-size: 1.8rem; line-height: 1; }
+
+/* ---------- Adresler ---------- */
+.adres-izgara { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+.adres-kart { border: 1px solid var(--cizgi); padding: 1.2rem; margin-bottom: 1rem; }
+.adres-ust { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; }
+.adres-ad { font-weight: 600; }
+.adres-metin { margin: .4rem 0; color: #333; }
+.izgara-form select {
+    padding: .65rem .7rem; border: 1px solid var(--cizgi); background: #fff; color: var(--metin);
+    font-family: var(--sans); font-size: 14px;
+}
+@media (max-width: 720px) { .adres-izgara { grid-template-columns: 1fr; } }
+
 /* ---------- Footer ---------- */
 .alt-bilgi { background: var(--koyu); color: #e8e8e8; margin-top: 3rem; padding: 3rem 2rem 2rem; }
 .alt-bilgi .sutunlar { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2rem; }

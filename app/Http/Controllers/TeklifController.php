@@ -20,6 +20,12 @@ class TeklifController extends Controller
             'miktar' => ['required', 'integer', 'min:1'],
         ]);
 
+        if ($request->user()->engelli) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'miktar' => 'Hesabınız engellendiği için teklif veremezsiniz.',
+            ]);
+        }
+
         $ilan = Ilan::findOrFail($veri['ilan_id']);
 
         // Geçersizse ValidationException fırlatır; Laravel AJAX'ta 422 JSON,

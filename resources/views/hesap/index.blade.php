@@ -8,6 +8,8 @@
 
 @section('content')
     <div class="kap hesap" id="hesap-panel">
+        <h1 class="hesap-baslik">Hesabım</h1>
+        @include('hesap._nav')
 
         {{-- Kazandıklarım --}}
         @if ($kazandiklarim->isNotEmpty())
