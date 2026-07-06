@@ -15,10 +15,10 @@ return new class extends Migration
 
         // Mevcut açık artırmadaki (teklif almış) ilanlara sıra numarası ver.
         $no = 0;
-        Ilan::whereNotNull('ilk_teklif_zamani')
-            ->orderBy('ilk_teklif_zamani')
-            ->get()
-            ->each(fn (Ilan $i) => $i->update(['lot_no' => ++$no]));
+        $lotlar = Ilan::whereNotNull('ilk_teklif_zamani')->orderBy('ilk_teklif_zamani')->get();
+        foreach ($lotlar as $ilan) {
+            $ilan->update(['lot_no' => ++$no]);
+        }
     }
 
     public function down(): void
