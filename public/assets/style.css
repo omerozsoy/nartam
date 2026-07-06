@@ -268,10 +268,25 @@ img { max-width: 100%; }
     letter-spacing: .01em;
     text-transform: uppercase;
     margin: .35rem 0 .2rem;
+    /* Her kartta tam 2 satır: kısa başlık yer rezerve eder, uzun başlık 2'ye kırpılır */
+    min-height: 2.24em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 .lot-baslik a:hover { text-decoration: none; color: var(--soluk); }
 
-.lot-alt { font-size: 14px; color: var(--soluk); margin-bottom: .8rem; }
+.lot-alt {
+    font-size: 14px;
+    color: var(--soluk);
+    margin-bottom: .8rem;
+    min-height: 1.05em;         /* alt başlık yoksa da yer rezerve et */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .lot-satir { margin: .5rem 0; }
 .lot-satir .deger { font-size: 15px; font-weight: 500; }
@@ -309,7 +324,9 @@ img { max-width: 100%; }
 .fiyat .sabit { display: inline-block; height: 1em; line-height: 1; white-space: pre; }
 
 /* Teklif formu */
-.teklif-form { display: flex; flex-wrap: wrap; gap: .5rem; align-items: stretch; margin-top: .8rem; }
+.teklif-form { display: flex; flex-wrap: wrap; gap: .5rem; align-items: stretch; margin-top: auto; padding-top: .8rem; }
+/* Teklif formu / giriş butonu her kartta en altta hizalansın */
+.lot > a.btn-dolu { margin-top: auto; }
 .teklif-form input[type="number"] {
     flex: 1 1 110px; min-width: 0; padding: .55rem .7rem;
     border: 1px solid var(--cizgi); background: #fff; color: var(--metin);

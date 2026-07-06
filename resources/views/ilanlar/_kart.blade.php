@@ -20,9 +20,7 @@
         <div class="lot-no">LOT {{ $ilan['lotNo'] }}</div>
     @endif
     <h2 class="lot-baslik"><a href="{{ $detayUrl }}">{{ $ilan['baslik'] }}</a></h2>
-    @if ($ilan['altBaslik'])
-        <div class="lot-alt">{{ $ilan['altBaslik'] }}</div>
-    @endif
+    <div class="lot-alt">{{ $ilan['altBaslik'] }}</div>
 
     <span class="rozet">{{ $ilan['durumEtiket'] }}</span>
 
