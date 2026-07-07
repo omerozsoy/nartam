@@ -427,16 +427,18 @@ img { max-width: 100%; }
 .fiyat .sabit { display: inline-block; height: 1em; line-height: 1; white-space: pre; }
 
 /* Teklif formu */
-.teklif-form { display: flex; flex-wrap: wrap; gap: .5rem; align-items: stretch; margin-top: auto; padding-top: .8rem; }
+.teklif-form { display: flex; flex-direction: column; gap: .5rem; margin-top: auto; padding-top: .8rem; }
 /* Teklif formu / giriş butonu her kartta en altta hizalansın */
 .lot > a.btn-dolu { margin-top: auto; }
 .teklif-form input[type="number"] {
-    flex: 1 1 110px; min-width: 0; padding: .55rem .7rem;
+    width: 100%; padding: .6rem .7rem; text-align: center;
     border: 1px solid var(--cizgi); background: #fff; color: var(--metin);
-    font: inherit; font-variant-numeric: tabular-nums;
+    font: inherit; font-size: 1.05rem; font-variant-numeric: tabular-nums;
 }
 .teklif-form input[type="number"]:focus { outline: none; border-color: var(--siyah); }
-.teklif-mesaj { flex-basis: 100%; font-size: 12px; min-height: 1em; }
+.onde-bilgi { color: #16a34a; font-size: 12px; font-weight: 600; letter-spacing: .03em; margin-bottom: .3rem; }
+.onde-bilgi[hidden] { display: none; }
+.teklif-mesaj { font-size: 12px; min-height: 1em; }
 .teklif-mesaj.basarili { color: #2e7d32; }
 .teklif-mesaj.hatali { color: var(--kritik); }
 

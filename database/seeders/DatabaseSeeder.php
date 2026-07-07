@@ -56,7 +56,10 @@ class DatabaseSeeder extends Seeder
             'baslangic_zamani' => $now->subHours(2),
             'ilk_teklif_zamani' => $t1,
             'bitis_zamani' => $t1->addSeconds(Ilan::ACIK_ARTIRMA_SURESI),
-            'guncel_teklif' => 12500,
+            // Proxy: Ayşe lider (gizli max 12500), görünen fiyat = Mehmet'in maksı + adım
+            'guncel_teklif' => 12000 + Ilan::artirimAdimi(12000),
+            'lider_id' => $ayse->id,
+            'lider_max' => 12500,
             'son_teklif_sahibi' => 'Ayşe',
         ]);
 

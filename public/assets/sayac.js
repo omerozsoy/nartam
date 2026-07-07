@@ -5,6 +5,7 @@
 
 const POLL_MS = 4000;
 const CSRF = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+const KULLANICI_ID = document.querySelector('meta[name="user-id"]')?.getAttribute('content') ?? '';
 
 function ikiHane(n) {
     return String(n).padStart(2, '0');
@@ -111,14 +112,18 @@ function ozetUygula(kalem, o) {
         return;
     }
 
-    // Tek düğme: gizli miktarı ve düğmedeki tutarı güncelle
+    // Girilebilir max input: min'i güncelle; kullanıcı yazmıyorsa ve değer düşükse yükselt
     const miktar = kalem.querySelector('[data-alan="miktar"]');
     if (miktar) {
-        miktar.value = o.minTeklif;
+        miktar.min = o.minTeklif;
+        if (document.activeElement !== miktar && Number(miktar.value) < o.minTeklif) {
+            miktar.value = o.minTeklif;
+        }
     }
-    const btnTutar = kalem.querySelector('[data-alan="btn-tutar"]');
-    if (btnTutar) {
-        btnTutar.textContent = o.minTeklifBicim;
+    // "Öndesiniz" göstergesi
+    const onde = kalem.querySelector('[data-alan="onde"]');
+    if (onde) {
+        onde.hidden = !(KULLANICI_ID !== '' && o.liderId != null && String(o.liderId) === KULLANICI_ID);
     }
 
     // Yeni teklif geldiyse (min yükseldiyse) sayacı kırmızı yanıp söndür (fade in/out)

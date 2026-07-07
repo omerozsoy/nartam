@@ -44,6 +44,8 @@ class Ilan extends Model
         'bitis_zamani',
         'guncel_teklif',
         'son_teklif_sahibi',
+        'lider_id',
+        'lider_max',
         'bildirildi',
         'ithal_kodu',
     ];
@@ -59,6 +61,8 @@ class Ilan extends Model
             'dusus_periyodu' => 'integer',
             'rezerv_fiyat' => 'integer',
             'guncel_teklif' => 'integer',
+            'lider_id' => 'integer',
+            'lider_max' => 'integer',
             'bildirildi' => 'boolean',
         ];
     }

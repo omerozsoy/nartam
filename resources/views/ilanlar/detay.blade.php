@@ -49,16 +49,19 @@
                         <p class="sayac" role="timer" data-alan="sayac">--:--</p>
 
                         @auth
+                            <div class="onde-bilgi" data-alan="onde" @unless(auth()->id() === $ozet['liderId']) hidden @endunless>★ Şu an öndesiniz</div>
                             <form class="teklif-form" data-alan="teklif-form">
                                 @csrf
                                 <input type="hidden" name="ilan_id" value="{{ $ozet['id'] }}">
-                                <input type="hidden" name="miktar" value="{{ $ozet['minTeklif'] }}" data-alan="miktar">
-                                <button type="submit" class="btn btn-dolu tek-dugme">
-                                    {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyattan 24 Saatlik Müzayedeyi Başlat' : 'Teklif Ver' }} ·
-                                    <span data-alan="btn-tutar">{{ $ozet['minTeklifBicim'] }}</span>
+                                <input type="number" name="miktar" step="1"
+                                       min="{{ $ozet['minTeklif'] }}" value="{{ $ozet['minTeklif'] }}"
+                                       data-alan="miktar" required>
+                                <button type="submit" class="btn btn-dolu">
+                                    {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyattan 24 Saatlik Müzayedeyi Başlat' : 'Teklif Ver' }}
                                 </button>
                                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
                             </form>
+                            <p class="alt-not" style="margin-top:.6rem">Girdiğiniz tutar <strong>gizli maksimumunuzdur</strong>; başkaları teklif verdikçe sistem, bu tutara kadar sizin adınıza otomatik pey verir.</p>
                         @else
                             <a class="btn btn-dolu" href="{{ route('giris') }}" style="margin-top:1rem">Teklif için giriş</a>
                         @endauth

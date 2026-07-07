@@ -50,6 +50,7 @@ class Sunum
             'bitisTs' => $bitis?->getTimestamp(),
             'sonrakiDususTs' => $sonrakiDusus?->getTimestamp(),
             'sonTeklifSahibi' => Ad::gizle($ilan->son_teklif_sahibi),
+            'liderId' => $ilan->lider_id,
             'teklifSayisi' => $ilan->teklifler_count ?? $ilan->teklifler()->count(),
         ];
     }
