@@ -125,7 +125,7 @@ function ozetUygula(kalem, o) {
     if (onde) {
         if (o.benimDurum === 'onde') {
             onde.hidden = false;
-            onde.textContent = '★ Şu an öndesiniz';
+            onde.textContent = '★ Şu an en yüksek teklife sahipsiniz';
             onde.className = 'onde-bilgi onde-yesil';
         } else if (o.benimDurum === 'gecildi') {
             onde.hidden = false;
