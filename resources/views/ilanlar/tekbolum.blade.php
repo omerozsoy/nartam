@@ -6,12 +6,8 @@
     <div class="kap">
         <div class="satis-basligi">
             <div>
-                <div class="satis-tarih">Yeni Müzayede · Çevrimiçi</div>
                 <h1>{{ $baslik }}</h1>
                 <div class="yer">{{ $aciklama }}</div>
-            </div>
-            <div class="satis-eylem">
-                <div class="kapanis">{{ $ilanlar->count() }} lot · canlı</div>
             </div>
         </div>
 
