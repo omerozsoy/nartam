@@ -50,7 +50,7 @@
                         <p class="sayac" role="timer" data-alan="sayac">--:--</p>
 
                         @auth
-                            <div class="onde-bilgi {{ $ozet['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ozet['benimDurum']) hidden @endunless>{{ $ozet['benimDurum'] === 'gecildi' ? 'Teklifiniz geçilmiştir' : '★ Şu an öndesiniz' }}</div>
+                            <div class="onde-bilgi {{ $ozet['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ozet['benimDurum']) hidden @endunless>{{ $ozet['benimDurum'] === 'gecildi' ? '★ Teklifiniz geçilmiştir' : '★ Şu an öndesiniz' }}</div>
                             <form class="teklif-form" data-alan="teklif-form">
                                 @csrf
                                 <input type="hidden" name="ilan_id" value="{{ $ozet['id'] }}">

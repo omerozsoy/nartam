@@ -129,7 +129,7 @@ function ozetUygula(kalem, o) {
             onde.className = 'onde-bilgi onde-yesil';
         } else if (o.benimDurum === 'gecildi') {
             onde.hidden = false;
-            onde.textContent = 'Teklifiniz geçilmiştir';
+            onde.textContent = '★ Teklifiniz geçilmiştir';
             onde.className = 'onde-bilgi onde-kirmizi';
         } else {
             onde.hidden = true;
