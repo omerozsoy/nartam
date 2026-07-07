@@ -519,50 +519,18 @@ img { max-width: 100%; }
 .durum-acik_artirma .rozet { border-color: #1a1a1a; color: #1a1a1a; }
 .durum-kapandi { opacity: .55; }
 
-/* "Fiyat Düşüyor" rozetinde aşağı akan degrade */
-.durum-dusuyor .rozet { position: relative; overflow: hidden; }
-.durum-dusuyor .rozet:not(.rozet-taban)::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: -160%;
-    width: 100%;
-    height: 55%;
-    pointer-events: none;
-    background: linear-gradient(
-        180deg,
-        transparent 0%,
-        rgba(22, 163, 74, .10) 40%,
-        rgba(22, 163, 74, .30) 50%,
-        rgba(22, 163, 74, .10) 60%,
-        transparent 100%
-    );
-    animation: rozetAkis 2.4s linear infinite;
+/* "Fiyat Düşüyor" rozetinde yeşil nabız */
+.durum-dusuyor .rozet:not(.rozet-taban) {
+    border-color: #16a34a;
+    color: #16a34a;
+    animation: rozetNabiz 1.5s ease-in-out infinite;
 }
-@keyframes rozetAkis {
-    0% { top: -160%; }
-    100% { top: 160%; }
-}
-/* metnin yanında zıplayan aşağı ok */
-.durum-dusuyor .rozet:not(.rozet-taban)::after {
-    content: '';
-    position: relative;
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin-left: .45rem;
-    border-right: 2px solid #16a34a;
-    border-bottom: 2px solid #16a34a;
-    transform: rotate(45deg);
-    animation: rozetOk 1.1s ease-in-out infinite;
-}
-@keyframes rozetOk {
-    0%, 100% { top: -2px; }
-    50% { top: 2px; }
+@keyframes rozetNabiz {
+    0%, 100% { background: rgba(22, 163, 74, 0); box-shadow: 0 0 0 0 rgba(22, 163, 74, .30); }
+    50% { background: rgba(22, 163, 74, .10); box-shadow: 0 0 0 4px rgba(22, 163, 74, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
-    .durum-dusuyor .rozet::before { animation: none; display: none; }
-    .durum-dusuyor .rozet::after { animation: none; }
+    .durum-dusuyor .rozet:not(.rozet-taban) { animation: none; }
 }
 
 /* "Taban Fiyata Ulaşıldı" rozetinde kırmızı nabız */
