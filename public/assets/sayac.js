@@ -253,16 +253,32 @@ function teklifBagla() {
                 if (tutarEl) {
                     tutarEl.textContent = new Intl.NumberFormat('tr-TR').format(tutar) + ' ₺';
                 }
-                // Gizli maksimum yalnızca teklif, en düşük geçerli teklifin (bir sonraki
-                // pey adımı) ÜZERİNDEyse geçerlidir. Tam minimumda normal tekliftir.
-                const gizliMax = min > 0 && tutar > min;
+                const durum = form.closest('[data-id]')?.dataset.durum;
+                const baslik = modal.querySelector('.modal-baslik');
                 const not = modal.querySelector('[data-alan="modal-not"]');
-                if (not) {
-                    not.hidden = !gizliMax;
-                }
                 const alt = modal.querySelector('[data-alan="modal-alt"]');
-                if (alt) {
-                    alt.textContent = gizliMax ? 'Şu an verdiğiniz gizli maksimum teklif' : 'Teklifiniz';
+                const onaylaBtn = modal.querySelector('[data-alan="modal-onayla"]');
+
+                if (durum === 'dusuyor') {
+                    // Açık Eksiltme: bu fiyattan teklif = 24 saatlik müzayedeyi başlatır
+                    if (baslik) baslik.textContent = 'Müzayedeyi Başlatın';
+                    if (alt) alt.textContent = 'Bu fiyattan müzayedeyi başlatıyorsunuz';
+                    if (not) {
+                        not.hidden = false;
+                        not.textContent = 'Bu fiyattan teklif vermeniz durumunda 24 saatlik müzayede geri sayımı başlar.';
+                    }
+                    if (onaylaBtn) onaylaBtn.textContent = 'Onayla ve Başlat';
+                } else {
+                    // Açık Artırma: gizli maksimum yalnızca teklif, en düşük geçerli teklifin
+                    // (bir sonraki pey adımı) ÜZERİNDEyse geçerlidir. Tam minimumda normal tekliftir.
+                    if (baslik) baslik.textContent = 'Teklifinizi Onaylayın';
+                    const gizliMax = min > 0 && tutar > min;
+                    if (not) {
+                        not.hidden = !gizliMax;
+                        not.innerHTML = 'Bu tutar sizin <strong>gizli maksimumunuzdur</strong>; başkaları teklif verdikçe sistem, bu tutara kadar sizin adınıza otomatik pey verir.';
+                    }
+                    if (alt) alt.textContent = gizliMax ? 'Şu an verdiğiniz gizli maksimum teklif' : 'Teklifiniz';
+                    if (onaylaBtn) onaylaBtn.textContent = 'Onayla ve Teklif Ver';
                 }
                 modal.hidden = false;
             } else {
