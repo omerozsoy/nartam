@@ -23,11 +23,12 @@
             return;
         }
         wrap.hidden = false;
-        const parca = olaylar.map((o) =>
-            '<a class="ticker-item' + (o.dustu ? ' dustu' : '') + '" href="/ilan/' + encodeURIComponent(o.id) + '">' +
-            '<span class="ticker-ok">▾</span> ' + esc(o.ad) +
-            ' <strong>' + esc(o.fiyat) + '</strong></a>'
-        ).join('');
+        const parca = olaylar.map((o) => {
+            const gorsel = o.gorsel ? '<img class="ticker-gorsel" src="' + esc(o.gorsel) + '" alt="">' : '';
+            return '<a class="ticker-item' + (o.dustu ? ' dustu' : '') + '" href="/ilan/' + encodeURIComponent(o.id) + '">' +
+                gorsel + '<span class="ticker-ok">▾</span> ' + esc(o.ad) +
+                ' <strong>' + esc(o.fiyat) + '</strong></a>';
+        }).join('');
         // İki kopya = kesintisiz döngü (translateX -50%)
         ray.innerHTML = parca + parca;
     }
@@ -46,7 +47,7 @@
                 const onceki = oncekiFiyat[o.id];
                 if (onceki != null && o.guncelFiyat < onceki) {
                     // Fiyat düştü → ticker'a gir
-                    olaylar.unshift({ id: o.id, ad: o.baslik, fiyat: o.guncelFiyatBicim, dustu: true });
+                    olaylar.unshift({ id: o.id, ad: o.baslik, fiyat: o.guncelFiyatBicim, gorsel: o.gorselUrl, dustu: true });
                     degisti = true;
                 }
                 oncekiFiyat[o.id] = o.guncelFiyat;
@@ -54,7 +55,7 @@
 
             // İlk yükleme: mevcut düşen ürünlerle doldur
             if (!olaylar.length && dusenler.length) {
-                olaylar = dusenler.map((o) => ({ id: o.id, ad: o.baslik, fiyat: o.guncelFiyatBicim, dustu: false }));
+                olaylar = dusenler.map((o) => ({ id: o.id, ad: o.baslik, fiyat: o.guncelFiyatBicim, gorsel: o.gorselUrl, dustu: false }));
                 degisti = true;
             }
 
