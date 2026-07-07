@@ -37,6 +37,7 @@
                         {{ $ozet['durum'] === 'dusuyor' ? 'Düşen fiyat' : ($ozet['durum'] === 'kapandi' ? 'Kapanış fiyatı' : 'Güncel teklif') }}
                     </div>
                     <div class="fiyat" data-alan="fiyat" data-deger="{{ $ozet['guncelFiyat'] }}">{{ $ozet['guncelFiyatBicim'] }}</div>
+                    @if ($ozet['durum'] === 'dusuyor')<i class="dususok" aria-hidden="true"></i>@endif
 
                     @if ($ozet['durum'] === 'acik_artirma')
                         <div class="etiket" style="margin-top:.4rem">{{ $ozet['teklifSayisi'] }} teklif</div>

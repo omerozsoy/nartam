@@ -31,6 +31,7 @@
 
     <div class="lot-satir fiyat-satir">
         <div class="fiyat" data-alan="fiyat" data-deger="{{ $ilan['guncelFiyat'] }}">{{ $ilan['guncelFiyatBicim'] }}</div>
+        @if ($ilan['durum'] === 'dusuyor')<i class="dususok" aria-hidden="true"></i>@endif
     </div>
 
     @if ($ilan['durum'] !== 'kapandi')
