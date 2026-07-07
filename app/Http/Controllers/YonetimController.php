@@ -177,8 +177,13 @@ class YonetimController extends Controller
         $iEser = $bul(['eser']);
         $iSanatci = $bul(['sanatç']);
         $iAciklama = $bul(['açıkla', 'aciklama']);
-        $iRezerv = $bul(['rezerv', 'taban']);
-        $iFiyat = $bul(['fiyat', 'muhammen', 'başlangıç', 'baslangic', 'tahmini']);
+        $iRezerv = $bul(['muhammen', 'rezerv', 'taban']);
+        $iFiyat = $bul(['başlangıç', 'baslangic', 'açılış', 'acilis', 'tahmini', 'fiyat']);
+        // Ayrı başlangıç sütunu yoksa muhammen/rezerv değeri başlangıç fiyatı olur.
+        if ($iFiyat === null) {
+            $iFiyat = $iRezerv;
+            $iRezerv = null;
+        }
         // Aynı sütun hem fiyat hem rezerv olarak eşleştiyse rezervi yok say.
         if ($iRezerv !== null && $iRezerv === $iFiyat) {
             $iRezerv = null;
