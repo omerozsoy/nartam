@@ -32,6 +32,9 @@
                 @if ($ozet['altBaslik'])
                     <div class="alt">{{ $ozet['altBaslik'] }}</div>
                 @endif
+                @if ($ilan->aciklama)
+                    <div class="detay-aciklama"><p>{{ $ilan->aciklama }}</p></div>
+                @endif
                 <span class="rozet {{ $ozet['tabanaUlasti'] ? 'rozet-taban' : '' }}">{{ $ozet['durumEtiket'] }}</span>
 
                 <div class="detay-kutu">
@@ -78,12 +81,6 @@
                     @endif
                 </div>
 
-                @if ($ilan->aciklama)
-                    <div class="detay-aciklama">
-                        <h3>Açıklama</h3>
-                        <p>{{ $ilan->aciklama }}</p>
-                    </div>
-                @endif
 
                 @if ($teklifler->isNotEmpty())
                     <div class="detay-aciklama">
