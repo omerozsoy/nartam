@@ -208,7 +208,7 @@ img { max-width: 100%; }
     display: inline-flex;
     white-space: nowrap;
     will-change: transform;
-    animation: tickerKay 45s linear infinite;
+    animation: tickerKay 85s linear infinite;
 }
 .ticker-wrap:hover .ticker { animation-play-state: paused; }
 .ticker-item {
@@ -217,8 +217,11 @@ img { max-width: 100%; }
     gap: .4rem;
     padding: .5rem 1.7rem;
     font-size: 13px;
+    color: #fff;
     border-right: 1px solid rgba(255, 255, 255, .12);
+    transition: color .15s ease;
 }
+.ticker-item:hover { text-decoration: none; color: #fff; opacity: .85; }
 .ticker-item strong { color: #58d68d; font-variant-numeric: tabular-nums; }
 .ticker-ok { color: #58d68d; font-size: 12px; }
 .ticker-item.dustu { animation: tickerYeni 2s ease; }
