@@ -39,17 +39,17 @@
                         {{ $ozet['durum'] === 'dusuyor' ? 'Düşen fiyat' : ($ozet['durum'] === 'kapandi' ? 'Kapanış fiyatı' : 'Güncel teklif') }}
                     </div>
                     <div class="fiyat" data-alan="fiyat" data-deger="{{ $ozet['guncelFiyat'] }}">{{ $ozet['guncelFiyatBicim'] }}</div>
-                    @if ($ozet['durum'] === 'dusuyor')<i class="dususok" aria-hidden="true"></i>@endif
+                    @if ($ozet['durum'] === 'dusuyor')<span class="dususok" aria-hidden="true"><i></i><i></i><i></i></span>@endif
 
                     @if ($ozet['durum'] === 'acik_artirma')
                         <div class="etiket" style="margin-top:.4rem">{{ $ozet['teklifSayisi'] }} teklif</div>
                     @endif
 
                     @if ($ozet['durum'] !== 'kapandi')
-                        <p class="sayac-etiket" data-alan="sayac-etiket">
+                        <p class="sayac-etiket" data-alan="sayac-etiket" @if($ozet['tabanaUlasti']) style="display:none" @endif>
                             {{ $ozet['durum'] === 'dusuyor' ? 'Sonraki düşüşe' : 'Bitişe kalan' }}
                         </p>
-                        <p class="sayac" role="timer" data-alan="sayac">--:--</p>
+                        <p class="sayac" role="timer" data-alan="sayac" @if($ozet['tabanaUlasti']) style="display:none" @endif>--:--</p>
 
                         @auth
                             <div class="onde-bilgi {{ $ozet['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ozet['benimDurum']) hidden @endunless>{{ $ozet['benimDurum'] === 'gecildi' ? '★ Teklifiniz geçilmiştir' : ($ozet['benimDurum'] === 'onde' ? '★ Şu an en yüksek teklife sahipsiniz' : '') }}</div>

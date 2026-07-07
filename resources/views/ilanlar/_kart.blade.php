@@ -19,7 +19,7 @@
     <span class="rozet">{{ $ilan['durumEtiket'] }}</span>
 
     @if ($ilan['durum'] !== 'kapandi')
-        <p class="sayac" role="timer" data-alan="sayac">--:--</p>
+        <p class="sayac" role="timer" data-alan="sayac" @if($ilan['tabanaUlasti']) style="display:none" @endif>--:--</p>
     @endif
 
     @if ($ilan['lotNo'])
@@ -33,7 +33,7 @@
 
     <div class="lot-satir fiyat-satir">
         <div class="fiyat" data-alan="fiyat" data-deger="{{ $ilan['guncelFiyat'] }}">{{ $ilan['guncelFiyatBicim'] }}</div>
-        @if ($ilan['durum'] === 'dusuyor')<i class="dususok" aria-hidden="true"></i>@endif
+        @if ($ilan['durum'] === 'dusuyor')<span class="dususok" aria-hidden="true"><i></i><i></i><i></i></span>@endif
     </div>
 
     @if ($ilan['durum'] !== 'kapandi')

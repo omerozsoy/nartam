@@ -460,16 +460,21 @@ img { max-width: 100%; }
 
 /* Düşen fiyat yanında aşağı yönlü yeşil ok (CodePen tarzı) */
 .dususok {
-    display: inline-block; width: 12px; height: 12px; margin-left: .55rem;
-    border-right: 3px solid #16a34a; border-bottom: 3px solid #16a34a;
-    vertical-align: middle;
+    display: inline-flex; flex-direction: column; align-items: center;
+    margin-left: .55rem; vertical-align: middle;
     animation: dususZipla 1s ease-in-out infinite;
 }
-@keyframes dususZipla {
-    0%, 100% { transform: rotate(45deg) translate(-1px, -1px); }
-    50% { transform: rotate(45deg) translate(2px, 2px); }
+.dususok i {
+    display: block; width: 9px; height: 9px; margin-top: -4px;
+    border-right: 3px solid #16a34a; border-bottom: 3px solid #16a34a;
+    transform: rotate(45deg);
 }
-@media (prefers-reduced-motion: reduce) { .dususok { animation: none; transform: rotate(45deg); } }
+.dususok i:first-child { margin-top: 0; }
+@keyframes dususZipla {
+    0%, 100% { transform: translateY(-1px); }
+    50% { transform: translateY(2px); }
+}
+@media (prefers-reduced-motion: reduce) { .dususok { animation: none; } }
 .onde-bilgi { font-size: 14px; font-weight: 600; letter-spacing: .02em; margin-bottom: .4rem; }
 .onde-bilgi.onde-yesil { color: #16a34a; }
 .onde-bilgi.onde-kirmizi { color: var(--kritik); }

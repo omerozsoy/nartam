@@ -106,6 +106,16 @@ function ozetUygula(kalem, o) {
         rozet.textContent = o.durumEtiket;
     }
 
+    // Taban fiyata ulaşıldıysa geri sayımı gizle
+    const sayacKutu = kalem.querySelector('[data-alan="sayac"]');
+    if (sayacKutu) {
+        sayacKutu.style.display = o.tabanaUlasti ? 'none' : '';
+    }
+    const sayacEtiketEl = kalem.querySelector('[data-alan="sayac-etiket"]');
+    if (sayacEtiketEl && o.durum === 'dusuyor') {
+        sayacEtiketEl.style.display = o.tabanaUlasti ? 'none' : '';
+    }
+
     // Yapı değişimi (faz/kapanış) olduğunda sayfayı tazele.
     if (o.durum === 'kapandi' || (oncekiDurum === 'dusuyor' && o.durum === 'acik_artirma')) {
         window.location.reload();

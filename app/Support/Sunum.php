@@ -36,13 +36,16 @@ class Sunum
         }
 
         $bitis = $ilan->bitis_zamani;
-        $sonrakiDusus = $ilan->sonrakiDususZamani($now);
         $fiyat = $ilan->guncelFiyat($now);
         $minTeklif = $durum === Durum::KAPANDI ? $fiyat : $ilan->minTeklif($now);
 
+        // Düşüş fazında fiyat rezerv (taban) fiyata indiyse artık düşmez.
+        $tabanaUlasti = $durum === Durum::DUSUYOR && $fiyat <= (int) $ilan->rezerv_fiyat;
+        $sonrakiDusus = $tabanaUlasti ? null : $ilan->sonrakiDususZamani($now);
+
         // Düşüş fazında etiket periyodu belirtir: "Her Dakika Fiyat Düşüyor" vb.
         $durumEtiket = $durum === Durum::DUSUYOR
-            ? match ($ilan->periyot()) {
+            ? ($tabanaUlasti ? 'Taban Fiyata Ulaşıldı' : match ($ilan->periyot()) {
                 30 => 'Her 30 Saniyede Bir Fiyat Düşüyor',
                 60 => 'Her Dakika Fiyat Düşüyor',
                 300 => 'Her 5 Dakikada Bir Fiyat Düşüyor',
@@ -50,7 +53,7 @@ class Sunum
                 1800 => 'Her 30 Dakikada Bir Fiyat Düşüyor',
                 3600 => 'Her Saat Fiyat Düşüyor',
                 default => 'Fiyat Düşüyor',
-            }
+            })
             : $durum->etiket();
 
         return [
@@ -68,6 +71,7 @@ class Sunum
             'minTeklifBicim' => number_format($minTeklif, 0, ',', '.') . ' ₺',
             'bitisTs' => $bitis?->getTimestamp(),
             'sonrakiDususTs' => $sonrakiDusus?->getTimestamp(),
+            'tabanaUlasti' => $tabanaUlasti,
             'sonTeklifSahibi' => Ad::gizle($ilan->son_teklif_sahibi),
             'liderId' => $ilan->lider_id,
             'benimDurum' => $benimDurum,
