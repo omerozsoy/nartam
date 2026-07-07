@@ -461,11 +461,11 @@ img { max-width: 100%; }
 /* Düşen fiyat yanında aşağı yönlü yeşil ok (CodePen tarzı) */
 .dususok {
     display: inline-flex; flex-direction: column; align-items: center;
-    margin-left: .55rem; vertical-align: middle;
+    margin-left: .55rem; vertical-align: middle; position: relative; top: -10px;
     animation: dususZipla 1s ease-in-out infinite;
 }
 .dususok i {
-    display: block; width: 9px; height: 9px; margin-top: -4px;
+    display: block; width: 9px; height: 9px; margin-top: -2px;
     border-right: 3px solid #16a34a; border-bottom: 3px solid #16a34a;
     transform: rotate(45deg);
 }
