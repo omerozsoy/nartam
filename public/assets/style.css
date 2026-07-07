@@ -235,9 +235,12 @@ img { max-width: 100%; }
     align-items: center;
     white-space: nowrap;
     will-change: transform;
-    animation: tickerKay 85s linear infinite;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    animation: tickerKay 90s linear infinite;
 }
-.ticker-wrap:hover .ticker { animation-play-state: paused; }
+.ticker-wrap:hover .ticker,
+.ticker-durdur .ticker { animation-play-state: paused; }
 .ticker-item {
     display: inline-flex;
     align-items: center;
@@ -260,7 +263,12 @@ img { max-width: 100%; }
 .ticker-item strong { color: #58d68d; font-variant-numeric: tabular-nums; }
 .ticker-ok { color: #58d68d; font-size: 12px; }
 .ticker-item.dustu { animation: tickerYeni 2s ease; }
-@keyframes tickerKay { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes tickerKay { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+/* Mobilde görselleri gizle — kaydırma çok daha hafif olur */
+@media (max-width: 640px) {
+    .ticker-gorsel { display: none; }
+    .ticker-item { padding-left: 0; }
+}
 @keyframes tickerYeni {
     0% { background: rgba(88, 214, 141, .25); }
     100% { background: transparent; }

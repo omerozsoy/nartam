@@ -9,7 +9,7 @@
     const ray = wrap.querySelector('[data-alan="ticker-ray"]');
     const oncekiFiyat = {};
     let olaylar = [];
-    const MAKS = 24;
+    const MAKS = 12;
 
     function esc(s) {
         const d = document.createElement('div');
@@ -24,7 +24,7 @@
         }
         wrap.hidden = false;
         const parca = olaylar.map((o) => {
-            const gorsel = o.gorsel ? '<img class="ticker-gorsel" src="' + esc(o.gorsel) + '" alt="">' : '';
+            const gorsel = o.gorsel ? '<img class="ticker-gorsel" src="' + esc(o.gorsel) + '" alt="" width="44" height="44" decoding="async">' : '';
             return '<a class="ticker-item' + (o.dustu ? ' dustu' : '') + '" href="/ilan/' + encodeURIComponent(o.id) + '">' +
                 gorsel + '<span class="ticker-ok">▾</span> ' + esc(o.ad) +
                 ' <strong>' + esc(o.fiyat) + '</strong></a>';
@@ -34,6 +34,9 @@
     }
 
     async function cek() {
+        if (document.hidden) {
+            return;
+        }
         try {
             const yanit = await fetch('/api/ilanlar', { headers: { Accept: 'application/json' } });
             if (!yanit.ok) {
@@ -70,6 +73,14 @@
         }
     }
 
+    // Ticker görünür değilken kaydırma animasyonunu durdur (mobil performans)
+    if ('IntersectionObserver' in window) {
+        const gozlemci = new IntersectionObserver((girisler) => {
+            girisler.forEach((g) => wrap.classList.toggle('ticker-durdur', !g.isIntersecting));
+        });
+        gozlemci.observe(wrap);
+    }
+
     cek();
-    setInterval(cek, 5000);
+    setInterval(cek, 6000);
 })();
