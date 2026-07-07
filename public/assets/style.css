@@ -470,7 +470,7 @@ img { max-width: 100%; }
     50% { transform: rotate(45deg) translate(2px, 2px); }
 }
 @media (prefers-reduced-motion: reduce) { .dususok { animation: none; transform: rotate(45deg); } }
-.onde-bilgi { font-size: 12px; font-weight: 600; letter-spacing: .03em; margin-bottom: .3rem; }
+.onde-bilgi { font-size: 14px; font-weight: 600; letter-spacing: .02em; margin-bottom: .4rem; }
 .onde-bilgi.onde-yesil { color: #16a34a; }
 .onde-bilgi.onde-kirmizi { color: var(--kritik); }
 .onde-bilgi[hidden] { display: none; }
