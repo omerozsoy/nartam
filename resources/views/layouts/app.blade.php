@@ -49,6 +49,11 @@
     </div>
 </header>
 
+<div class="ticker-wrap" data-alan="ticker" hidden>
+    <span class="ticker-etiket">Düşen Fiyatlar</span>
+    <div class="ticker-govde"><div class="ticker" data-alan="ticker-ray"></div></div>
+</div>
+
 @if (session('basari'))
     <div class="flash flash-basari">{{ session('basari') }}</div>
 @endif
@@ -111,6 +116,7 @@
     </div>
 @endauth
 
+<script src="{{ asset('assets/ticker.js') }}?v={{ filemtime(public_path('assets/ticker.js')) }}"></script>
 <script src="{{ asset('assets/arama.js') }}?v={{ filemtime(public_path('assets/arama.js')) }}"></script>
 <script src="{{ asset('assets/lightbox.js') }}?v={{ filemtime(public_path('assets/lightbox.js')) }}"></script>
 @stack('scripts')

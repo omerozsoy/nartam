@@ -180,6 +180,55 @@ img { max-width: 100%; }
 .arama-bos { padding: .7rem .9rem; font-size: 13px; color: var(--soluk); }
 .arama-gizli { display: none !important; }
 
+/* ---------- Menü altı canlı fiyat ticker'ı ---------- */
+.ticker-wrap {
+    display: flex;
+    align-items: stretch;
+    background: #1a1a1a;
+    color: #fff;
+    overflow: hidden;
+    border-bottom: 1px solid #000;
+}
+.ticker-wrap[hidden] { display: none; }
+.ticker-etiket {
+    flex: none;
+    display: flex;
+    align-items: center;
+    background: var(--kritik);
+    color: #fff;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0 .95rem;
+    white-space: nowrap;
+}
+.ticker-govde { flex: 1; overflow: hidden; }
+.ticker {
+    display: inline-flex;
+    white-space: nowrap;
+    will-change: transform;
+    animation: tickerKay 45s linear infinite;
+}
+.ticker-wrap:hover .ticker { animation-play-state: paused; }
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem 1.7rem;
+    font-size: 13px;
+    border-right: 1px solid rgba(255, 255, 255, .12);
+}
+.ticker-item strong { color: #58d68d; font-variant-numeric: tabular-nums; }
+.ticker-ok { color: #58d68d; font-size: 12px; }
+.ticker-item.dustu { animation: tickerYeni 2s ease; }
+@keyframes tickerKay { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes tickerYeni {
+    0% { background: rgba(88, 214, 141, .25); }
+    100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .ticker { animation: none; } }
+
 /* ---------- İçerik sayfaları (İletişim / Ekspertiz) ---------- */
 .sayfa { max-width: 900px; margin: 2rem auto 3rem; }
 .sayfa h1 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2.2rem; margin: 0 0 1.4rem; }
