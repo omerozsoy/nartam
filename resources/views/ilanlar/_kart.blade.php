@@ -6,6 +6,7 @@
     @if ($ilan['bitisTs']) data-bitis="{{ $ilan['bitisTs'] }}" @endif
     @if ($ilan['sonrakiDususTs']) data-sonraki-dusus="{{ $ilan['sonrakiDususTs'] }}" @endif
     data-min="{{ $ilan['minTeklif'] }}"
+    data-ara="{{ mb_strtolower(trim(($ilan['baslik'] ?? '') . ' ' . ($ilan['altBaslik'] ?? '') . ' ' . ($ilan['lotNo'] ? 'lot ' . $ilan['lotNo'] : '') . ' ' . $ilan['id'])) }}"
 >
     <a href="{{ $detayUrl }}" class="lot-gorsel {{ $ilan['gorselUrl'] ? '' : 'bos' }}">
         @if ($ilan['gorselUrl'])

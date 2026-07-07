@@ -474,8 +474,37 @@ function aramaBagla() {
         }
     }
 
+    // Alttaki listeyi de canlı filtrele
+    function izgaraFiltrele(q) {
+        const aktif = q.length >= 2;
+        const kucuk = q.toLowerCase();
+        let gorunen = 0;
+        document.querySelectorAll('#lotlar .lot').forEach((kart) => {
+            const metin = kart.dataset.ara || '';
+            const eslesti = !aktif || metin.indexOf(kucuk) !== -1;
+            kart.classList.toggle('arama-gizli', !eslesti);
+            if (eslesti) {
+                gorunen++;
+            }
+        });
+        document.querySelectorAll('.lot-bolum').forEach((bolum) => {
+            const toplam = bolum.querySelectorAll('.lot').length;
+            const gizli = bolum.querySelectorAll('.lot.arama-gizli').length;
+            bolum.classList.toggle('arama-gizli', aktif && toplam > 0 && gizli === toplam);
+        });
+        const slider = document.querySelector('[data-alan="slider"]');
+        if (slider) {
+            slider.classList.toggle('arama-gizli', aktif);
+        }
+        const yok = document.querySelector('[data-alan="arama-yok"]');
+        if (yok) {
+            yok.hidden = !(aktif && gorunen === 0);
+        }
+    }
+
     girdi.addEventListener('input', () => {
         const q = girdi.value.trim();
+        izgaraFiltrele(q);
         clearTimeout(zamanlayici);
         if (q.length < 2) {
             liste.innerHTML = '';

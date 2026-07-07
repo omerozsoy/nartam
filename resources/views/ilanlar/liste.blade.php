@@ -60,6 +60,7 @@
                     </section>
                 @endif
             @endforeach
+            <p class="hesap-bos arama-yok" data-alan="arama-yok" hidden>Aramanızla eşleşen eser bulunamadı.</p>
         </main>
     </div>
 @endsection
