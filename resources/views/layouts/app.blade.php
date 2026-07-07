@@ -94,9 +94,9 @@
     <div class="modal-arka" data-alan="teklif-modal" hidden>
         <div class="modal-kutu">
             <div class="modal-baslik">Teklifinizi Onaylayın</div>
-            <p class="modal-alt">Vereceğiniz en yüksek (maksimum) teklif</p>
+            <p class="modal-alt" data-alan="modal-alt">Teklifiniz</p>
             <div class="modal-tutar" data-alan="modal-tutar">—</div>
-            <p class="modal-not">Bu tutar <strong>gizli maksimumunuzdur</strong>; başkaları teklif verdikçe sistem, bu tutara kadar sizin adınıza otomatik pey verir.</p>
+            <p class="modal-not" data-alan="modal-not" hidden>Bu tutar <strong>gizli maksimumunuzdur</strong>; başkaları teklif verdikçe sistem, bu tutara kadar sizin adınıza otomatik pey verir.</p>
             <div class="modal-butonlar">
                 <button type="button" class="btn" data-alan="modal-vazgec">Vazgeç</button>
                 <button type="button" class="btn btn-dolu" data-alan="modal-onayla">Onayla ve Teklif Ver</button>

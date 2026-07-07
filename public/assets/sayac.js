@@ -241,7 +241,9 @@ function teklifBagla() {
     document.querySelectorAll('.teklif-form').forEach((form) => {
         form.addEventListener('submit', (olay) => {
             olay.preventDefault();
-            const tutar = Number(form.querySelector('[data-alan="miktar"]')?.value || 0);
+            const miktarEl = form.querySelector('[data-alan="miktar"]');
+            const tutar = Number(miktarEl?.value || 0);
+            const min = Number(miktarEl?.min || 0);
             if (tutar <= 0) {
                 return;
             }
@@ -250,6 +252,17 @@ function teklifBagla() {
                 const tutarEl = modal.querySelector('[data-alan="modal-tutar"]');
                 if (tutarEl) {
                     tutarEl.textContent = new Intl.NumberFormat('tr-TR').format(tutar) + ' ₺';
+                }
+                // Gizli maksimum yalnızca teklif, en düşük geçerli teklifin (bir sonraki
+                // pey adımı) ÜZERİNDEyse geçerlidir. Tam minimumda normal tekliftir.
+                const gizliMax = min > 0 && tutar > min;
+                const not = modal.querySelector('[data-alan="modal-not"]');
+                if (not) {
+                    not.hidden = !gizliMax;
+                }
+                const alt = modal.querySelector('[data-alan="modal-alt"]');
+                if (alt) {
+                    alt.textContent = gizliMax ? 'Vereceğiniz en yüksek (gizli maksimum) teklif' : 'Teklifiniz';
                 }
                 modal.hidden = false;
             } else {
