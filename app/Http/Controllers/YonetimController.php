@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Ayar;
 use App\Models\Ilan;
 use App\Models\PeyAdimi;
 use App\Models\Teklif;
@@ -467,5 +468,54 @@ class YonetimController extends Controller
         $peyAdimi->delete();
 
         return back()->with('basari', 'Pey adımı silindi.');
+    }
+
+    /** İletişim bilgileri düzenleme formu. */
+    public function iletisim(): View
+    {
+        return view('yonetim.iletisim', [
+            'a' => Ayar::coklu(SayfaController::ILETISIM_ALANLARI),
+        ]);
+    }
+
+    public function iletisimGuncelle(Request $request): RedirectResponse
+    {
+        $veri = $request->validate([
+            'iletisim_adres' => ['nullable', 'string', 'max:1000'],
+            'iletisim_telefon' => ['nullable', 'string', 'max:100'],
+            'iletisim_eposta' => ['nullable', 'string', 'max:255'],
+            'iletisim_saatler' => ['nullable', 'string', 'max:255'],
+            'iletisim_metin' => ['nullable', 'string', 'max:5000'],
+            'iletisim_harita' => ['nullable', 'string', 'max:3000'],
+            'sosyal_instagram' => ['nullable', 'string', 'max:255'],
+            'sosyal_facebook' => ['nullable', 'string', 'max:255'],
+            'sosyal_twitter' => ['nullable', 'string', 'max:255'],
+            'sosyal_whatsapp' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        Ayar::kaydet($veri);
+
+        return back()->with('basari', 'İletişim bilgileri güncellendi.');
+    }
+
+    /** Ekspertiz sayfası düzenleme formu. */
+    public function ekspertiz(): View
+    {
+        return view('yonetim.ekspertiz', [
+            'baslik' => Ayar::oku('ekspertiz_baslik', 'Ekspertiz'),
+            'icerik' => Ayar::oku('ekspertiz_metin'),
+        ]);
+    }
+
+    public function ekspertizGuncelle(Request $request): RedirectResponse
+    {
+        $veri = $request->validate([
+            'ekspertiz_baslik' => ['required', 'string', 'max:255'],
+            'ekspertiz_metin' => ['nullable', 'string', 'max:20000'],
+        ]);
+
+        Ayar::kaydet($veri);
+
+        return back()->with('basari', 'Ekspertiz sayfası güncellendi.');
     }
 }

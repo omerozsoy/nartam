@@ -5,6 +5,7 @@ use App\Http\Controllers\HesapController;
 use App\Http\Controllers\IlanController;
 use App\Http\Controllers\KimlikController;
 use App\Http\Controllers\OdemeController;
+use App\Http\Controllers\SayfaController;
 use App\Http\Controllers\TeklifController;
 use App\Http\Controllers\YonetimController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,10 @@ Route::get('/acik-eksiltme', [IlanController::class, 'acikEksiltme'])->name('aci
 Route::get('/api/ilanlar', [IlanController::class, 'api'])->name('ilanlar.api');
 Route::get('/api/ara', [IlanController::class, 'ara'])->name('ilanlar.ara');
 Route::get('/ilan/{ilan}', [IlanController::class, 'goster'])->name('ilan.goster');
+
+// Statik içerik sayfaları
+Route::get('/iletisim', [SayfaController::class, 'iletisim'])->name('iletisim');
+Route::get('/ekspertiz', [SayfaController::class, 'ekspertiz'])->name('ekspertiz');
 
 // Kimlik (yalnızca misafirler görebilir)
 Route::middleware('guest')->group(function () {
@@ -66,4 +71,8 @@ Route::middleware(['auth', 'yonetici'])->prefix('yonetim')->group(function () {
     Route::post('/uye/{user}/guncelle', [YonetimController::class, 'uyeGuncelle'])->name('yonetim.uye.guncelle');
     Route::post('/uye/{user}/engelle', [YonetimController::class, 'uyeEngelle'])->name('yonetim.uye.engelle');
     Route::get('/teklifler', [YonetimController::class, 'teklifler'])->name('yonetim.teklifler');
+    Route::get('/iletisim', [YonetimController::class, 'iletisim'])->name('yonetim.iletisim');
+    Route::post('/iletisim', [YonetimController::class, 'iletisimGuncelle'])->name('yonetim.iletisim.guncelle');
+    Route::get('/ekspertiz', [YonetimController::class, 'ekspertiz'])->name('yonetim.ekspertiz');
+    Route::post('/ekspertiz', [YonetimController::class, 'ekspertizGuncelle'])->name('yonetim.ekspertiz.guncelle');
 });

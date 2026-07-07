@@ -22,6 +22,8 @@
         <a href="{{ route('ilanlar.liste') }}" class="{{ request()->routeIs('ilanlar.liste') ? 'aktif' : '' }}">Ana Sayfa</a>
         <a href="{{ route('acik.artirma') }}" class="{{ request()->routeIs('acik.artirma') ? 'aktif' : '' }}">Açık Artırma</a>
         <a href="{{ route('acik.eksiltme') }}" class="{{ request()->routeIs('acik.eksiltme') ? 'aktif' : '' }}">Açık Eksiltme</a>
+        <a href="{{ route('ekspertiz') }}" class="{{ request()->routeIs('ekspertiz') ? 'aktif' : '' }}">Ekspertiz</a>
+        <a href="{{ route('iletisim') }}" class="{{ request()->routeIs('iletisim') ? 'aktif' : '' }}">İletişim</a>
     </nav>
     <div class="arama arama-ust" data-alan="arama">
         <input type="search" class="arama-girdi" data-alan="arama-girdi" placeholder="Ara…" autocomplete="off" spellcheck="false" aria-label="Ara">

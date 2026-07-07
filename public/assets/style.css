@@ -180,6 +180,36 @@ img { max-width: 100%; }
 .arama-bos { padding: .7rem .9rem; font-size: 13px; color: var(--soluk); }
 .arama-gizli { display: none !important; }
 
+/* ---------- İçerik sayfaları (İletişim / Ekspertiz) ---------- */
+.sayfa { max-width: 900px; margin: 2rem auto 3rem; }
+.sayfa h1 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2.2rem; margin: 0 0 1.4rem; }
+.sayfa-metin { font-size: 15px; line-height: 1.7; color: var(--metin); }
+.iletisim-izgara { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+.iletisim-satir { margin-bottom: 1.4rem; }
+.iletisim-etiket { display: block; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--soluk); margin-bottom: .3rem; }
+.iletisim-satir p { margin: 0; font-size: 15px; line-height: 1.6; }
+.sosyal-baglar { display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; }
+.iletisim-metin { margin-top: 1.5rem; font-size: 15px; line-height: 1.7; color: var(--soluk); }
+.iletisim-harita iframe, .iletisim-harita { width: 100%; min-height: 320px; border: 0; }
+@media (max-width: 720px) { .iletisim-izgara { grid-template-columns: 1fr; } }
+
+/* Yönetim: dikey form */
+.dikey-form { display: flex; flex-direction: column; gap: 1rem; max-width: 720px; }
+.dikey-form > label { display: flex; flex-direction: column; gap: .35rem; font-size: 13px; color: var(--soluk); }
+.dikey-form h2 { font-size: 1.1rem; margin: .8rem 0 0; }
+.dikey-form textarea, .dikey-form input, .izgara-form textarea {
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--metin);
+    padding: .6rem .7rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 2px;
+    background: #fff;
+    width: 100%;
+    resize: vertical;
+}
+.dikey-form textarea:focus, .dikey-form input:focus { outline: none; border-color: var(--metin); }
+
 /* ---------- Lightbox ---------- */
 .lightbox {
     position: fixed;

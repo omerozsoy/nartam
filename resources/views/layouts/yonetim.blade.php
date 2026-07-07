@@ -20,6 +20,8 @@
             <a href="{{ route('yonetim.toplu') }}" class="{{ request()->routeIs('yonetim.toplu') ? 'aktif' : '' }}">Toplu Ürün Girişi</a>
             <a href="{{ route('yonetim.pey') }}" class="{{ request()->routeIs('yonetim.pey') ? 'aktif' : '' }}">Pey Adımları</a>
             <a href="{{ route('yonetim.uyeler') }}" class="{{ request()->routeIs('yonetim.uyeler') || request()->routeIs('yonetim.uye') ? 'aktif' : '' }}">Üyeler</a>
+            <a href="{{ route('yonetim.iletisim') }}" class="{{ request()->routeIs('yonetim.iletisim') ? 'aktif' : '' }}">İletişim</a>
+            <a href="{{ route('yonetim.ekspertiz') }}" class="{{ request()->routeIs('yonetim.ekspertiz') ? 'aktif' : '' }}">Ekspertiz</a>
         </nav>
         <div class="yk-dip">
             <a href="{{ route('ilanlar.liste') }}">← Siteye dön</a>
