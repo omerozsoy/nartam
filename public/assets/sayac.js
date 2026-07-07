@@ -262,7 +262,7 @@ function teklifBagla() {
                 }
                 const alt = modal.querySelector('[data-alan="modal-alt"]');
                 if (alt) {
-                    alt.textContent = gizliMax ? 'Vereceğiniz en yüksek (gizli maksimum) teklif' : 'Teklifiniz';
+                    alt.textContent = gizliMax ? 'Şu an verdiğiniz gizli maksimum teklif' : 'Teklifiniz';
                 }
                 modal.hidden = false;
             } else {
