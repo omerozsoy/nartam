@@ -393,6 +393,7 @@ class YonetimController extends Controller
     {
         $veri = $request->validate([
             'alt_sinir' => ['required', 'integer', 'min:0', 'unique:pey_adimlari,alt_sinir'],
+            'ust_sinir' => ['nullable', 'integer', 'gte:alt_sinir'],
             'adim' => ['required', 'integer', 'min:1'],
         ], [
             'alt_sinir.unique' => 'Bu başlangıç fiyatı için zaten bir kademe var.',
@@ -407,6 +408,7 @@ class YonetimController extends Controller
     {
         $veri = $request->validate([
             'alt_sinir' => ['required', 'integer', 'min:0', \Illuminate\Validation\Rule::unique('pey_adimlari', 'alt_sinir')->ignore($peyAdimi->id)],
+            'ust_sinir' => ['nullable', 'integer', 'gte:alt_sinir'],
             'adim' => ['required', 'integer', 'min:1'],
         ], [
             'alt_sinir.unique' => 'Bu başlangıç fiyatı için zaten bir kademe var.',

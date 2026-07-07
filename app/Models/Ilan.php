@@ -127,9 +127,9 @@ class Ilan extends Model
     /** Kademeli artırım tutarı — yönetimdeki pey adım tablosundan okur. */
     public static function artirimAdimi(int $fiyat): int
     {
-        foreach (self::peyAdimlari() as $kademe) {
-            if ($fiyat >= $kademe['alt']) {
-                return $kademe['adim'];
+        foreach (self::peyAdimlari() as $k) {
+            if ($fiyat >= $k['alt'] && ($k['ust'] === null || $fiyat <= $k['ust'])) {
+                return $k['adim'];
             }
         }
 
@@ -151,7 +151,7 @@ class Ilan extends Model
 
         try {
             self::$peyAdimCache = PeyAdimi::orderByDesc('alt_sinir')->get()
-                ->map(fn (PeyAdimi $p) => ['alt' => $p->alt_sinir, 'adim' => $p->adim])
+                ->map(fn (PeyAdimi $p) => ['alt' => $p->alt_sinir, 'ust' => $p->ust_sinir, 'adim' => $p->adim])
                 ->all();
         } catch (\Throwable) {
             self::$peyAdimCache = [];
@@ -159,9 +159,9 @@ class Ilan extends Model
 
         if (self::$peyAdimCache === []) {
             self::$peyAdimCache = [
-                ['alt' => 5000, 'adim' => 250],
-                ['alt' => 1000, 'adim' => 100],
-                ['alt' => 0, 'adim' => 50],
+                ['alt' => 5000, 'ust' => null, 'adim' => 250],
+                ['alt' => 1000, 'ust' => 4999, 'adim' => 100],
+                ['alt' => 0, 'ust' => 999, 'adim' => 50],
             ];
         }
 

@@ -275,8 +275,8 @@ function rakamGuncelle(el, sayi) {
 // --- Pey adımı (artırım tablosu) ile +/- ---
 function peyAdimiHesap(deger) {
     const tablo = window.PEY_ADIMLARI || [];
-    for (const k of tablo) { // alt'a göre azalan sıralı
-        if (deger >= k.alt) {
+    for (const k of tablo) {
+        if (deger >= k.alt && (k.ust == null || deger <= k.ust)) {
             return k.adim;
         }
     }
