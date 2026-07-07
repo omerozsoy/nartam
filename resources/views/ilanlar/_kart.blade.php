@@ -40,11 +40,11 @@
                 @csrf
                 <input type="hidden" name="ilan_id" value="{{ $ilan['id'] }}">
                 <div class="pey-kutu">
-                    <button type="button" class="pey-btn" data-alan="pey-eksi" tabindex="-1">−</button>
+                    <button type="button" class="pey-btn" data-alan="pey-eksi" tabindex="-1" aria-label="Azalt"><i class="ok asagi"></i></button>
                     <input type="number" name="miktar" step="1"
                            min="{{ $ilan['minTeklif'] }}" value="{{ $ilan['minTeklif'] }}"
                            data-alan="miktar" required title="Maksimum teklifiniz (gizli)">
-                    <button type="button" class="pey-btn" data-alan="pey-arti" tabindex="-1">+</button>
+                    <button type="button" class="pey-btn" data-alan="pey-arti" tabindex="-1" aria-label="Artır"><i class="ok yukari"></i></button>
                 </div>
                 <button type="submit" class="btn btn-dolu">
                     {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyattan 24 Saatlik Müzayedeyi Başlat' : 'Teklif Ver' }}

@@ -440,9 +440,18 @@ img { max-width: 100%; }
 .pey-kutu input[type="number"] { border-left: 0; border-right: 0; }
 .pey-btn {
     width: 46px; flex-shrink: 0; border: 1px solid var(--cizgi); background: #f4f2ee;
-    font-size: 1.4rem; line-height: 1; color: var(--metin); cursor: pointer; user-select: none;
+    color: var(--metin); cursor: pointer; user-select: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
 }
-.pey-btn:hover { background: var(--cizgi); }
+.pey-btn:hover { background: var(--siyah); color: #fff; }
+/* CSS chevron ok (CodePen z-/BoyXKr tarzı) */
+.ok {
+    display: inline-block; width: 9px; height: 9px;
+    border-right: 2.5px solid currentColor; border-bottom: 2.5px solid currentColor;
+}
+.ok.yukari { transform: rotate(-135deg); position: relative; top: 2px; }
+.ok.asagi { transform: rotate(45deg); position: relative; bottom: 2px; }
 .onde-bilgi { color: #16a34a; font-size: 12px; font-weight: 600; letter-spacing: .03em; margin-bottom: .3rem; }
 .onde-bilgi[hidden] { display: none; }
 .teklif-mesaj { font-size: 12px; min-height: 1em; }
