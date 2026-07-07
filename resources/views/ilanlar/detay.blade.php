@@ -32,7 +32,7 @@
                 @if ($ozet['altBaslik'])
                     <div class="alt">{{ $ozet['altBaslik'] }}</div>
                 @endif
-                <span class="rozet">{{ $ozet['durumEtiket'] }}</span>
+                <span class="rozet {{ $ozet['tabanaUlasti'] ? 'rozet-taban' : '' }}">{{ $ozet['durumEtiket'] }}</span>
 
                 <div class="detay-kutu">
                     <div class="etiket" data-alan="fiyat-etiket">

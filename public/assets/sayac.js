@@ -104,6 +104,7 @@ function ozetUygula(kalem, o) {
     const rozet = kalem.querySelector('.rozet');
     if (rozet) {
         rozet.textContent = o.durumEtiket;
+        rozet.classList.toggle('rozet-taban', !!o.tabanaUlasti);
     }
 
     // Taban fiyata ulaşıldıysa geri sayımı gizle

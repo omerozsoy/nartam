@@ -521,7 +521,7 @@ img { max-width: 100%; }
 
 /* "Fiyat Düşüyor" rozetinde kayan parıltı (shimmer) */
 .durum-dusuyor .rozet { position: relative; overflow: hidden; }
-.durum-dusuyor .rozet::before {
+.durum-dusuyor .rozet:not(.rozet-taban)::before {
     content: '';
     position: absolute;
     top: 0;
@@ -546,6 +546,21 @@ img { max-width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
     .durum-dusuyor .rozet::before { animation: none; display: none; }
+}
+
+/* "Taban Fiyata Ulaşıldı" rozetinde kırmızı nabız */
+.rozet-taban {
+    border-color: var(--kritik) !important;
+    color: var(--kritik) !important;
+    font-weight: 600;
+    animation: rozetTaban 1.3s ease-in-out infinite;
+}
+@keyframes rozetTaban {
+    0%, 100% { background: rgba(176, 0, 32, 0); box-shadow: 0 0 0 0 rgba(176, 0, 32, .35); }
+    50% { background: rgba(176, 0, 32, .10); box-shadow: 0 0 0 4px rgba(176, 0, 32, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .rozet-taban { animation: none; }
 }
 
 .sayac-etiket { font-size: 10px; letter-spacing: .09em; text-transform: uppercase; color: var(--soluk); margin: .4rem 0 .35rem; }

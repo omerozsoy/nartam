@@ -17,7 +17,7 @@
         @endif
     </a>
 
-    <span class="rozet">{{ $ilan['durumEtiket'] }}</span>
+    <span class="rozet {{ $ilan['tabanaUlasti'] ? 'rozet-taban' : '' }}">{{ $ilan['durumEtiket'] }}</span>
 
     @if ($ilan['durum'] !== 'kapandi')
         <p class="sayac" role="timer" data-alan="sayac" @if($ilan['tabanaUlasti']) style="display:none" @endif>--:--</p>
