@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 
 // Ana sayfa + canlı güncelleme API'si
 Route::get('/', [IlanController::class, 'index'])->name('ilanlar.liste');
+Route::get('/acik-artirma', [IlanController::class, 'acikArtirma'])->name('acik.artirma');
+Route::get('/acik-eksiltme', [IlanController::class, 'acikEksiltme'])->name('acik.eksiltme');
 Route::get('/api/ilanlar', [IlanController::class, 'api'])->name('ilanlar.api');
 Route::get('/ilan/{ilan}', [IlanController::class, 'goster'])->name('ilan.goster');
 

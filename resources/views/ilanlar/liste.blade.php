@@ -16,7 +16,7 @@
         </div>
 
         <main id="lotlar">
-            @php($bolumler = ['acik_artirma' => 'Açık Artırma', 'dusuyor' => 'Fiyat Düşüyor', 'kapandi' => 'Kapandı'])
+            @php($bolumler = ['acik_artirma' => 'Açık Artırma', 'dusuyor' => 'Açık Eksiltme', 'kapandi' => 'Kapandı'])
             @foreach ($bolumler as $durum => $bolumBaslik)
                 @php($grup = $gruplar[$durum] ?? collect())
                 @if ($grup->isNotEmpty())

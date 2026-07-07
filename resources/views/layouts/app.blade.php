@@ -19,9 +19,9 @@
         <span class="marka-slogan">Fiyat hep düşer, ilk teklifle 24 saatlik açık artırma başlar</span>
     </div>
     <nav class="ust-nav">
-        <a href="{{ route('ilanlar.liste') }}">Müzayedeler</a>
-        <a href="{{ route('ilanlar.liste') }}">Nasıl Çalışır</a>
-        <a href="{{ route('ilanlar.liste') }}">Hakkımızda</a>
+        <a href="{{ route('ilanlar.liste') }}" class="{{ request()->routeIs('ilanlar.liste') ? 'aktif' : '' }}">Tümü</a>
+        <a href="{{ route('acik.artirma') }}" class="{{ request()->routeIs('acik.artirma') ? 'aktif' : '' }}">Açık Artırma</a>
+        <a href="{{ route('acik.eksiltme') }}" class="{{ request()->routeIs('acik.eksiltme') ? 'aktif' : '' }}">Açık Eksiltme</a>
     </nav>
     <div class="ust-sag">
         @auth

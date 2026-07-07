@@ -445,6 +445,7 @@ img { max-width: 100%; }
 .pey-btn {
     width: 46px; flex-shrink: 0; border: 1px solid var(--cizgi); background: #f4f2ee;
     color: var(--metin); cursor: pointer; user-select: none;
+    font-size: 1.4rem; line-height: 1;
     display: flex; align-items: center; justify-content: center;
     transition: background .15s;
 }
@@ -469,7 +470,9 @@ img { max-width: 100%; }
     50% { transform: rotate(45deg) translate(2px, 2px); }
 }
 @media (prefers-reduced-motion: reduce) { .dususok { animation: none; transform: rotate(45deg); } }
-.onde-bilgi { color: #16a34a; font-size: 12px; font-weight: 600; letter-spacing: .03em; margin-bottom: .3rem; }
+.onde-bilgi { font-size: 12px; font-weight: 600; letter-spacing: .03em; margin-bottom: .3rem; }
+.onde-bilgi.onde-yesil { color: #16a34a; }
+.onde-bilgi.onde-kirmizi { color: var(--kritik); }
 .onde-bilgi[hidden] { display: none; }
 .teklif-mesaj { font-size: 12px; min-height: 1em; }
 .teklif-mesaj.basarili { color: #2e7d32; }

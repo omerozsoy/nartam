@@ -50,16 +50,16 @@
                         <p class="sayac" role="timer" data-alan="sayac">--:--</p>
 
                         @auth
-                            <div class="onde-bilgi" data-alan="onde" @unless(auth()->id() === $ozet['liderId']) hidden @endunless>★ Şu an öndesiniz</div>
+                            <div class="onde-bilgi {{ $ozet['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ozet['benimDurum']) hidden @endunless>{{ $ozet['benimDurum'] === 'gecildi' ? 'Teklifiniz geçilmiştir' : '★ Şu an öndesiniz' }}</div>
                             <form class="teklif-form" data-alan="teklif-form">
                                 @csrf
                                 <input type="hidden" name="ilan_id" value="{{ $ozet['id'] }}">
                                 <div class="pey-kutu">
-                                    <button type="button" class="pey-btn" data-alan="pey-eksi" tabindex="-1" aria-label="Azalt"><i class="ok asagi"></i></button>
+                                    <button type="button" class="pey-btn" data-alan="pey-eksi" tabindex="-1" aria-label="Azalt">−</button>
                                     <input type="number" name="miktar" step="1" readonly inputmode="none"
                                            min="{{ $ozet['minTeklif'] }}" value="{{ $ozet['minTeklif'] }}"
                                            data-alan="miktar" required title="+ / − ile ayarlayın">
-                                    <button type="button" class="pey-btn" data-alan="pey-arti" tabindex="-1" aria-label="Artır"><i class="ok yukari"></i></button>
+                                    <button type="button" class="pey-btn" data-alan="pey-arti" tabindex="-1" aria-label="Artır">+</button>
                                 </div>
                                 <button type="submit" class="btn btn-dolu">
                                     {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyattan 24 Saatlik Müzayedeyi Başlat' : 'Teklif Ver' }}

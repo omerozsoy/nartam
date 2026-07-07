@@ -120,10 +120,20 @@ function ozetUygula(kalem, o) {
             miktar.value = o.minTeklif;
         }
     }
-    // "Öndesiniz" göstergesi
+    // Kullanıcının durumu: önde (yeşil) / geçildi (kırmızı) / gizli
     const onde = kalem.querySelector('[data-alan="onde"]');
     if (onde) {
-        onde.hidden = !(KULLANICI_ID !== '' && o.liderId != null && String(o.liderId) === KULLANICI_ID);
+        if (o.benimDurum === 'onde') {
+            onde.hidden = false;
+            onde.textContent = '★ Şu an öndesiniz';
+            onde.className = 'onde-bilgi onde-yesil';
+        } else if (o.benimDurum === 'gecildi') {
+            onde.hidden = false;
+            onde.textContent = 'Teklifiniz geçilmiştir';
+            onde.className = 'onde-bilgi onde-kirmizi';
+        } else {
+            onde.hidden = true;
+        }
     }
 
     // Yeni teklif geldiyse (min yükseldiyse) sayacı kırmızı yanıp söndür (fade in/out)

@@ -15,11 +15,21 @@ use Carbon\CarbonImmutable;
  */
 class Sunum
 {
-    public static function ilan(Ilan $ilan, ?CarbonImmutable $now = null): array
+    public static function ilan(Ilan $ilan, ?CarbonImmutable $now = null, ?int $benimId = null, bool $teklifVerdim = false): array
     {
         $now ??= CarbonImmutable::now();
 
         $durum = $ilan->durum($now);
+
+        // Giriş yapan kullanıcının bu ilandaki durumu: önde / geçildi / (yok)
+        $benimDurum = null;
+        if ($benimId !== null) {
+            if ((int) $ilan->lider_id === $benimId) {
+                $benimDurum = 'onde';
+            } elseif ($teklifVerdim) {
+                $benimDurum = 'gecildi';
+            }
+        }
         $bitis = $ilan->bitis_zamani;
         $sonrakiDusus = $ilan->sonrakiDususZamani($now);
         $fiyat = $ilan->guncelFiyat($now);
@@ -51,6 +61,7 @@ class Sunum
             'sonrakiDususTs' => $sonrakiDusus?->getTimestamp(),
             'sonTeklifSahibi' => Ad::gizle($ilan->son_teklif_sahibi),
             'liderId' => $ilan->lider_id,
+            'benimDurum' => $benimDurum,
             'teklifSayisi' => $ilan->teklifler_count ?? $ilan->teklifler()->count(),
         ];
     }
