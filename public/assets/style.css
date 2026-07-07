@@ -790,6 +790,7 @@ body.lightbox-acik { overflow: hidden; }
     margin-bottom: .1rem;
     flex-wrap: wrap;
 }
+.baslangic-satir[hidden] { display: none; }
 .baslangic-fiyat {
     font-size: 13px;
     color: var(--soluk);

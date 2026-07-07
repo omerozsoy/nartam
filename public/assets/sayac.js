@@ -107,10 +107,14 @@ function ozetUygula(kalem, o) {
         rozet.classList.toggle('rozet-taban', !!o.tabanaUlasti);
     }
 
-    // Düşüş yüzdesi (fiyat düştükçe güncellenir)
+    // Düşüş yüzdesi (fiyat düştükçe güncellenir; hiç düşmediyse gizli)
     const yuzdeEl = kalem.querySelector('[data-alan="dusus-yuzde"]');
     if (yuzdeEl && o.dususYuzde != null) {
         yuzdeEl.textContent = '%' + o.dususYuzde + ' ↓';
+    }
+    const bSatir = kalem.querySelector('[data-alan="baslangic-satir"]');
+    if (bSatir) {
+        bSatir.hidden = !(o.dususYuzde > 0);
     }
 
     // Taban fiyata ulaşıldıysa geri sayımı gizle

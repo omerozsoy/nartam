@@ -42,7 +42,7 @@
                         {{ $ozet['durum'] === 'dusuyor' ? 'Düşen fiyat' : ($ozet['durum'] === 'kapandi' ? 'Kapanış fiyatı' : 'Güncel teklif') }}
                     </div>
                     @if ($ozet['durum'] === 'dusuyor')
-                        <div class="baslangic-satir">
+                        <div class="baslangic-satir" data-alan="baslangic-satir" @unless($ozet['dususYuzde'] > 0) hidden @endunless>
                             <span class="baslangic-fiyat">Başlangıç: {{ $ozet['baslangicFiyatiBicim'] }}</span>
                             <span class="dusus-yuzde" data-alan="dusus-yuzde">%{{ $ozet['dususYuzde'] }} ↓</span>
                         </div>
