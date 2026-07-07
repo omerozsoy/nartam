@@ -121,14 +121,51 @@ class Ilan extends Model
         return (int) $this->guncel_teklif + self::artirimAdimi((int) $this->guncel_teklif);
     }
 
-    /** Kademeli artırım tablosu. */
+    /** @var list<array{alt: int, adim: int}>|null İstek-içi önbellek. */
+    private static ?array $peyAdimCache = null;
+
+    /** Kademeli artırım tutarı — yönetimdeki pey adım tablosundan okur. */
     public static function artirimAdimi(int $fiyat): int
     {
-        return match (true) {
-            $fiyat < 1000 => 50,
-            $fiyat < 5000 => 100,
-            default => 250,
-        };
+        foreach (self::peyAdimlari() as $kademe) {
+            if ($fiyat >= $kademe['alt']) {
+                return $kademe['adim'];
+            }
+        }
+
+        return 50;
+    }
+
+    /** @return list<array{alt: int, adim: int}> Pey kademeleri (alt'a göre azalan) — ön yüz için. */
+    public static function peyKademeleri(): array
+    {
+        return self::peyAdimlari();
+    }
+
+    /** @return list<array{alt: int, adim: int}> alt_sinir'e göre AZALAN sıralı */
+    private static function peyAdimlari(): array
+    {
+        if (self::$peyAdimCache !== null) {
+            return self::$peyAdimCache;
+        }
+
+        try {
+            self::$peyAdimCache = PeyAdimi::orderByDesc('alt_sinir')->get()
+                ->map(fn (PeyAdimi $p) => ['alt' => $p->alt_sinir, 'adim' => $p->adim])
+                ->all();
+        } catch (\Throwable) {
+            self::$peyAdimCache = [];
+        }
+
+        if (self::$peyAdimCache === []) {
+            self::$peyAdimCache = [
+                ['alt' => 5000, 'adim' => 250],
+                ['alt' => 1000, 'adim' => 100],
+                ['alt' => 0, 'adim' => 50],
+            ];
+        }
+
+        return self::$peyAdimCache;
     }
 
     /** Düşüş fazında bir sonraki fiyat düşüşünün zamanı (taban değilse). */

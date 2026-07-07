@@ -435,7 +435,14 @@ img { max-width: 100%; }
     border: 1px solid var(--cizgi); background: #fff; color: var(--metin);
     font: inherit; font-size: 1.05rem; font-variant-numeric: tabular-nums;
 }
-.teklif-form input[type="number"]:focus { outline: none; border-color: var(--siyah); }
+.teklif-form input[type="number"]:focus { outline: none; border-color: var(--siyah); position: relative; z-index: 1; }
+.pey-kutu { display: flex; align-items: stretch; }
+.pey-kutu input[type="number"] { border-left: 0; border-right: 0; }
+.pey-btn {
+    width: 46px; flex-shrink: 0; border: 1px solid var(--cizgi); background: #f4f2ee;
+    font-size: 1.4rem; line-height: 1; color: var(--metin); cursor: pointer; user-select: none;
+}
+.pey-btn:hover { background: var(--cizgi); }
 .onde-bilgi { color: #16a34a; font-size: 12px; font-weight: 600; letter-spacing: .03em; margin-bottom: .3rem; }
 .onde-bilgi[hidden] { display: none; }
 .teklif-mesaj { font-size: 12px; min-height: 1em; }

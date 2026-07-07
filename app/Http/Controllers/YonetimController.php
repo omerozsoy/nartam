@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Ilan;
+use App\Models\PeyAdimi;
 use App\Models\Teklif;
 use App\Models\User;
 use App\Support\Sunum;
@@ -380,5 +381,32 @@ class YonetimController extends Controller
             'teklifler' => $sorgu->get(),
             'ilan' => $ilanId ? Ilan::find($ilanId) : null,
         ]);
+    }
+
+    /** Pey (artırım) adım tablosu. */
+    public function peyAdimlari(): View
+    {
+        return view('yonetim.pey_adimlari', ['adimlar' => PeyAdimi::orderBy('alt_sinir')->get()]);
+    }
+
+    public function peyAdimiEkle(Request $request): RedirectResponse
+    {
+        $veri = $request->validate([
+            'alt_sinir' => ['required', 'integer', 'min:0', 'unique:pey_adimlari,alt_sinir'],
+            'adim' => ['required', 'integer', 'min:1'],
+        ], [
+            'alt_sinir.unique' => 'Bu başlangıç fiyatı için zaten bir kademe var.',
+        ]);
+
+        PeyAdimi::create($veri);
+
+        return back()->with('basari', 'Pey adımı eklendi.');
+    }
+
+    public function peyAdimiSil(PeyAdimi $peyAdimi): RedirectResponse
+    {
+        $peyAdimi->delete();
+
+        return back()->with('basari', 'Pey adımı silindi.');
     }
 }

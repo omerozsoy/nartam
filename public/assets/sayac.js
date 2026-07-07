@@ -272,9 +272,45 @@ function rakamGuncelle(el, sayi) {
     rakamModel(el, sayi, true);
 }
 
+// --- Pey adımı (artırım tablosu) ile +/- ---
+function peyAdimiHesap(deger) {
+    const tablo = window.PEY_ADIMLARI || [];
+    for (const k of tablo) { // alt'a göre azalan sıralı
+        if (deger >= k.alt) {
+            return k.adim;
+        }
+    }
+    return 50;
+}
+
+function peyStepperBagla() {
+    document.querySelectorAll('.teklif-form').forEach((form) => {
+        const input = form.querySelector('[data-alan="miktar"]');
+        if (!input) {
+            return;
+        }
+        const arti = form.querySelector('[data-alan="pey-arti"]');
+        const eksi = form.querySelector('[data-alan="pey-eksi"]');
+        if (arti) {
+            arti.addEventListener('click', () => {
+                const v = Number(input.value) || 0;
+                input.value = v + peyAdimiHesap(v);
+            });
+        }
+        if (eksi) {
+            eksi.addEventListener('click', () => {
+                const v = Number(input.value) || 0;
+                const min = Number(input.min) || 0;
+                input.value = Math.max(min, v - peyAdimiHesap(v));
+            });
+        }
+    });
+}
+
 document.querySelectorAll('[data-alan="fiyat"]').forEach(rakamKur);
 
 sayaclariGuncelle();
 setInterval(sayaclariGuncelle, 1000);
 setInterval(ilanlariCek, POLL_MS);
 teklifBagla();
+peyStepperBagla();

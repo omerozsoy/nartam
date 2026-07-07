@@ -18,6 +18,7 @@
             <a href="{{ route('yonetim.eserler') }}" class="{{ request()->routeIs('yonetim.eserler') || request()->routeIs('yonetim.ilan.duzenle') ? 'aktif' : '' }}">Eserler</a>
             <a href="{{ route('yonetim.eser.yeni') }}" class="{{ request()->routeIs('yonetim.eser.yeni') ? 'aktif' : '' }}">Yeni Eser Ekle</a>
             <a href="{{ route('yonetim.toplu') }}" class="{{ request()->routeIs('yonetim.toplu') ? 'aktif' : '' }}">Toplu Ürün Girişi</a>
+            <a href="{{ route('yonetim.pey') }}" class="{{ request()->routeIs('yonetim.pey') ? 'aktif' : '' }}">Pey Adımları</a>
             <a href="{{ route('yonetim.uyeler') }}" class="{{ request()->routeIs('yonetim.uyeler') || request()->routeIs('yonetim.uye') ? 'aktif' : '' }}">Üyeler</a>
         </nav>
         <div class="yk-dip">
