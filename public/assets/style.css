@@ -519,6 +519,35 @@ img { max-width: 100%; }
 .durum-acik_artirma .rozet { border-color: #1a1a1a; color: #1a1a1a; }
 .durum-kapandi { opacity: .55; }
 
+/* "Fiyat Düşüyor" rozetinde kayan parıltı (shimmer) */
+.durum-dusuyor .rozet { position: relative; overflow: hidden; }
+.durum-dusuyor .rozet::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -160%;
+    width: 55%;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(
+        100deg,
+        transparent 0%,
+        rgba(22, 163, 74, .12) 40%,
+        rgba(22, 163, 74, .32) 50%,
+        rgba(22, 163, 74, .12) 60%,
+        transparent 100%
+    );
+    transform: skewX(-18deg);
+    animation: rozetShimmer 2.6s ease-in-out infinite;
+}
+@keyframes rozetShimmer {
+    0% { left: -160%; }
+    55%, 100% { left: 160%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .durum-dusuyor .rozet::before { animation: none; display: none; }
+}
+
 .sayac-etiket { font-size: 10px; letter-spacing: .09em; text-transform: uppercase; color: var(--soluk); margin: .4rem 0 .35rem; }
 .sayac {
     font-size: 1.6rem;
