@@ -23,6 +23,8 @@
         <a href="{{ route('acik.artirma') }}" class="{{ request()->routeIs('acik.artirma') ? 'aktif' : '' }}">Açık Artırma</a>
         <a href="{{ route('acik.eksiltme') }}" class="{{ request()->routeIs('acik.eksiltme') ? 'aktif' : '' }}">Açık Eksiltme</a>
     </nav>
+    <input type="checkbox" id="mobil-menu" class="mobil-anahtar" hidden>
+    <label for="mobil-menu" class="hamburger" aria-label="Menü"><span></span><span></span><span></span></label>
     <div class="ust-sag">
         @auth
             <a href="{{ route('hesabim') }}">Hesabım</a>
