@@ -4,6 +4,8 @@
 
 @section('content')
     <div class="kap">
+        @include('ilanlar._vitrin', ['vitrin' => $ilanlar->where('durum', 'acik_artirma')->take(10)])
+
         <div class="satis-basligi">
             <div>
                 <h1>{{ $baslik }}</h1>
@@ -22,5 +24,6 @@
 @endsection
 
 @push('scripts')
+    @include('ilanlar._vitrin_script')
     <script src="{{ asset('assets/sayac.js') }}?v={{ filemtime(public_path('assets/sayac.js')) }}"></script>
 @endpush

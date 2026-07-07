@@ -23,6 +23,10 @@
         <a href="{{ route('acik.artirma') }}" class="{{ request()->routeIs('acik.artirma') ? 'aktif' : '' }}">Açık Artırma</a>
         <a href="{{ route('acik.eksiltme') }}" class="{{ request()->routeIs('acik.eksiltme') ? 'aktif' : '' }}">Açık Eksiltme</a>
     </nav>
+    <div class="arama arama-ust" data-alan="arama">
+        <input type="search" class="arama-girdi" data-alan="arama-girdi" placeholder="Ara…" autocomplete="off" spellcheck="false" aria-label="Ara">
+        <ul class="arama-oneri" data-alan="arama-oneri" hidden></ul>
+    </div>
     <input type="checkbox" id="mobil-menu" class="mobil-anahtar" hidden>
     <label for="mobil-menu" class="hamburger" aria-label="Menü"><span></span><span></span><span></span></label>
     <div class="ust-sag">
@@ -105,6 +109,7 @@
     </div>
 @endauth
 
+<script src="{{ asset('assets/arama.js') }}?v={{ filemtime(public_path('assets/arama.js')) }}"></script>
 <script src="{{ asset('assets/lightbox.js') }}?v={{ filemtime(public_path('assets/lightbox.js')) }}"></script>
 @stack('scripts')
 </body>
