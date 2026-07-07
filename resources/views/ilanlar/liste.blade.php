@@ -4,35 +4,30 @@
 
 @section('content')
     <div class="kap">
-        @php($vitrin = ($gruplar['acik_artirma'] ?? collect())->take(8))
+        @php($vitrin = ($gruplar['acik_artirma'] ?? collect())->take(10))
         @if ($vitrin->isNotEmpty())
-            <section class="slider" data-alan="slider">
-                <div class="slider-govde">
-                    <ul class="slider-ray" data-alan="slider-ray">
+            <section class="vitrin" data-alan="slider">
+                <div class="swiper vitrin-swiper">
+                    <div class="swiper-wrapper">
                         @foreach ($vitrin as $ilan)
-                            <li class="slider-slayt">
-                                <a href="{{ route('ilan.goster', $ilan['id']) }}" class="slider-gorsel {{ $ilan['gorselUrl'] ? '' : 'bos' }}">
-                                    @if ($ilan['gorselUrl'])
-                                        <img src="{{ $ilan['gorselUrl'] }}" alt="{{ $ilan['baslik'] }}">
-                                    @else
-                                        {{ mb_strtoupper(mb_substr($ilan['baslik'], 0, 1)) }}
-                                    @endif
-                                </a>
-                                <div class="slider-bilgi">
-                                    <div class="slider-etiket">Açık Artırma</div>
-                                    @if ($ilan['lotNo'])<div class="slider-lot">Lot {{ $ilan['lotNo'] }}</div>@endif
-                                    <h2>{{ $ilan['baslik'] }}</h2>
-                                    @if ($ilan['altBaslik'])<div class="slider-alt">{{ $ilan['altBaslik'] }}</div>@endif
-                                    <div class="slider-fiyat">{{ $ilan['guncelFiyatBicim'] }}</div>
-                                    <a class="btn btn-dolu" href="{{ route('ilan.goster', $ilan['id']) }}">İncele ve Teklif Ver</a>
+                            <a class="swiper-slide {{ $ilan['gorselUrl'] ? '' : 'bos' }}" href="{{ route('ilan.goster', $ilan['id']) }}">
+                                @if ($ilan['gorselUrl'])
+                                    <img src="{{ $ilan['gorselUrl'] }}" alt="{{ $ilan['baslik'] }}">
+                                @else
+                                    <span class="vitrin-harf">{{ mb_strtoupper(mb_substr($ilan['baslik'], 0, 1)) }}</span>
+                                @endif
+                                <div class="vitrin-bilgi">
+                                    @if ($ilan['lotNo'])<span class="vitrin-lot">Lot {{ $ilan['lotNo'] }}</span>@endif
+                                    <strong>{{ $ilan['baslik'] }}</strong>
+                                    <span class="vitrin-fiyat">{{ $ilan['guncelFiyatBicim'] }}</span>
                                 </div>
-                            </li>
+                            </a>
                         @endforeach
-                    </ul>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
-                <button type="button" class="slider-ok slider-onceki" data-alan="slider-onceki" aria-label="Önceki"></button>
-                <button type="button" class="slider-ok slider-sonraki" data-alan="slider-sonraki" aria-label="Sonraki"></button>
-                <div class="slider-nokta" data-alan="slider-nokta"></div>
             </section>
         @endif
 
@@ -66,5 +61,28 @@
 @endsection
 
 @push('scripts')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof Swiper === 'undefined' || !document.querySelector('.vitrin-swiper')) {
+                return;
+            }
+            new Swiper('.vitrin-swiper', {
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                loop: true,
+                coverflowEffect: { rotate: 20, stretch: 0, depth: 350, modifier: 1, slideShadows: true },
+                autoplay: { delay: 3500, disableOnInteraction: false },
+                pagination: { el: '.vitrin-swiper .swiper-pagination', clickable: true },
+                navigation: {
+                    nextEl: '.vitrin-swiper .swiper-button-next',
+                    prevEl: '.vitrin-swiper .swiper-button-prev',
+                },
+            });
+        });
+    </script>
     <script src="{{ asset('assets/sayac.js') }}?v={{ filemtime(public_path('assets/sayac.js')) }}"></script>
 @endpush

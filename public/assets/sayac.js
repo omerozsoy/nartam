@@ -535,69 +535,6 @@ function aramaBagla() {
     });
 }
 
-// --- Vitrin slider ---
-function sliderBagla() {
-    const slider = document.querySelector('[data-alan="slider"]');
-    if (!slider) {
-        return;
-    }
-    const ray = slider.querySelector('[data-alan="slider-ray"]');
-    const toplam = ray ? ray.children.length : 0;
-    if (toplam === 0) {
-        return;
-    }
-    const noktaKap = slider.querySelector('[data-alan="slider-nokta"]');
-    const onceki = slider.querySelector('[data-alan="slider-onceki"]');
-    const sonraki = slider.querySelector('[data-alan="slider-sonraki"]');
-    let indeks = 0;
-    let otomatik = null;
-
-    // Tek slayt varsa kontrolleri gizle
-    if (toplam <= 1) {
-        if (onceki) onceki.style.display = 'none';
-        if (sonraki) sonraki.style.display = 'none';
-        if (noktaKap) noktaKap.style.display = 'none';
-        return;
-    }
-
-    const noktalar = [];
-    if (noktaKap) {
-        for (let i = 0; i < toplam; i++) {
-            const b = document.createElement('button');
-            b.type = 'button';
-            b.setAttribute('aria-label', (i + 1) + '. lot');
-            b.addEventListener('click', () => {
-                git(i);
-                sifirla();
-            });
-            noktaKap.appendChild(b);
-            noktalar.push(b);
-        }
-    }
-
-    function git(i) {
-        indeks = (i + toplam) % toplam;
-        ray.style.transform = 'translateX(' + (-indeks * 100) + '%)';
-        noktalar.forEach((n, j) => n.classList.toggle('aktif', j === indeks));
-    }
-
-    function basla() {
-        otomatik = setInterval(() => git(indeks + 1), 5000);
-    }
-    function sifirla() {
-        clearInterval(otomatik);
-        basla();
-    }
-
-    if (sonraki) sonraki.addEventListener('click', () => { git(indeks + 1); sifirla(); });
-    if (onceki) onceki.addEventListener('click', () => { git(indeks - 1); sifirla(); });
-    slider.addEventListener('mouseenter', () => clearInterval(otomatik));
-    slider.addEventListener('mouseleave', basla);
-
-    git(0);
-    basla();
-}
-
 document.querySelectorAll('[data-alan="fiyat"]').forEach(rakamKur);
 
 sayaclariGuncelle();
@@ -606,4 +543,3 @@ setInterval(ilanlariCek, POLL_MS);
 teklifBagla();
 peyStepperBagla();
 aramaBagla();
-sliderBagla();
