@@ -38,5 +38,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/sayac.js') }}"></script>
+    <script src="{{ asset('assets/sayac.js') }}?v={{ filemtime(public_path('assets/sayac.js')) }}"></script>
 @endpush

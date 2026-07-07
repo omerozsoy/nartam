@@ -70,5 +70,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/panel.js') }}"></script>
+    <script src="{{ asset('assets/panel.js') }}?v={{ filemtime(public_path('assets/panel.js')) }}"></script>
 @endpush
