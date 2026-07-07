@@ -36,7 +36,7 @@
 
     @if ($ilan['durum'] !== 'kapandi')
         @auth
-            <div class="onde-bilgi {{ $ilan['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ilan['benimDurum']) hidden @endunless>@if($ilan['benimDurum'] === 'gecildi')★ Teklifiniz geçilmiştir@elseif($ilan['benimDurum'] === 'onde')★ Şu an en yüksek teklife sahipsiniz@endif</div>
+            <div class="onde-bilgi {{ $ilan['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ilan['benimDurum']) hidden @endunless>{{ $ilan['benimDurum'] === 'gecildi' ? '★ Teklifiniz geçilmiştir' : ($ilan['benimDurum'] === 'onde' ? '★ Şu an en yüksek teklife sahipsiniz' : '') }}</div>
             <form class="teklif-form" data-alan="teklif-form">
                 @csrf
                 <input type="hidden" name="ilan_id" value="{{ $ilan['id'] }}">
