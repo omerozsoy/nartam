@@ -107,6 +107,12 @@ function ozetUygula(kalem, o) {
         rozet.classList.toggle('rozet-taban', !!o.tabanaUlasti);
     }
 
+    // Düşüş yüzdesi (fiyat düştükçe güncellenir)
+    const yuzdeEl = kalem.querySelector('[data-alan="dusus-yuzde"]');
+    if (yuzdeEl && o.dususYuzde != null) {
+        yuzdeEl.textContent = '%' + o.dususYuzde + ' ↓';
+    }
+
     // Taban fiyata ulaşıldıysa geri sayımı gizle
     const sayacKutu = kalem.querySelector('[data-alan="sayac"]');
     if (sayacKutu) {

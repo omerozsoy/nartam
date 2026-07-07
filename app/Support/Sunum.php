@@ -43,6 +43,12 @@ class Sunum
         $tabanaUlasti = $durum === Durum::DUSUYOR && $fiyat <= (int) $ilan->rezerv_fiyat;
         $sonrakiDusus = $tabanaUlasti ? null : $ilan->sonrakiDususZamani($now);
 
+        // Başlangıca göre yüzde düşüş (yalnızca düşüş fazında).
+        $baslangic = (int) $ilan->baslangic_fiyati;
+        $dususYuzde = ($durum === Durum::DUSUYOR && $baslangic > 0)
+            ? (int) round(($baslangic - $fiyat) / $baslangic * 100)
+            : 0;
+
         // Düşüş fazında etiket periyodu belirtir: "Her Dakika Fiyat Düşüyor" vb.
         $durumEtiket = $durum === Durum::DUSUYOR
             ? ($tabanaUlasti ? 'Taban Fiyata Ulaşıldı' : match ($ilan->periyot()) {
@@ -72,6 +78,7 @@ class Sunum
             'bitisTs' => $bitis?->getTimestamp(),
             'sonrakiDususTs' => $sonrakiDusus?->getTimestamp(),
             'tabanaUlasti' => $tabanaUlasti,
+            'dususYuzde' => $dususYuzde,
             'sonTeklifSahibi' => Ad::gizle($ilan->son_teklif_sahibi),
             'liderId' => $ilan->lider_id,
             'benimDurum' => $benimDurum,

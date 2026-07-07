@@ -34,7 +34,10 @@
 
     <div class="lot-satir fiyat-satir">
         @if ($ilan['durum'] === 'dusuyor')
-            <div class="baslangic-fiyat">{{ $ilan['baslangicFiyatiBicim'] }}</div>
+            <div class="baslangic-satir">
+                <span class="baslangic-fiyat">{{ $ilan['baslangicFiyatiBicim'] }}</span>
+                <span class="dusus-yuzde" data-alan="dusus-yuzde">%{{ $ilan['dususYuzde'] }} ↓</span>
+            </div>
         @endif
         <div class="fiyat" data-alan="fiyat" data-deger="{{ $ilan['guncelFiyat'] }}">{{ $ilan['guncelFiyatBicim'] }}</div>
         @if ($ilan['durum'] === 'dusuyor')<span class="dususok" aria-hidden="true"><i></i><i></i><i></i></span>@endif
