@@ -24,6 +24,8 @@
 
     @if ($ilan['lotNo'])
         <div class="lot-no">Lot {{ $ilan['lotNo'] }}</div>
+    @elseif ($ilan['durum'] === 'dusuyor')
+        <div class="stok-no">Stok No: {{ $ilan['id'] }}</div>
     @endif
 
     <h2 class="lot-baslik"><a href="{{ $detayUrl }}">{{ $ilan['baslik'] }}</a></h2>
@@ -37,6 +39,7 @@
     @if ($ilan['durum'] !== 'kapandi')
         @auth
             <div class="onde-bilgi {{ $ilan['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ilan['benimDurum']) hidden @endunless>{{ $ilan['benimDurum'] === 'gecildi' ? '★ Teklifiniz geçilmiştir' : ($ilan['benimDurum'] === 'onde' ? '★ Şu an en yüksek teklife sahipsiniz' : '') }}</div>
+            <div class="benim-max" data-alan="benim-max" @unless($ilan['benimMax']) hidden @endunless>Maksimum teklifiniz: <strong data-alan="benim-max-tutar">{{ $ilan['benimMaxBicim'] }}</strong></div>
             <form class="teklif-form" data-alan="teklif-form">
                 @csrf
                 <input type="hidden" name="ilan_id" value="{{ $ilan['id'] }}">

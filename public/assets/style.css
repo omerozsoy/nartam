@@ -474,6 +474,10 @@ img { max-width: 100%; }
 .onde-bilgi.onde-yesil { color: #16a34a; }
 .onde-bilgi.onde-kirmizi { color: var(--kritik); }
 .onde-bilgi[hidden] { display: none; }
+.benim-max { font-size: 12px; color: var(--soluk); margin-bottom: .35rem; }
+.benim-max strong { color: var(--metin); font-variant-numeric: tabular-nums; }
+.benim-max[hidden] { display: none; }
+.stok-no { font-size: 10px; letter-spacing: .09em; text-transform: uppercase; color: var(--soluk); }
 .teklif-mesaj { font-size: 12px; min-height: 1em; }
 .teklif-mesaj.basarili { color: #2e7d32; }
 .teklif-mesaj.hatali { color: var(--kritik); }

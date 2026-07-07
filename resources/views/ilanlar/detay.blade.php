@@ -25,6 +25,8 @@
             <div class="detay-bilgi">
                 @if ($ozet['lotNo'])
                     <div class="lot-no">LOT {{ $ozet['lotNo'] }}</div>
+                @elseif ($ozet['durum'] === 'dusuyor')
+                    <div class="stok-no">Stok No: {{ $ozet['id'] }}</div>
                 @endif
                 <h1>{{ $ozet['baslik'] }}</h1>
                 @if ($ozet['altBaslik'])
@@ -51,6 +53,7 @@
 
                         @auth
                             <div class="onde-bilgi {{ $ozet['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ozet['benimDurum']) hidden @endunless>{{ $ozet['benimDurum'] === 'gecildi' ? '★ Teklifiniz geçilmiştir' : ($ozet['benimDurum'] === 'onde' ? '★ Şu an en yüksek teklife sahipsiniz' : '') }}</div>
+                            <div class="benim-max" data-alan="benim-max" @unless($ozet['benimMax']) hidden @endunless>Maksimum teklifiniz: <strong data-alan="benim-max-tutar">{{ $ozet['benimMaxBicim'] }}</strong></div>
                             <form class="teklif-form" data-alan="teklif-form">
                                 @csrf
                                 <input type="hidden" name="ilan_id" value="{{ $ozet['id'] }}">

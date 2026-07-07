@@ -32,8 +32,11 @@
                 </label>
                 <label>Düşüş Periyodu
                     <select name="dusus_periyodu" required>
-                        <option value="1" @selected(old('dusus_periyodu') == 1)>Saniyede bir</option>
+                        <option value="30" @selected(old('dusus_periyodu') == 30)>30 saniyede bir</option>
                         <option value="60" @selected(old('dusus_periyodu') == 60)>Dakikada bir</option>
+                        <option value="300" @selected(old('dusus_periyodu') == 300)>5 dakikada bir</option>
+                        <option value="900" @selected(old('dusus_periyodu') == 900)>15 dakikada bir</option>
+                        <option value="1800" @selected(old('dusus_periyodu') == 1800)>30 dakikada bir</option>
                         <option value="3600" @selected(old('dusus_periyodu', 3600) == 3600)>Saatte bir</option>
                     </select>
                 </label>

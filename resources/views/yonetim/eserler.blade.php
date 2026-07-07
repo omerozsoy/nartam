@@ -15,7 +15,7 @@
         <section class="kart">
             <table class="tablo">
                 <thead>
-                <tr><th>#</th><th>Lot</th><th>Başlık</th><th>Durum</th><th>Güncel Fiyat</th><th>Teklif</th><th></th></tr>
+                <tr><th>Stok No</th><th>Lot</th><th>Başlık</th><th>Durum</th><th>Güncel Fiyat</th><th>Teklif</th><th></th></tr>
                 </thead>
                 <tbody>
                 @foreach ($ilanlar as $ilan)

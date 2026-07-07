@@ -15,7 +15,7 @@ use Carbon\CarbonImmutable;
  */
 class Sunum
 {
-    public static function ilan(Ilan $ilan, ?CarbonImmutable $now = null, ?int $benimId = null, bool $teklifVerdim = false): array
+    public static function ilan(Ilan $ilan, ?CarbonImmutable $now = null, ?int $benimId = null, bool $teklifVerdim = false, ?int $benimMax = null): array
     {
         $now ??= CarbonImmutable::now();
 
@@ -38,9 +38,13 @@ class Sunum
         // Düşüş fazında etiket periyodu belirtir: "Her Dakika Fiyat Düşüyor" vb.
         $durumEtiket = $durum === Durum::DUSUYOR
             ? match ($ilan->periyot()) {
-                1 => 'Her Saniye Fiyat Düşüyor',
+                30 => 'Her 30 Saniyede Fiyat Düşüyor',
                 60 => 'Her Dakika Fiyat Düşüyor',
-                default => 'Her Saat Fiyat Düşüyor',
+                300 => 'Her 5 Dakikada Fiyat Düşüyor',
+                900 => 'Her 15 Dakikada Fiyat Düşüyor',
+                1800 => 'Her 30 Dakikada Fiyat Düşüyor',
+                3600 => 'Her Saat Fiyat Düşüyor',
+                default => 'Fiyat Düşüyor',
             }
             : $durum->etiket();
 
@@ -62,6 +66,8 @@ class Sunum
             'sonTeklifSahibi' => Ad::gizle($ilan->son_teklif_sahibi),
             'liderId' => $ilan->lider_id,
             'benimDurum' => $benimDurum,
+            'benimMax' => $benimMax,
+            'benimMaxBicim' => $benimMax ? number_format($benimMax, 0, ',', '.') . ' ₺' : null,
             'teklifSayisi' => $ilan->teklifler_count ?? $ilan->teklifler()->count(),
         ];
     }

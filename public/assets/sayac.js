@@ -136,6 +136,20 @@ function ozetUygula(kalem, o) {
         }
     }
 
+    // Kendi gizli maksimum teklifi (yalnızca kullanıcıya)
+    const bmax = kalem.querySelector('[data-alan="benim-max"]');
+    if (bmax) {
+        if (o.benimMax) {
+            bmax.hidden = false;
+            const t = bmax.querySelector('[data-alan="benim-max-tutar"]');
+            if (t) {
+                t.textContent = o.benimMaxBicim;
+            }
+        } else {
+            bmax.hidden = true;
+        }
+    }
+
     // Yeni teklif geldiyse (min yükseldiyse) sayacı kırmızı yanıp söndür (fade in/out)
     if (oncekiMin > 0 && o.minTeklif > oncekiMin) {
         const sayac = kalem.querySelector('[data-alan="sayac"]');

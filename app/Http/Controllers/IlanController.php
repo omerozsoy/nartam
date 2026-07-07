@@ -46,11 +46,11 @@ class IlanController extends Controller
         $teklifler = $ilan->teklifler()->with('kullanici')->orderByDesc('miktar')->take(20)->get();
 
         $benimId = Auth::id();
-        $teklifVerdim = $benimId ? $ilan->teklifler()->where('kullanici_id', $benimId)->exists() : false;
+        $benimMax = $benimId ? $ilan->teklifler()->where('kullanici_id', $benimId)->max('miktar') : null;
 
         return view('ilanlar.detay', [
             'ilan' => $ilan,
-            'ozet' => Sunum::ilan($ilan, null, $benimId, $teklifVerdim),
+            'ozet' => Sunum::ilan($ilan, null, $benimId, $benimMax !== null, $benimMax !== null ? (int) $benimMax : null),
             'teklifler' => $teklifler,
         ]);
     }
@@ -69,12 +69,19 @@ class IlanController extends Controller
     {
         $oncelik = ['acik_artirma' => 0, 'dusuyor' => 1, 'kapandi' => 2];
         $benimId = Auth::id();
-        $benimIlanlar = $benimId
-            ? Teklif::where('kullanici_id', $benimId)->pluck('ilan_id')->flip()
+        $benimMaxlar = $benimId
+            ? Teklif::where('kullanici_id', $benimId)
+                ->selectRaw('ilan_id, MAX(miktar) as maks')
+                ->groupBy('ilan_id')
+                ->pluck('maks', 'ilan_id')
             : collect();
 
         return Ilan::withCount('teklifler')->orderBy('id')->get()
-            ->map(fn (Ilan $i) => Sunum::ilan($i, null, $benimId, $benimIlanlar->has($i->id)))
+            ->map(function (Ilan $i) use ($benimId, $benimMaxlar) {
+                $m = $benimMaxlar->get($i->id);
+
+                return Sunum::ilan($i, null, $benimId, $m !== null, $m !== null ? (int) $m : null);
+            })
             // Grup önceliği; grup içinde: lot no'su olanlar (açık artırma) lot no'ya göre 1,2,3…
             ->sortBy(fn (array $o) => sprintf('%d-%08d', $oncelik[$o['durum']] ?? 9, $o['lotNo'] ?? $o['id']))
             ->values();

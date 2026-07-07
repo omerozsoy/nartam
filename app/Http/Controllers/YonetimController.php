@@ -294,7 +294,7 @@ class YonetimController extends Controller
             'aciklama' => ['nullable', 'string', 'max:5000'],
             'baslangic_fiyati' => ['required', 'integer', 'min:1'],
             'saatlik_dusus' => ['required', 'integer', 'min:1'],
-            'dusus_periyodu' => ['required', 'integer', 'in:1,60,3600'],
+            'dusus_periyodu' => ['required', 'integer', 'in:30,60,300,900,1800,3600'],
             'rezerv_fiyat' => ['required', 'integer', 'min:0', 'lte:baslangic_fiyati'],
         ]);
 
@@ -326,7 +326,7 @@ class YonetimController extends Controller
             'aciklama' => ['nullable', 'string', 'max:5000'],
             'baslangic_fiyati' => ['required', 'integer', 'min:1'],
             'saatlik_dusus' => ['required', 'integer', 'min:1'],
-            'dusus_periyodu' => ['required', 'integer', 'in:1,60,3600'],
+            'dusus_periyodu' => ['required', 'integer', 'in:30,60,300,900,1800,3600'],
             'rezerv_fiyat' => ['required', 'integer', 'min:0', 'lte:baslangic_fiyati'],
         ]);
 

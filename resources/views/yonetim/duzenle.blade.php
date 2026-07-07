@@ -42,8 +42,11 @@
                 <label>Düşüş Periyodu
                     @php($pOld = old('dusus_periyodu', $ilan->dusus_periyodu))
                     <select name="dusus_periyodu" required>
-                        <option value="1" @selected($pOld == 1)>Saniyede bir</option>
+                        <option value="30" @selected($pOld == 30)>30 saniyede bir</option>
                         <option value="60" @selected($pOld == 60)>Dakikada bir</option>
+                        <option value="300" @selected($pOld == 300)>5 dakikada bir</option>
+                        <option value="900" @selected($pOld == 900)>15 dakikada bir</option>
+                        <option value="1800" @selected($pOld == 1800)>30 dakikada bir</option>
                         <option value="3600" @selected($pOld == 3600)>Saatte bir</option>
                     </select>
                 </label>

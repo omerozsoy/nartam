@@ -30,8 +30,12 @@ class TeklifController extends Controller
 
         // Geçersizse ValidationException fırlatır; Laravel AJAX'ta 422 JSON,
         // formda geri yönlendirme + hata olarak döndürür.
-        $ilan = $servis->teklifVer($ilan, $request->user(), (int) $veri['miktar']);
-        $ozet = Sunum::ilan($ilan);
+        $kullanici = $request->user();
+        $ilan = $servis->teklifVer($ilan, $kullanici, (int) $veri['miktar']);
+
+        // Yanıtta kullanıcı bağlamı: kendi durumu (önde/geçildi) ve gizli maksimumu
+        $benimMax = (int) $ilan->teklifler()->where('kullanici_id', $kullanici->id)->max('miktar');
+        $ozet = Sunum::ilan($ilan, null, $kullanici->id, true, $benimMax);
 
         if ($request->wantsJson()) {
             return response()->json(['ok' => true, 'ilan' => $ozet]);
