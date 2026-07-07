@@ -116,6 +116,21 @@
     </div>
 @endauth
 
+<button type="button" class="yukari-don" data-alan="yukari-don" aria-label="En üste dön" hidden>
+    <span aria-hidden="true">↑</span>
+</button>
+<script>
+    (function () {
+        var btn = document.querySelector('[data-alan="yukari-don"]');
+        if (!btn) { return; }
+        function guncelle() { btn.hidden = window.scrollY < 400; }
+        window.addEventListener('scroll', guncelle, { passive: true });
+        btn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        guncelle();
+    })();
+</script>
 <script src="{{ asset('assets/ticker.js') }}?v={{ filemtime(public_path('assets/ticker.js')) }}"></script>
 <script src="{{ asset('assets/arama.js') }}?v={{ filemtime(public_path('assets/arama.js')) }}"></script>
 <script src="{{ asset('assets/lightbox.js') }}?v={{ filemtime(public_path('assets/lightbox.js')) }}"></script>

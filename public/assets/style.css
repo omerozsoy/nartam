@@ -180,6 +180,31 @@ img { max-width: 100%; }
 .arama-bos { padding: .7rem .9rem; font-size: 13px; color: var(--soluk); }
 .arama-gizli { display: none !important; }
 
+/* ---------- En üste dön butonu ---------- */
+.yukari-don {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 150;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--kritik);
+    color: #fff;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s ease, transform .15s ease, opacity .2s ease;
+}
+.yukari-don:hover { background: #900018; transform: translateY(-2px); }
+.yukari-don[hidden] { display: none; }
+@media (max-width: 520px) { .yukari-don { right: 1rem; bottom: 1rem; width: 42px; height: 42px; } }
+
 /* ---------- Menü altı canlı fiyat ticker'ı ---------- */
 .ticker-wrap {
     display: flex;
