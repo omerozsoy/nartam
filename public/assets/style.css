@@ -519,30 +519,29 @@ img { max-width: 100%; }
 .durum-acik_artirma .rozet { border-color: #1a1a1a; color: #1a1a1a; }
 .durum-kapandi { opacity: .55; }
 
-/* "Fiyat Düşüyor" rozetinde kayan parıltı (shimmer) */
+/* "Fiyat Düşüyor" rozetinde aşağı akan degrade */
 .durum-dusuyor .rozet { position: relative; overflow: hidden; }
 .durum-dusuyor .rozet:not(.rozet-taban)::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -160%;
-    width: 55%;
-    height: 100%;
+    left: 0;
+    top: -160%;
+    width: 100%;
+    height: 55%;
     pointer-events: none;
     background: linear-gradient(
-        100deg,
+        180deg,
         transparent 0%,
-        rgba(22, 163, 74, .12) 40%,
-        rgba(22, 163, 74, .32) 50%,
-        rgba(22, 163, 74, .12) 60%,
+        rgba(22, 163, 74, .10) 40%,
+        rgba(22, 163, 74, .30) 50%,
+        rgba(22, 163, 74, .10) 60%,
         transparent 100%
     );
-    transform: skewX(-18deg);
-    animation: rozetShimmer 2.6s ease-in-out infinite;
+    animation: rozetAkis 2.4s linear infinite;
 }
-@keyframes rozetShimmer {
-    0% { left: -160%; }
-    55%, 100% { left: 160%; }
+@keyframes rozetAkis {
+    0% { top: -160%; }
+    100% { top: 160%; }
 }
 @media (prefers-reduced-motion: reduce) {
     .durum-dusuyor .rozet::before { animation: none; display: none; }
