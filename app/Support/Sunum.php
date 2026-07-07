@@ -43,11 +43,11 @@ class Sunum
         // Düşüş fazında etiket periyodu belirtir: "Her Dakika Fiyat Düşüyor" vb.
         $durumEtiket = $durum === Durum::DUSUYOR
             ? match ($ilan->periyot()) {
-                30 => 'Her 30 Saniyede Fiyat Düşüyor',
+                30 => 'Her 30 Saniyede Bir Fiyat Düşüyor',
                 60 => 'Her Dakika Fiyat Düşüyor',
-                300 => 'Her 5 Dakikada Fiyat Düşüyor',
-                900 => 'Her 15 Dakikada Fiyat Düşüyor',
-                1800 => 'Her 30 Dakikada Fiyat Düşüyor',
+                300 => 'Her 5 Dakikada Bir Fiyat Düşüyor',
+                900 => 'Her 15 Dakikada Bir Fiyat Düşüyor',
+                1800 => 'Her 30 Dakikada Bir Fiyat Düşüyor',
                 3600 => 'Her Saat Fiyat Düşüyor',
                 default => 'Fiyat Düşüyor',
             }
