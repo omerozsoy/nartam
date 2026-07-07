@@ -782,6 +782,13 @@ body.lightbox-acik { overflow: hidden; }
 
 /* Fiyat: büyük ve ortalı */
 .fiyat-satir { text-align: center; margin: .3rem 0 .5rem; }
+.baslangic-fiyat {
+    font-size: 13px;
+    color: var(--soluk);
+    text-decoration: line-through;
+    text-decoration-color: var(--kritik);
+    margin-bottom: .1rem;
+}
 .fiyat-satir .fiyat { font-size: 1.75rem; }
 
 /* Fiyat değişince tek seferlik flash: DÜŞÜNCE yeşil, YÜKSELİNCE kırmızı. Normalde nötr renk. */

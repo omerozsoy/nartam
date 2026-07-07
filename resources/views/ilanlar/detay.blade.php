@@ -41,6 +41,9 @@
                     <div class="etiket" data-alan="fiyat-etiket">
                         {{ $ozet['durum'] === 'dusuyor' ? 'Düşen fiyat' : ($ozet['durum'] === 'kapandi' ? 'Kapanış fiyatı' : 'Güncel teklif') }}
                     </div>
+                    @if ($ozet['durum'] === 'dusuyor')
+                        <div class="baslangic-fiyat">Başlangıç: {{ $ozet['baslangicFiyatiBicim'] }}</div>
+                    @endif
                     <div class="fiyat" data-alan="fiyat" data-deger="{{ $ozet['guncelFiyat'] }}">{{ $ozet['guncelFiyatBicim'] }}</div>
                     @if ($ozet['durum'] === 'dusuyor')<span class="dususok" aria-hidden="true"><i></i><i></i><i></i></span>@endif
 
