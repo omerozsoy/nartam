@@ -386,7 +386,7 @@ body.lightbox-acik { overflow: hidden; }
     flex-direction: column;
     gap: .15rem;
 }
-.vitrin-lot { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+.vitrin-lot { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; opacity: .9; }
 .vitrin-bilgi strong {
     font-family: 'DM Serif Display', Georgia, serif;
     font-weight: 400;
