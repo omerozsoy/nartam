@@ -403,6 +403,20 @@ class YonetimController extends Controller
         return back()->with('basari', 'Pey adımı eklendi.');
     }
 
+    public function peyAdimiGuncelle(Request $request, PeyAdimi $peyAdimi): RedirectResponse
+    {
+        $veri = $request->validate([
+            'alt_sinir' => ['required', 'integer', 'min:0', \Illuminate\Validation\Rule::unique('pey_adimlari', 'alt_sinir')->ignore($peyAdimi->id)],
+            'adim' => ['required', 'integer', 'min:1'],
+        ], [
+            'alt_sinir.unique' => 'Bu başlangıç fiyatı için zaten bir kademe var.',
+        ]);
+
+        $peyAdimi->update($veri);
+
+        return back()->with('basari', 'Pey adımı güncellendi.');
+    }
+
     public function peyAdimiSil(PeyAdimi $peyAdimi): RedirectResponse
     {
         $peyAdimi->delete();

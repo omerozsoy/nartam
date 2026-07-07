@@ -28,24 +28,26 @@
             @if ($adimlar->isEmpty())
                 <p class="alt-not">Henüz kademe yok — varsayılan kullanılır (0→50, 1.000→100, 5.000→250).</p>
             @else
-                <table class="tablo">
-                    <thead><tr><th>Fiyat Aralığı</th><th>Pey Adımı</th><th></th></tr></thead>
-                    <tbody>
-                    @foreach ($adimlar as $i => $a)
-                        @php($ust = isset($adimlar[$i + 1]) ? number_format($adimlar[$i + 1]->alt_sinir - 1, 0, ',', '.') . ' ₺' : 've üzeri')
-                        <tr>
-                            <td>{{ number_format($a->alt_sinir, 0, ',', '.') }} ₺ – {{ $ust }}</td>
-                            <td>{{ number_format($a->adim, 0, ',', '.') }} ₺</td>
-                            <td>
-                                <form method="post" action="{{ route('yonetim.pey.sil', $a) }}" onsubmit="return confirm('Bu kademe silinsin mi?')">
-                                    @csrf
-                                    <button type="submit" class="baglanti-buton" style="color:var(--kritik)">Sil</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                @foreach ($adimlar as $i => $a)
+                    @php($ust = isset($adimlar[$i + 1]) ? number_format($adimlar[$i + 1]->alt_sinir - 1, 0, ',', '.') . ' ₺' : 've üzeri')
+                    <div class="pey-satir">
+                        <form method="post" action="{{ route('yonetim.pey.guncelle', $a) }}" class="pey-duzen">
+                            @csrf
+                            <label>Başlangıç (₺)
+                                <input type="number" name="alt_sinir" value="{{ $a->alt_sinir }}" min="0" required>
+                            </label>
+                            <label>Adım (₺)
+                                <input type="number" name="adim" value="{{ $a->adim }}" min="1" required>
+                            </label>
+                            <span class="pey-aralik">{{ number_format($a->alt_sinir, 0, ',', '.') }} ₺ – {{ $ust }}</span>
+                            <button type="submit" class="btn">Güncelle</button>
+                        </form>
+                        <form method="post" action="{{ route('yonetim.pey.sil', $a) }}" onsubmit="return confirm('Bu kademe silinsin mi?')">
+                            @csrf
+                            <button type="submit" class="baglanti-buton" style="color:var(--kritik)">Sil</button>
+                        </form>
+                    </div>
+                @endforeach
             @endif
         </section>
     </main>

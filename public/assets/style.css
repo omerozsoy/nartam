@@ -540,6 +540,12 @@ input:focus, textarea:focus { outline: none; border-color: var(--siyah); }
 .gorsel-alan { grid-column: 1 / -1; display: flex; flex-direction: column; gap: .7rem; }
 .gorsel-alan label { gap: .3rem; }
 .gorsel-onizleme { max-width: 180px; max-height: 180px; object-fit: contain; border: 1px solid var(--cizgi); background: #fafafa; display: block; }
+
+/* Pey adımı kademe düzenleme satırı */
+.pey-satir { display: flex; align-items: flex-end; gap: 1.2rem; padding: .9rem 0; border-bottom: 1px solid var(--cizgi); flex-wrap: wrap; }
+.pey-duzen { display: flex; align-items: flex-end; gap: .8rem; flex-wrap: wrap; }
+.pey-duzen input[type="number"] { width: 120px; }
+.pey-aralik { color: var(--soluk); font-size: 13px; padding-bottom: .55rem; }
 .izgara-form button { grid-column: 1 / -1; justify-self: start; }
 .tablo { width: 100%; border-collapse: collapse; }
 .tablo th, .tablo td { text-align: left; padding: .6rem; border-bottom: 1px solid var(--cizgi); font-size: 14px; }
