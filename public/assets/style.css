@@ -434,7 +434,11 @@ img { max-width: 100%; }
     width: 100%; padding: .6rem .7rem; text-align: center;
     border: 1px solid var(--cizgi); background: #fff; color: var(--metin);
     font: inherit; font-size: 1.05rem; font-variant-numeric: tabular-nums;
+    cursor: default; -moz-appearance: textfield; appearance: textfield;
 }
+/* Native artırma/azaltma oklarını gizle (sadece +/− ile) */
+.teklif-form input[type="number"]::-webkit-outer-spin-button,
+.teklif-form input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .teklif-form input[type="number"]:focus { outline: none; border-color: var(--siyah); position: relative; z-index: 1; }
 .pey-kutu { display: flex; align-items: stretch; }
 .pey-kutu input[type="number"] { border-left: 0; border-right: 0; }

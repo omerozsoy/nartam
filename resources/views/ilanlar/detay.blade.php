@@ -55,9 +55,9 @@
                                 <input type="hidden" name="ilan_id" value="{{ $ozet['id'] }}">
                                 <div class="pey-kutu">
                                     <button type="button" class="pey-btn" data-alan="pey-eksi" tabindex="-1" aria-label="Azalt"><i class="ok asagi"></i></button>
-                                    <input type="number" name="miktar" step="1"
+                                    <input type="number" name="miktar" step="1" readonly inputmode="none"
                                            min="{{ $ozet['minTeklif'] }}" value="{{ $ozet['minTeklif'] }}"
-                                           data-alan="miktar" required>
+                                           data-alan="miktar" required title="+ / − ile ayarlayın">
                                     <button type="button" class="pey-btn" data-alan="pey-arti" tabindex="-1" aria-label="Artır"><i class="ok yukari"></i></button>
                                 </div>
                                 <button type="submit" class="btn btn-dolu">
