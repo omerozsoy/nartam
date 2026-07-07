@@ -9,6 +9,7 @@
                         @else
                             <span class="vitrin-harf">{{ mb_strtoupper(mb_substr($ilan['baslik'], 0, 1)) }}</span>
                         @endif
+                        <span class="vitrin-rozet">Açık Artırma</span>
                         <div class="vitrin-bilgi">
                             @if ($ilan['lotNo'])<span class="vitrin-lot">Lot {{ $ilan['lotNo'] }}</span>@endif
                             <strong>{{ $ilan['baslik'] }}</strong>

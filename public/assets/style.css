@@ -273,6 +273,35 @@ body.lightbox-acik { overflow: hidden; }
 }
 .vitrin-fiyat { font-size: .95rem; font-variant-numeric: tabular-nums; margin-top: .2rem; }
 
+/* Slaytın sol üst köşesinde canlı 'Açık Artırma' rozeti */
+.vitrin-rozet {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: 10px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    padding: .3rem .55rem;
+    background: rgba(255, 255, 255, .95);
+    border: 1px solid #1a1a1a;
+    color: #1a1a1a;
+}
+.vitrin-rozet::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--kritik);
+    animation: canliNokta 1.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .vitrin-rozet::before { animation: none; }
+}
+
 .vitrin-swiper .swiper-button-next,
 .vitrin-swiper .swiper-button-prev { color: var(--metin); }
 .vitrin-swiper .swiper-pagination-bullet-active { background: var(--metin); }
