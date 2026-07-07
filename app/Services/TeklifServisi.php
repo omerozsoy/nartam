@@ -32,6 +32,9 @@ class TeklifServisi
         $ilkTeklif = ! $ilan->teklifAldi();
 
         // --- Doğrulama ---
+        if ($durum === Durum::YAKINDA) {
+            throw $this->hata('Müzayede henüz başlamadı, teklif verilemez.');
+        }
         if ($durum === Durum::KAPANDI) {
             throw $this->hata('Müzayede kapandı, teklif verilemez.');
         }

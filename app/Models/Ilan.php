@@ -34,6 +34,7 @@ class Ilan extends Model
     protected $table = 'ilanlar';
 
     protected $fillable = [
+        'muzayede_id',
         'baslik',
         'lot_no',
         'gorsel_url',
@@ -68,6 +69,11 @@ class Ilan extends Model
         return $this->hasMany(Teklif::class);
     }
 
+    public function muzayede(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Muzayede::class);
+    }
+
     /** En az bir teklif almış mı? */
     public function teklifAldi(): bool
     {
@@ -77,6 +83,11 @@ class Ilan extends Model
     public function durum(?CarbonImmutable $now = null): Durum
     {
         $now ??= CarbonImmutable::now();
+
+        // Bağlı olduğu müzayede henüz başlamadıysa teklif kapalı (Yakında).
+        if ($this->muzayede && ! $this->muzayede->basladi($now)) {
+            return Durum::YAKINDA;
+        }
 
         // Programlanmamış (bitişi olmayan) lot: açık kabul, düşmez, kapanmaz.
         if ($this->bitis_zamani === null) {

@@ -701,6 +701,8 @@ body.lightbox-acik { overflow: hidden; }
     margin-bottom: .5rem;
 }
 .durum-acik_artirma .rozet { border-color: #1a1a1a; color: #1a1a1a; }
+.yakinda-not { font-size: 13px; letter-spacing: .04em; color: var(--soluk); text-align: center; margin: .5rem 0; }
+.durum-yakinda { opacity: .9; }
 /* "Açık Artırma" rozetinde canlı nabız noktası */
 .durum-acik_artirma .rozet::before {
     content: '';

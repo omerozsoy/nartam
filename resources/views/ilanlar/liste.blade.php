@@ -7,7 +7,7 @@
         @include('ilanlar._vitrin', ['vitrin' => ($gruplar['acik_artirma'] ?? collect())->take(10)])
 
         <main id="lotlar">
-            @php($bolumler = ['acik_artirma' => 'Açık Artırma', 'dusuyor' => 'Fiyatı Düşenler', 'kapandi' => 'Kapandı'])
+            @php($bolumler = ['acik_artirma' => 'Açık Artırma', 'dusuyor' => 'Fiyatı Düşenler', 'yakinda' => 'Yakında', 'kapandi' => 'Kapandı'])
             @foreach ($bolumler as $durum => $bolumBaslik)
                 @php($grup = $gruplar[$durum] ?? collect())
                 @if ($grup->isNotEmpty())

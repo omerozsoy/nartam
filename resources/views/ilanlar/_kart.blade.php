@@ -19,7 +19,9 @@
 
     <span class="rozet {{ $ilan['tabanaUlasti'] ? 'rozet-taban' : '' }}">{{ $ilan['durumEtiket'] }}</span>
 
-    @if ($ilan['durum'] !== 'kapandi')
+    @if ($ilan['durum'] === 'yakinda')
+        <p class="yakinda-not">Başlangıç: {{ $ilan['baslangicBicim'] }}</p>
+    @elseif ($ilan['durum'] !== 'kapandi')
         <p class="sayac" role="timer" data-alan="sayac" @if($ilan['tabanaUlasti']) style="display:none" @endif>--:--</p>
     @endif
 
@@ -43,7 +45,7 @@
         @if ($ilan['durum'] === 'dusuyor')<span class="dususok" aria-hidden="true"><i></i><i></i><i></i></span>@endif
     </div>
 
-    @if ($ilan['durum'] !== 'kapandi')
+    @if (in_array($ilan['durum'], ['acik_artirma', 'dusuyor'], true))
         @auth
             <div class="onde-bilgi {{ $ilan['benimDurum'] === 'gecildi' ? 'onde-kirmizi' : 'onde-yesil' }}" data-alan="onde" @unless($ilan['benimDurum']) hidden @endunless>{{ $ilan['benimDurum'] === 'gecildi' ? '★ Teklifiniz geçilmiştir' : ($ilan['benimDurum'] === 'onde' ? '★ Şu an en yüksek teklife sahipsiniz' : '') }}</div>
             <div class="benim-max" data-alan="benim-max" @unless($ilan['benimMax']) hidden @endunless>Maksimum teklifiniz: <strong data-alan="benim-max-tutar">{{ $ilan['benimMaxBicim'] }}</strong></div>

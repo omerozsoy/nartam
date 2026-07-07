@@ -34,6 +34,7 @@ class IlanController extends Controller
     public function goster(Ilan $ilan): View
     {
         $ilan->loadCount('teklifler');
+        $ilan->load('muzayede');
         $teklifler = $ilan->teklifler()->with('kullanici')->orderByDesc('miktar')->take(20)->get();
 
         $benimId = Auth::id();
@@ -92,7 +93,7 @@ class IlanController extends Controller
      */
     private function siraliOzetler(): Collection
     {
-        $oncelik = ['acik_artirma' => 0, 'dusuyor' => 1, 'kapandi' => 2];
+        $oncelik = ['acik_artirma' => 0, 'dusuyor' => 1, 'yakinda' => 2, 'kapandi' => 3];
         $benimId = Auth::id();
         $benimMaxlar = $benimId
             ? Teklif::where('kullanici_id', $benimId)
@@ -101,7 +102,12 @@ class IlanController extends Controller
                 ->pluck('maks', 'ilan_id')
             : collect();
 
-        return Ilan::withCount('teklifler')->orderBy('id')->get()
+        // Aktif müzayede varsa yalnızca onun lotları; yoksa müzayedesiz (eski) lotlar.
+        $aktif = \App\Models\Muzayede::aktif();
+
+        return Ilan::withCount('teklifler')->with('muzayede')
+            ->when($aktif, fn ($q) => $q->where('muzayede_id', $aktif->id))
+            ->orderBy('id')->get()
             ->map(function (Ilan $i) use ($benimId, $benimMaxlar) {
                 $m = $benimMaxlar->get($i->id);
 

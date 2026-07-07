@@ -32,10 +32,23 @@ class DatabaseSeeder extends Seeder
 
         $now = CarbonImmutable::now();
 
+        // --- Aktif müzayede ---
+        $muzayede = \App\Models\Muzayede::create([
+            'no' => '407',
+            'ad' => 'Sanat & Antika',
+            'baslangic' => $now->subDay(), // teklifler açık
+            'bitis' => $now->addDays(2),
+            'esik_lot' => 10,
+            'aralik1' => 2,
+            'aralik2' => 1,
+            'aktif' => true,
+        ]);
+
         // --- Lot 1: açık artırma, teklif almış (proxy) ---
         $t1 = $now->subMinutes(90);
         $t2 = $now->subMinutes(40);
         $ilan1 = Ilan::create([
+            'muzayede_id' => $muzayede->id,
             'baslik' => 'Yağlı Boya Tablo',
             'lot_no' => 1,
             'alt_baslik' => 'Tuval üzerine, imzalı',
@@ -54,6 +67,7 @@ class DatabaseSeeder extends Seeder
 
         // --- Lot 2: teklifsiz, kapanışa uzak (açık artırma, başlangıç fiyatından) ---
         Ilan::create([
+            'muzayede_id' => $muzayede->id,
             'baslik' => 'Antika Porselen Vazo',
             'lot_no' => 2,
             'alt_baslik' => 'Çin, el boyaması',
@@ -64,6 +78,7 @@ class DatabaseSeeder extends Seeder
 
         // --- Lot 3: teklifsiz, kapanışa 6 saat (son 12 saat: fiyat düşüyor) ---
         Ilan::create([
+            'muzayede_id' => $muzayede->id,
             'baslik' => 'Gümüş Şamdan Takımı',
             'lot_no' => 3,
             'alt_baslik' => 'Osmanlı dönemi',

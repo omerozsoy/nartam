@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ayar;
 use App\Models\Ilan;
+use App\Models\Muzayede;
 use App\Models\PeyAdimi;
 use App\Models\Teklif;
 use App\Models\User;
@@ -249,6 +250,7 @@ class YonetimController extends Controller
         $rezerv = $it['rezerv'] ?? null;
         $rezerv = ($rezerv !== null && $rezerv > 0) ? min((int) $rezerv, $fiyat) : (int) round($fiyat * 0.5);
         Ilan::create([
+            'muzayede_id' => Muzayede::aktif()?->id,
             'baslik' => $it['baslik'],
             'lot_no' => $lotNo,
             'alt_baslik' => ($it['alt'] ?? '') !== '' ? $it['alt'] : null,
@@ -269,44 +271,83 @@ class YonetimController extends Controller
         return back()->with('basari', "{$sayi} eser ve teklifleri silindi.");
     }
 
-    /** Kademeli kapanış programı: ilk lot kapanışı + iki kademeli aralık. */
-    public function muzayede(): View
+    /** Müzayedeler listesi. */
+    public function muzayedeler(): View
     {
-        return view('yonetim.muzayede', [
-            'a' => Ayar::coklu(['muzayede_bitis', 'muzayede_esik_lot', 'muzayede_aralik1', 'muzayede_aralik2']),
-            'lotSayisi' => Ilan::count(),
+        return view('yonetim.muzayedeler', [
+            'muzayedeler' => Muzayede::withCount('ilanlar')->latest('id')->get(),
         ]);
     }
 
-    public function muzayedeUygula(Request $request): RedirectResponse
+    public function muzayedeYeni(): View
     {
-        $veri = $request->validate([
-            'muzayede_bitis' => ['required', 'date'],
-            'muzayede_esik_lot' => ['required', 'integer', 'min:0'],
-            'muzayede_aralik1' => ['required', 'integer', 'min:0'],
-            'muzayede_aralik2' => ['required', 'integer', 'min:0'],
+        return view('yonetim.muzayede_form', ['muzayede' => new Muzayede()]);
+    }
+
+    public function muzayedeOlustur(Request $request): RedirectResponse
+    {
+        $muzayede = Muzayede::create($this->muzayedeVeri($request));
+
+        return redirect()->route('yonetim.muzayedeler')->with('basari', 'Müzayede oluşturuldu: ' . $muzayede->ad);
+    }
+
+    public function muzayedeDuzenle(Muzayede $muzayede): View
+    {
+        return view('yonetim.muzayede_form', ['muzayede' => $muzayede]);
+    }
+
+    public function muzayedeGuncelle(Request $request, Muzayede $muzayede): RedirectResponse
+    {
+        $muzayede->update($this->muzayedeVeri($request));
+
+        return redirect()->route('yonetim.muzayedeler')->with('basari', 'Müzayede güncellendi: ' . $muzayede->ad);
+    }
+
+    private function muzayedeVeri(Request $request): array
+    {
+        return $request->validate([
+            'no' => ['required', 'string', 'max:50'],
+            'ad' => ['required', 'string', 'max:255'],
+            'baslangic' => ['required', 'date'],
+            'bitis' => ['required', 'date', 'after:baslangic'],
+            'esik_lot' => ['required', 'integer', 'min:0'],
+            'aralik1' => ['required', 'integer', 'min:0'],
+            'aralik2' => ['required', 'integer', 'min:0'],
         ]);
+    }
 
-        Ayar::kaydet($veri);
+    /** Bu müzayedeyi aktif yap (diğerlerini pasifleştir). */
+    public function muzayedeAktif(Muzayede $muzayede): RedirectResponse
+    {
+        Muzayede::query()->update(['aktif' => false]);
+        $muzayede->update(['aktif' => true]);
 
-        $t0 = CarbonImmutable::parse($veri['muzayede_bitis']);
-        $esik = (int) $veri['muzayede_esik_lot'];
-        $a1 = (int) $veri['muzayede_aralik1'];
-        $a2 = (int) $veri['muzayede_aralik2'];
+        return back()->with('basari', $muzayede->ad . ' aktif müzayede yapıldı.');
+    }
 
-        // Lot no'ya göre sıralı; ilk lot t0'da, sonrakiler kademeli aralıkla kapanır.
-        $lotlar = Ilan::orderByRaw('lot_no is null')->orderBy('lot_no')->orderBy('id')->get();
-        $kapanis = $t0;
+    /** Kademeli kapanış: bu müzayedenin lotlarına lot no sırasına göre bitiş zamanı atar. */
+    public function muzayedeProgram(Muzayede $muzayede): RedirectResponse
+    {
+        $lotlar = $muzayede->ilanlar()->orderByRaw('lot_no is null')->orderBy('lot_no')->orderBy('id')->get();
+
+        $kapanis = $muzayede->bitis;
         foreach ($lotlar->values() as $i => $ilan) {
             if ($i > 0) {
-                // i (0-tabanlı) → lot sırası (i+1). Bu lotun aralığı: sıra <= eşik ise a1, değilse a2.
-                $aralik = (($i + 1) <= $esik) ? $a1 : $a2;
+                $aralik = (($i + 1) <= $muzayede->esik_lot) ? $muzayede->aralik1 : $muzayede->aralik2;
                 $kapanis = $kapanis->addMinutes($aralik);
             }
             $ilan->update(['bitis_zamani' => $kapanis]);
         }
 
-        return back()->with('basari', $lotlar->count() . ' lot için kapanış zamanları ayarlandı.');
+        return back()->with('basari', $lotlar->count() . ' lotun kapanış zamanları ayarlandı.');
+    }
+
+    public function muzayedeSil(Muzayede $muzayede): RedirectResponse
+    {
+        $ad = $muzayede->ad;
+        $muzayede->delete(); // lotların muzayede_id'si null olur (nullOnDelete)
+
+        return back()->with('basari', 'Müzayede silindi: ' . $ad);
     }
 
     /** Üye detayı: bilgileri, adresleri, teklifleri. */
@@ -371,6 +412,7 @@ class YonetimController extends Controller
         }
 
         $veri['lot_no'] = (Ilan::max('lot_no') ?? 0) + 1;
+        $veri['muzayede_id'] = Muzayede::aktif()?->id;
         Ilan::create($veri);
 
         return redirect()->route('yonetim.eserler')->with('basari', 'Eser oluşturuldu: ' . $veri['baslik']);

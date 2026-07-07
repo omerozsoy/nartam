@@ -51,8 +51,14 @@ Route::middleware(['auth', 'yonetici'])->prefix('yonetim')->group(function () {
     Route::get('/', [YonetimController::class, 'index'])->name('yonetim');
     Route::get('/eserler', [YonetimController::class, 'eserler'])->name('yonetim.eserler');
     Route::post('/eserler/sil-hepsi', [YonetimController::class, 'tumEserleriSil'])->name('yonetim.eserler.sil-hepsi');
-    Route::get('/muzayede', [YonetimController::class, 'muzayede'])->name('yonetim.muzayede');
-    Route::post('/muzayede', [YonetimController::class, 'muzayedeUygula'])->name('yonetim.muzayede.uygula');
+    Route::get('/muzayedeler', [YonetimController::class, 'muzayedeler'])->name('yonetim.muzayedeler');
+    Route::get('/muzayede/yeni', [YonetimController::class, 'muzayedeYeni'])->name('yonetim.muzayede.yeni');
+    Route::post('/muzayede', [YonetimController::class, 'muzayedeOlustur'])->name('yonetim.muzayede.olustur');
+    Route::get('/muzayede/{muzayede}/duzenle', [YonetimController::class, 'muzayedeDuzenle'])->name('yonetim.muzayede.duzenle');
+    Route::post('/muzayede/{muzayede}/guncelle', [YonetimController::class, 'muzayedeGuncelle'])->name('yonetim.muzayede.guncelle');
+    Route::post('/muzayede/{muzayede}/aktif', [YonetimController::class, 'muzayedeAktif'])->name('yonetim.muzayede.aktif');
+    Route::post('/muzayede/{muzayede}/program', [YonetimController::class, 'muzayedeProgram'])->name('yonetim.muzayede.program');
+    Route::post('/muzayede/{muzayede}/sil', [YonetimController::class, 'muzayedeSil'])->name('yonetim.muzayede.sil');
     Route::get('/eser/yeni', [YonetimController::class, 'eserYeni'])->name('yonetim.eser.yeni');
     Route::get('/toplu', [YonetimController::class, 'toplu'])->name('yonetim.toplu');
     Route::post('/toplu/onizle', [YonetimController::class, 'topluOnizle'])->name('yonetim.toplu.onizle');

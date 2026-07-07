@@ -71,6 +71,8 @@ class Sunum
             'sonrakiDususTs' => $sonrakiDusus?->getTimestamp(),
             'tabanaUlasti' => $tabanaUlasti,
             'dususYuzde' => $dususYuzde,
+            'baslangicTs' => $ilan->muzayede?->baslangic?->getTimestamp(),
+            'baslangicBicim' => $ilan->muzayede?->baslangic?->format('d.m.Y H:i'),
             'sonTeklifSahibi' => Ad::gizle($ilan->son_teklif_sahibi),
             'liderId' => $ilan->lider_id,
             'benimDurum' => $benimDurum,

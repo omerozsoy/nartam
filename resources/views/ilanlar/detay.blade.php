@@ -54,7 +54,11 @@
                         <div class="etiket" style="margin-top:.4rem">{{ $ozet['teklifSayisi'] }} teklif</div>
                     @endif
 
-                    @if ($ozet['durum'] !== 'kapandi')
+                    @if ($ozet['durum'] === 'yakinda')
+                        <p class="sayac-etiket">Müzayede başlangıcı</p>
+                        <p class="yakinda-not" style="font-size:1.1rem">{{ $ozet['baslangicBicim'] }}</p>
+                        <p class="alt-not" style="margin-top:.6rem">Teklifler başlangıçta açılacaktır.</p>
+                    @elseif ($ozet['durum'] !== 'kapandi')
                         <p class="sayac-etiket" data-alan="sayac-etiket" @if($ozet['tabanaUlasti']) style="display:none" @endif>
                             {{ $ozet['durum'] === 'dusuyor' ? 'Sonraki düşüşe' : 'Bitişe kalan' }}
                         </p>
