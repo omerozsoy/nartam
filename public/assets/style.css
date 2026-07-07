@@ -118,6 +118,63 @@ img { max-width: 100%; }
     padding: 0 2rem;
 }
 
+/* ---------- Otomatik tamamlamalı arama ---------- */
+.arama { position: relative; max-width: 560px; margin: 1.6rem auto 2.2rem; }
+.arama-girdi {
+    width: 100%;
+    padding: .85rem 1.1rem;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--metin);
+    background: #fff;
+    border: 1px solid var(--cizgi);
+    border-radius: 2px;
+    outline: none;
+    transition: border-color .15s ease;
+}
+.arama-girdi:focus { border-color: var(--metin); }
+.arama-girdi::placeholder { color: var(--soluk); }
+.arama-oneri {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 70;
+    list-style: none;
+    margin: 0;
+    padding: .3rem 0;
+    background: #fff;
+    border: 1px solid var(--cizgi);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .1);
+    max-height: 380px;
+    overflow-y: auto;
+}
+.arama-oneri[hidden] { display: none; }
+.arama-oneri li { margin: 0; }
+.arama-oneri a {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    padding: .55rem .9rem;
+    color: var(--metin);
+}
+.arama-oneri a:hover, .arama-oneri li.vurgu a { background: var(--acik, #f6f5f2); text-decoration: none; }
+.arama-gorsel {
+    width: 42px;
+    height: 42px;
+    flex: none;
+    background: var(--acik, #f2f1ee);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.arama-gorsel img { width: 100%; height: 100%; object-fit: cover; }
+.arama-metin { display: flex; flex-direction: column; min-width: 0; }
+.arama-metin strong { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.arama-metin small { font-size: 12px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.arama-bos { padding: .7rem .9rem; font-size: 13px; color: var(--soluk); }
+
 /* ---------- Satış başlığı ---------- */
 .satis-basligi {
     display: flex;

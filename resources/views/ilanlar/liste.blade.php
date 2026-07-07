@@ -4,6 +4,12 @@
 
 @section('content')
     <div class="kap">
+        <div class="arama" data-alan="arama">
+            <input type="search" class="arama-girdi" data-alan="arama-girdi"
+                   placeholder="Sanatçı, eser adı veya lot no ara…" autocomplete="off" spellcheck="false">
+            <ul class="arama-oneri" data-alan="arama-oneri" hidden></ul>
+        </div>
+
         <main id="lotlar">
             @php($bolumler = ['acik_artirma' => 'Açık Artırma', 'dusuyor' => 'Açık Eksiltme', 'kapandi' => 'Kapandı'])
             @foreach ($bolumler as $durum => $bolumBaslik)

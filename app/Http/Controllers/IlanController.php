@@ -8,6 +8,7 @@ use App\Models\Ilan;
 use App\Models\Teklif;
 use App\Support\Sunum;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -59,6 +60,40 @@ class IlanController extends Controller
     public function api(): JsonResponse
     {
         return response()->json($this->siraliOzetler());
+    }
+
+    /** Otomatik tamamlama araması: sanatçı (başlık), eser (alt başlık) veya lot no. */
+    public function ara(Request $request): JsonResponse
+    {
+        $q = trim((string) $request->query('q', ''));
+        if (mb_strlen($q) < 2) {
+            return response()->json([]);
+        }
+
+        $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $q) . '%';
+
+        $ilanlar = Ilan::query()
+            ->where(function ($w) use ($like, $q) {
+                $w->where('baslik', 'like', $like)
+                    ->orWhere('alt_baslik', 'like', $like);
+                if (ctype_digit($q)) {
+                    $w->orWhere('lot_no', (int) $q);
+                }
+            })
+            ->orderByRaw('lot_no is null')
+            ->orderBy('lot_no')
+            ->orderBy('id')
+            ->limit(8)
+            ->get();
+
+        return response()->json($ilanlar->map(fn (Ilan $i) => [
+            'id' => $i->id,
+            'baslik' => $i->baslik,
+            'altBaslik' => $i->alt_baslik,
+            'lotNo' => $i->lot_no,
+            'gorselUrl' => $i->gorsel_url,
+            'url' => route('ilan.goster', $i->id),
+        ]));
     }
 
     /**

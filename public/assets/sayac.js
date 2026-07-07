@@ -385,6 +385,97 @@ function peyStepperBagla() {
     });
 }
 
+// --- Otomatik tamamlamalı arama ---
+function htmlKacis(s) {
+    const d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
+}
+
+function aramaBagla() {
+    const kutu = document.querySelector('[data-alan="arama"]');
+    if (!kutu) {
+        return;
+    }
+    const girdi = kutu.querySelector('[data-alan="arama-girdi"]');
+    const liste = kutu.querySelector('[data-alan="arama-oneri"]');
+    let zamanlayici = null;
+    let sonSorgu = -1;
+
+    function gizle() {
+        liste.hidden = true;
+    }
+
+    function goster(veriler) {
+        if (!veriler.length) {
+            liste.innerHTML = '<li class="arama-bos">Sonuç bulunamadı</li>';
+            liste.hidden = false;
+            return;
+        }
+        liste.innerHTML = veriler.map((o) => {
+            const altParcalari = [];
+            if (o.lotNo) {
+                altParcalari.push('Lot ' + o.lotNo);
+            }
+            if (o.altBaslik) {
+                altParcalari.push(htmlKacis(o.altBaslik));
+            }
+            const gorsel = o.gorselUrl
+                ? '<img src="' + htmlKacis(o.gorselUrl) + '" alt="">'
+                : '';
+            return '<li><a href="' + htmlKacis(o.url) + '">' +
+                '<span class="arama-gorsel">' + gorsel + '</span>' +
+                '<span class="arama-metin"><strong>' + htmlKacis(o.baslik) + '</strong>' +
+                '<small>' + altParcalari.join(' · ') + '</small></span></a></li>';
+        }).join('');
+        liste.hidden = false;
+    }
+
+    async function cek(q) {
+        try {
+            const yanit = await fetch('/api/ara?q=' + encodeURIComponent(q), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            });
+            if (!yanit.ok) {
+                return;
+            }
+            goster(await yanit.json());
+        } catch (e) {
+            /* sessizce yut */
+        }
+    }
+
+    girdi.addEventListener('input', () => {
+        const q = girdi.value.trim();
+        clearTimeout(zamanlayici);
+        if (q.length < 2) {
+            liste.innerHTML = '';
+            gizle();
+            return;
+        }
+        zamanlayici = setTimeout(() => cek(q), 220);
+    });
+
+    girdi.addEventListener('focus', () => {
+        if (girdi.value.trim().length >= 2 && liste.children.length) {
+            liste.hidden = false;
+        }
+    });
+
+    girdi.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            gizle();
+            girdi.blur();
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!kutu.contains(e.target)) {
+            gizle();
+        }
+    });
+}
+
 document.querySelectorAll('[data-alan="fiyat"]').forEach(rakamKur);
 
 sayaclariGuncelle();
@@ -392,3 +483,4 @@ setInterval(sayaclariGuncelle, 1000);
 setInterval(ilanlariCek, POLL_MS);
 teklifBagla();
 peyStepperBagla();
+aramaBagla();
