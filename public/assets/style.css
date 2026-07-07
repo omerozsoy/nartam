@@ -175,6 +175,48 @@ img { max-width: 100%; }
 .arama-metin small { font-size: 12px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .arama-bos { padding: .7rem .9rem; font-size: 13px; color: var(--soluk); }
 .arama-gizli { display: none !important; }
+
+/* ---------- Lightbox ---------- */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: rgba(0, 0, 0, .88);
+    cursor: zoom-out;
+    animation: lightboxAc .18s ease;
+}
+.lightbox[hidden] { display: none; }
+@keyframes lightboxAc { from { opacity: 0; } to { opacity: 1; } }
+.lightbox-resim {
+    max-width: 95vw;
+    max-height: 92vh;
+    object-fit: contain;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+    cursor: default;
+}
+.lightbox-kapat {
+    position: absolute;
+    top: 1rem;
+    right: 1.4rem;
+    width: 44px;
+    height: 44px;
+    font-size: 2rem;
+    line-height: 1;
+    color: #fff;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    opacity: .85;
+}
+.lightbox-kapat:hover { opacity: 1; }
+body.lightbox-acik { overflow: hidden; }
+
+/* Lightbox'a uygun (linksiz) görsellere büyüteç imleci */
+.detay-gorsel img, .gorsel-onizleme { cursor: zoom-in; }
 .arama-yok { text-align: center; padding: 2rem 0; color: var(--soluk); }
 
 /* ---------- Vitrin slider ---------- */

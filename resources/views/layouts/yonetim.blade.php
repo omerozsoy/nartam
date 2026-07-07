@@ -36,5 +36,6 @@
         @yield('content')
     </div>
 </div>
+<script src="{{ asset('assets/lightbox.js') }}?v={{ filemtime(public_path('assets/lightbox.js')) }}"></script>
 </body>
 </html>

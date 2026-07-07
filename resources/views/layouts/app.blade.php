@@ -105,6 +105,7 @@
     </div>
 @endauth
 
+<script src="{{ asset('assets/lightbox.js') }}?v={{ filemtime(public_path('assets/lightbox.js')) }}"></script>
 @stack('scripts')
 </body>
 </html>
