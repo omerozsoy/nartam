@@ -387,6 +387,29 @@ class YonetimController extends Controller
         return view('yonetim.uyeler', ['uyeler' => $uyeler]);
     }
 
+    /** Yönetim panelinden elle yeni üye ekler. */
+    public function uyeEkle(Request $request): RedirectResponse
+    {
+        $veri = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'telefon' => ['nullable', 'string', 'max:20'],
+            'sifre' => ['required', 'string', 'min:6'],
+            'rol' => ['nullable', 'in:yonetici'],
+        ]);
+
+        User::create([
+            'name' => $veri['name'],
+            'email' => $veri['email'],
+            'telefon' => $veri['telefon'] ?? null,
+            'password' => $veri['sifre'], // 'hashed' cast ile hash'lenir
+            'rol' => ($veri['rol'] ?? null) === 'yonetici' ? 'yonetici' : null,
+            'engelli' => false,
+        ]);
+
+        return back()->with('basari', 'Yeni üye eklendi: ' . $veri['name']);
+    }
+
     /** Pey verenler — tüm teklifler (isteğe bağlı ilana göre filtreli). */
     public function teklifler(Request $request): View
     {
