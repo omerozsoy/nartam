@@ -43,7 +43,7 @@
             <form class="teklif-form" data-alan="teklif-form">
                 @csrf
                 <input type="hidden" name="ilan_id" value="{{ $ilan['id'] }}">
-                <div class="pey-kutu" @if($ilan['tabanaUlasti']) style="display:none" @endif>
+                <div class="pey-kutu" @if($ilan['durum'] === 'dusuyor') style="display:none" @endif>
                     <button type="button" class="pey-btn" data-alan="pey-eksi" tabindex="-1" aria-label="Azalt">−</button>
                     <input type="number" name="miktar" step="1" readonly inputmode="none"
                            min="{{ $ilan['minTeklif'] }}" value="{{ $ilan['minTeklif'] }}"
