@@ -25,7 +25,7 @@
         <section class="kart">
             <table class="tablo">
                 <thead>
-                <tr><th>Görsel</th><th>Lot</th><th>Başlık</th><th>Alt Başlık</th><th>Başlangıç Fiyatı</th></tr>
+                <tr><th>Görsel</th><th>Lot</th><th>Başlık</th><th>Alt Başlık</th><th>Başlangıç Fiyatı</th><th>Rezerv</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($items as $it)
@@ -41,6 +41,7 @@
                         <td>{{ $it['baslik'] }}</td>
                         <td>{{ $it['alt'] ?: '—' }}</td>
                         <td>{{ number_format($it['fiyat'], 0, ',', '.') }} ₺</td>
+                        <td>{{ ($it['rezerv'] ?? null) ? number_format($it['rezerv'], 0, ',', '.') . ' ₺' : '%50 (oto)' }}</td>
                     </tr>
                 @endforeach
                 </tbody>

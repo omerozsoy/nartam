@@ -58,7 +58,7 @@
                     <button type="button" class="pey-btn" data-alan="pey-arti" tabindex="-1" aria-label="Artır">+</button>
                 </div>
                 <button type="submit" class="btn btn-dolu">
-                    {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyattan 24 Saatlik Müzayedeyi Başlat' : 'Teklif Ver' }}
+                    {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyattan Teklif Ver' : 'Teklif Ver' }}
                 </button>
                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
             </form>

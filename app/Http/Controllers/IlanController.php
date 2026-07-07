@@ -30,16 +30,6 @@ class IlanController extends Controller
         ]);
     }
 
-    /** Açık Eksiltme — fiyatı düşen (düşen fiyat) ürünler. */
-    public function acikEksiltme(): View
-    {
-        return view('ilanlar.tekbolum', [
-            'baslik' => 'Açık Eksiltme',
-            'aciklama' => 'Teklif gelene kadar fiyat düşer; ilk teklifle açık artırma başlar',
-            'ilanlar' => $this->siraliOzetler()->where('durum', 'dusuyor')->values(),
-        ]);
-    }
-
     /** Tekil lot (detay) sayfası. */
     public function goster(Ilan $ilan): View
     {

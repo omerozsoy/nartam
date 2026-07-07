@@ -177,18 +177,28 @@ class YonetimController extends Controller
         $iEser = $bul(['eser']);
         $iSanatci = $bul(['sanatç']);
         $iAciklama = $bul(['açıkla', 'aciklama']);
-        $iFiyat = $bul(['fiyat']);
+        $iRezerv = $bul(['rezerv', 'taban']);
+        $iFiyat = $bul(['fiyat', 'muhammen', 'başlangıç', 'baslangic', 'tahmini']);
+        // Aynı sütun hem fiyat hem rezerv olarak eşleştiyse rezervi yok say.
+        if ($iRezerv !== null && $iRezerv === $iFiyat) {
+            $iRezerv = null;
+        }
         $iProv = $bul(['provenance', 'literature', 'not']);
         $iLot = $bul(['lot']);
         $al = static fn (array $r, ?int $i): string => $i !== null ? trim((string) ($r[$i] ?? '')) : '';
+        $sayi = static function (array $r, ?int $i): int {
+            $ham = $i !== null ? ($r[$i] ?? null) : null;
+
+            return is_numeric($ham) ? (int) round((float) $ham) : (int) preg_replace('/\D/', '', (string) $ham);
+        };
 
         $items = [];
         $atlanan = 0;
         foreach ($satirlar as $r) {
             $eser = $al($r, $iEser);
             $sanatci = $al($r, $iSanatci);
-            $fiyatRaw = $iFiyat !== null ? ($r[$iFiyat] ?? null) : null;
-            $fiyat = is_numeric($fiyatRaw) ? (int) round((float) $fiyatRaw) : (int) preg_replace('/\D/', '', (string) $fiyatRaw);
+            $fiyat = $sayi($r, $iFiyat);
+            $rezerv = $sayi($r, $iRezerv);
 
             $baslik = $sanatci !== '' ? $sanatci : $eser;
             if ($baslik === '' || $fiyat < 1) {
@@ -216,6 +226,7 @@ class YonetimController extends Controller
                 'alt' => $eser,
                 'aciklama' => $aciklama,
                 'fiyat' => $fiyat,
+                'rezerv' => $rezerv > 0 ? $rezerv : null,
                 'lot' => $lot,
                 'gorsel' => $gorsel,
             ];
@@ -229,6 +240,9 @@ class YonetimController extends Controller
     {
         $fiyat = (int) $it['fiyat'];
         $lotNo = ($it['lot'] ?? null) ?: ((Ilan::max('lot_no') ?? 0) + 1);
+        // Rezerv: Excel'den geldiyse (0<rezerv<=başlangıç) onu kullan; yoksa başlangıcın %50'si.
+        $rezerv = $it['rezerv'] ?? null;
+        $rezerv = ($rezerv !== null && $rezerv > 0) ? min((int) $rezerv, $fiyat) : (int) round($fiyat * 0.5);
         Ilan::create([
             'baslik' => $it['baslik'],
             'lot_no' => $lotNo,
@@ -236,7 +250,7 @@ class YonetimController extends Controller
             'aciklama' => ($it['aciklama'] ?? '') !== '' ? $it['aciklama'] : null,
             'gorsel_url' => $it['gorsel'] ?? null,
             'baslangic_fiyati' => $fiyat,
-            'rezerv_fiyat' => (int) round($fiyat * 0.5),
+            'rezerv_fiyat' => $rezerv,
             'ithal_kodu' => $kod,
         ]);
     }

@@ -271,14 +271,14 @@ function teklifBagla() {
                 const onaylaBtn = modal.querySelector('[data-alan="modal-onayla"]');
 
                 if (durum === 'dusuyor') {
-                    // Açık Eksiltme: bu fiyattan teklif = 24 saatlik müzayedeyi başlatır
-                    if (baslik) baslik.textContent = 'Müzayedeyi Başlatın';
-                    if (alt) alt.textContent = 'Bu fiyattan müzayedeyi başlatıyorsunuz';
+                    // Düşen fiyat: bu fiyattan ilk teklif lotu açık artırmaya sokar; kapanış zamanı değişmez.
+                    if (baslik) baslik.textContent = 'Teklifinizi Onaylayın';
+                    if (alt) alt.textContent = 'Bu düşen fiyattan teklif';
                     if (not) {
                         not.hidden = false;
-                        not.textContent = 'Bu fiyattan teklif vermeniz durumunda 24 saatlik müzayede geri sayımı başlar.';
+                        not.textContent = 'Bu fiyattan teklif verirseniz lot açık artırmaya girer. Kapanış zamanı değişmez; sonrasında teklifler yükselerek devam eder.';
                     }
-                    if (onaylaBtn) onaylaBtn.textContent = 'Onayla ve Başlat';
+                    if (onaylaBtn) onaylaBtn.textContent = 'Onayla ve Teklif Ver';
                 } else {
                     // Açık Artırma: gizli maksimum yalnızca teklif, en düşük geçerli teklifin
                     // (bir sonraki pey adımı) ÜZERİNDEyse geçerlidir. Tam minimumda normal tekliftir.
