@@ -19,12 +19,13 @@ class TeklifTest extends TestCase
 
     private function ilan(): Ilan
     {
+        // Teklifsiz, kapanışa uzak (düşüş penceresi dışında) → açık artırma, fiyat = başlangıç 700
         return Ilan::create([
             'baslik' => 'Test',
-            'baslangic_fiyati' => 1000,
-            'saatlik_dusus' => 100,
+            'lot_no' => 1,
+            'baslangic_fiyati' => 700,
             'rezerv_fiyat' => 500,
-            'baslangic_zamani' => CarbonImmutable::now()->subHours(3), // fiyat 700
+            'bitis_zamani' => CarbonImmutable::now()->addDays(2),
         ]);
     }
 

@@ -10,7 +10,7 @@ use Carbon\CarbonImmutable;
 use Tests\TestCase;
 
 /**
- * İki fazlı müzayede mantığının testleri (model metodları; veritabanı sorgusu yok).
+ * Yeni müzayede mantığı: sabit bitişli açık artırma; teklifsiz lot son 12 saatte düşer.
  */
 class IlanTest extends TestCase
 {
@@ -22,32 +22,41 @@ class IlanTest extends TestCase
         $this->t0 = CarbonImmutable::parse('2026-07-06 12:00:00');
     }
 
-    private function ilan(): Ilan
+    /** Bitişi $saat sonra olan, teklifsiz bir lot. */
+    private function ilan(int $bitisSaatSonra): Ilan
     {
         return new Ilan([
             'baslik' => 'Test Ürünü',
             'baslangic_fiyati' => 1000,
-            'saatlik_dusus' => 100,
             'rezerv_fiyat' => 500,
-            'baslangic_zamani' => $this->t0,
+            'bitis_zamani' => $this->t0->addHours($bitisSaatSonra),
         ]);
     }
 
-    public function test_baslangicta_durum_dusuyor_ve_fiyat_tam(): void
+    public function test_kapanisa_uzak_teklifsiz_lot_acik_artirmada_baslangic_fiyatinda(): void
     {
-        $ilan = $this->ilan();
+        $ilan = $this->ilan(24); // düşüş penceresine (12s) daha girmedi
+        $this->assertSame(Durum::ACIK_ARTIRMA, $ilan->durum($this->t0));
+        $this->assertSame(1000, $ilan->guncelFiyat($this->t0));
+        $this->assertSame(1000, $ilan->minTeklif($this->t0));
+    }
+
+    public function test_son_12_saatte_dusuyor_ve_baslangicta_fiyat_tam(): void
+    {
+        $ilan = $this->ilan(12); // düşüş tam şimdi başlıyor
         $this->assertSame(Durum::DUSUYOR, $ilan->durum($this->t0));
         $this->assertSame(1000, $ilan->dusenFiyat($this->t0));
     }
 
-    public function test_fiyat_saatlik_duser(): void
+    public function test_fiyat_lineer_duser(): void
     {
-        $this->assertSame(700, $this->ilan()->dusenFiyat($this->t0->addMinutes(210))); // 3.5 saat -> 3 tam saat
+        // Bitiş 12 saat sonra; 6 saat geçince yarı yol: 1000 -> 750
+        $this->assertSame(750, $this->ilan(12)->dusenFiyat($this->t0->addHours(6)));
     }
 
     public function test_rezerv_tabaninin_altina_inmez(): void
     {
-        $this->assertSame(500, $this->ilan()->dusenFiyat($this->t0->addHours(50)));
+        $this->assertSame(500, $this->ilan(12)->dusenFiyat($this->t0->addHours(20)));
     }
 
     public function test_artirim_tablosu(): void
@@ -59,7 +68,6 @@ class IlanTest extends TestCase
 
     public function test_dusuyorken_min_teklif_dusen_fiyattir(): void
     {
-        $an = $this->t0->addHours(3); // fiyat 700
-        $this->assertSame(700, $this->ilan()->minTeklif($an));
+        $this->assertSame(750, $this->ilan(12)->minTeklif($this->t0->addHours(6)));
     }
 }

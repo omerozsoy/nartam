@@ -27,21 +27,9 @@
                 <label>Başlangıç Fiyatı (₺)
                     <input type="number" name="baslangic_fiyati" min="1" value="{{ old('baslangic_fiyati', 1000) }}" required>
                 </label>
-                <label>Düşüş Miktarı (₺)
-                    <input type="number" name="saatlik_dusus" min="1" value="{{ old('saatlik_dusus', 100) }}" required>
-                </label>
-                <label>Düşüş Periyodu
-                    <select name="dusus_periyodu" required>
-                        <option value="30" @selected(old('dusus_periyodu') == 30)>30 saniyede bir</option>
-                        <option value="60" @selected(old('dusus_periyodu') == 60)>Dakikada bir</option>
-                        <option value="300" @selected(old('dusus_periyodu') == 300)>5 dakikada bir</option>
-                        <option value="900" @selected(old('dusus_periyodu') == 900)>15 dakikada bir</option>
-                        <option value="1800" @selected(old('dusus_periyodu') == 1800)>30 dakikada bir</option>
-                        <option value="3600" @selected(old('dusus_periyodu', 3600) == 3600)>Saatte bir</option>
-                    </select>
-                </label>
                 <label>Rezerv (Taban) Fiyat (₺)
                     <input type="number" name="rezerv_fiyat" min="0" value="{{ old('rezerv_fiyat', 500) }}" required>
+                    <small style="color:var(--soluk)">Teklifsiz kalırsa son 12 saatte fiyat bu tabana kadar düşer.</small>
                 </label>
                 <button type="submit" class="btn btn-dolu">Eser Oluştur</button>
             </form>

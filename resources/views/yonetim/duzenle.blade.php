@@ -36,22 +36,9 @@
                 <label>Başlangıç Fiyatı (₺)
                     <input type="number" name="baslangic_fiyati" min="1" value="{{ old('baslangic_fiyati', $ilan->baslangic_fiyati) }}" required>
                 </label>
-                <label>Düşüş Miktarı (₺)
-                    <input type="number" name="saatlik_dusus" min="1" value="{{ old('saatlik_dusus', $ilan->saatlik_dusus) }}" required>
-                </label>
-                <label>Düşüş Periyodu
-                    @php($pOld = old('dusus_periyodu', $ilan->dusus_periyodu))
-                    <select name="dusus_periyodu" required>
-                        <option value="30" @selected($pOld == 30)>30 saniyede bir</option>
-                        <option value="60" @selected($pOld == 60)>Dakikada bir</option>
-                        <option value="300" @selected($pOld == 300)>5 dakikada bir</option>
-                        <option value="900" @selected($pOld == 900)>15 dakikada bir</option>
-                        <option value="1800" @selected($pOld == 1800)>30 dakikada bir</option>
-                        <option value="3600" @selected($pOld == 3600)>Saatte bir</option>
-                    </select>
-                </label>
                 <label>Rezerv (Taban) Fiyat (₺)
                     <input type="number" name="rezerv_fiyat" min="0" value="{{ old('rezerv_fiyat', $ilan->rezerv_fiyat) }}" required>
+                    <small style="color:var(--soluk)">Teklifsiz kalırsa son 12 saatte fiyat bu tabana kadar düşer.</small>
                 </label>
                 <button type="submit" class="btn btn-dolu">Kaydet</button>
             </form>

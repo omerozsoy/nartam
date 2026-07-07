@@ -24,7 +24,7 @@ class KapananlariBildir extends Command
     {
         $simdi = CarbonImmutable::now();
 
-        $kapananlar = Ilan::whereNotNull('ilk_teklif_zamani')
+        $kapananlar = Ilan::whereNotNull('lider_id')
             ->where('bildirildi', false)
             ->where('bitis_zamani', '<=', $simdi)
             ->get();

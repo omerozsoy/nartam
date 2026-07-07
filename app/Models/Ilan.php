@@ -10,21 +10,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Müzayede ilanı. İki fazlı çalışır:
- *   1) DÜŞEN FİYAT (Dutch): teklif gelene kadar fiyat her saat {@see $saatlik_dusus}
- *      kadar düşer, {@see $rezerv_fiyat} tabanında durur.
- *   2) AÇIK ARTIRMA (English): ilk teklifle o anki düşmüş fiyat taban olur ve 24 saatlik
- *      geri sayım başlar. Kademeli artırım + son 2 dk'da anti-snipe uzatması.
+ * Müzayede lotu. Klasik (yükselen) açık artırma:
+ *   - Her lotun sabit bir {@see $bitis_zamani} kapanış anı vardır (kademeli kapanış).
+ *   - Herkes yukarı doğru teklif verir; bitişte en yüksek teklif kazanır.
+ *   - Tek istisna: HİÇ teklif almamış lot, bitişe {@see DUSUS_PENCERESI} (son 12 saat)
+ *     kala başlangıç fiyatından {@see $rezerv_fiyat} tabanına doğru düşmeye başlar.
+ *     İlk teklif gelince o anki düşmüş fiyattan normal açık artırma sürer (bitiş sabit).
  */
 class Ilan extends Model
 {
-    /** Açık artırma fazının süresi (saniye). */
-    public const ACIK_ARTIRMA_SURESI = 24 * 60 * 60;
+    /** Teklifsiz lotun fiyatının düşmeye başladığı pencere: bitişten önceki son 12 saat (saniye). */
+    public const DUSUS_PENCERESI = 12 * 60 * 60;
 
-    /** Bu süreden az kala gelen teklif sayacı uzatır (saniye). */
+    /** Düşüş adım periyodu (saniye) — fiyat bu aralıklarla kademeli iner. */
+    public const DUSUS_ADIM_SN = 10 * 60;
+
+    /** Bu süreden az kala gelen teklif kapanışı uzatır (saniye). */
     public const ANTI_SNIPE_ESIK = 2 * 60;
 
-    /** Anti-snipe tetiklenince sayaç bu kadara çekilir (saniye). */
+    /** Anti-snipe tetiklenince kapanış bu kadara çekilir (saniye). */
     public const ANTI_SNIPE_UZATMA = 2 * 60;
 
     protected $table = 'ilanlar';
@@ -36,11 +40,7 @@ class Ilan extends Model
         'alt_baslik',
         'aciklama',
         'baslangic_fiyati',
-        'saatlik_dusus',
-        'dusus_periyodu',
         'rezerv_fiyat',
-        'baslangic_zamani',
-        'ilk_teklif_zamani',
         'bitis_zamani',
         'guncel_teklif',
         'son_teklif_sahibi',
@@ -53,12 +53,8 @@ class Ilan extends Model
     protected function casts(): array
     {
         return [
-            'baslangic_zamani' => 'immutable_datetime',
-            'ilk_teklif_zamani' => 'immutable_datetime',
             'bitis_zamani' => 'immutable_datetime',
             'baslangic_fiyati' => 'integer',
-            'saatlik_dusus' => 'integer',
-            'dusus_periyodu' => 'integer',
             'rezerv_fiyat' => 'integer',
             'guncel_teklif' => 'integer',
             'lider_id' => 'integer',
@@ -72,31 +68,60 @@ class Ilan extends Model
         return $this->hasMany(Teklif::class);
     }
 
+    /** En az bir teklif almış mı? */
+    public function teklifAldi(): bool
+    {
+        return $this->lider_id !== null;
+    }
+
     public function durum(?CarbonImmutable $now = null): Durum
     {
         $now ??= CarbonImmutable::now();
 
-        if ($this->ilk_teklif_zamani === null) {
+        // Programlanmamış (bitişi olmayan) lot: açık kabul, düşmez, kapanmaz.
+        if ($this->bitis_zamani === null) {
+            return Durum::ACIK_ARTIRMA;
+        }
+
+        if ($now->greaterThanOrEqualTo($this->bitis_zamani)) {
+            return Durum::KAPANDI;
+        }
+
+        // Teklif geldiyse normal açık artırma. Teklif yoksa ve son 12 saatteysek fiyat düşüyor.
+        if (! $this->teklifAldi() && $now->getTimestamp() >= $this->dususBaslangici()) {
             return Durum::DUSUYOR;
         }
 
-        return $now->greaterThanOrEqualTo($this->bitis_zamani) ? Durum::KAPANDI : Durum::ACIK_ARTIRMA;
+        return Durum::ACIK_ARTIRMA;
     }
 
-    /** Düşüş periyodu (saniye). 1=saniye, 60=dakika, 3600=saat. */
-    public function periyot(): int
+    /** Düşüşün başladığı an (timestamp): bitiş − 12 saat. */
+    private function dususBaslangici(): int
     {
-        return $this->dusus_periyodu ?: 3600;
+        return $this->bitis_zamani->getTimestamp() - self::DUSUS_PENCERESI;
     }
 
-    /** Düşüş fazındaki anlık fiyat (rezervde taban yapar). */
+    /** Düşüş fazındaki anlık fiyat (başlangıçtan rezerve, kademeli; rezervde taban yapar). */
     public function dusenFiyat(?CarbonImmutable $now = null): int
     {
         $now ??= CarbonImmutable::now();
-        $gecen = intdiv(max(0, $now->getTimestamp() - $this->baslangic_zamani->getTimestamp()), $this->periyot());
-        $fiyat = $this->baslangic_fiyati - ($gecen * $this->saatlik_dusus);
 
-        return max($this->rezerv_fiyat, $fiyat);
+        if ($this->bitis_zamani === null) {
+            return (int) $this->baslangic_fiyati;
+        }
+
+        $gecenSn = $now->getTimestamp() - $this->dususBaslangici();
+        if ($gecenSn <= 0) {
+            return (int) $this->baslangic_fiyati;
+        }
+
+        $toplamAdim = (int) (self::DUSUS_PENCERESI / self::DUSUS_ADIM_SN);
+        $gecenAdim = min($toplamAdim, intdiv($gecenSn, self::DUSUS_ADIM_SN));
+
+        $aralik = (int) $this->baslangic_fiyati - (int) $this->rezerv_fiyat;
+        $dusus = (int) round($aralik * $gecenAdim / $toplamAdim);
+
+        return max((int) $this->rezerv_fiyat, (int) $this->baslangic_fiyati - $dusus);
     }
 
     /** Ekranda gösterilecek geçerli fiyat (faza göre). */
@@ -104,24 +129,37 @@ class Ilan extends Model
     {
         $now ??= CarbonImmutable::now();
 
-        return $this->durum($now) === Durum::DUSUYOR
-            ? $this->dusenFiyat($now)
-            : (int) $this->guncel_teklif;
+        if ($this->durum($now) === Durum::DUSUYOR) {
+            return $this->dusenFiyat($now);
+        }
+
+        // Teklif varsa güncel teklif; yoksa başlangıç fiyatı.
+        return $this->teklifAldi() ? (int) $this->guncel_teklif : (int) $this->baslangic_fiyati;
     }
 
     /** Bu an için geçerli en düşük kabul edilebilir teklif. */
     public function minTeklif(?CarbonImmutable $now = null): int
     {
         $now ??= CarbonImmutable::now();
+        $durum = $this->durum($now);
 
-        if ($this->durum($now) === Durum::DUSUYOR) {
+        if ($durum === Durum::KAPANDI) {
+            return $this->guncelFiyat($now);
+        }
+
+        if ($durum === Durum::DUSUYOR) {
             return $this->dusenFiyat($now);
+        }
+
+        // Açık artırma: teklif varsa bir pey adımı üstü; yoksa başlangıç fiyatı.
+        if (! $this->teklifAldi()) {
+            return (int) $this->baslangic_fiyati;
         }
 
         return (int) $this->guncel_teklif + self::artirimAdimi((int) $this->guncel_teklif);
     }
 
-    /** @var list<array{alt: int, adim: int}>|null İstek-içi önbellek. */
+    /** @var list<array{alt: int, ust: int|null, adim: int}>|null İstek-içi önbellek. */
     private static ?array $peyAdimCache = null;
 
     /** Kademeli artırım tutarı — yönetimdeki pey adım tablosundan okur. */
@@ -136,13 +174,13 @@ class Ilan extends Model
         return 50;
     }
 
-    /** @return list<array{alt: int, adim: int}> Pey kademeleri (alt'a göre azalan) — ön yüz için. */
+    /** @return list<array{alt: int, ust: int|null, adim: int}> Pey kademeleri — ön yüz için. */
     public static function peyKademeleri(): array
     {
         return self::peyAdimlari();
     }
 
-    /** @return list<array{alt: int, adim: int}> alt_sinir'e göre AZALAN sıralı */
+    /** @return list<array{alt: int, ust: int|null, adim: int}> alt_sinir'e göre AZALAN sıralı */
     private static function peyAdimlari(): array
     {
         if (self::$peyAdimCache !== null) {
@@ -173,12 +211,13 @@ class Ilan extends Model
     {
         $now ??= CarbonImmutable::now();
 
-        if ($this->durum($now) !== Durum::DUSUYOR || $this->dusenFiyat($now) <= $this->rezerv_fiyat) {
+        if ($this->durum($now) !== Durum::DUSUYOR || $this->dusenFiyat($now) <= (int) $this->rezerv_fiyat) {
             return null;
         }
 
-        $gecen = intdiv(max(0, $now->getTimestamp() - $this->baslangic_zamani->getTimestamp()), $this->periyot());
+        $gecenAdim = intdiv($now->getTimestamp() - $this->dususBaslangici(), self::DUSUS_ADIM_SN);
+        $sonraki = $this->dususBaslangici() + ($gecenAdim + 1) * self::DUSUS_ADIM_SN;
 
-        return $this->baslangic_zamani->addSeconds(($gecen + 1) * $this->periyot());
+        return CarbonImmutable::createFromTimestamp(min($sonraki, $this->bitis_zamani->getTimestamp()));
     }
 }

@@ -224,21 +224,70 @@ class YonetimController extends Controller
         return ['items' => $items, 'atlanan' => $atlanan];
     }
 
-    /** Bir önizleme öğesini kaydeder (düşüş %5, rezerv %50 — sonra Düzenle'den ayarlanır). */
+    /** Bir önizleme öğesini kaydeder. Lot no Excel'den gelir; yoksa sıradaki atanır. Rezerv %50 (sonra Düzenle'den ayarlanır). */
     private function itemKaydet(array $it, string $kod): void
     {
         $fiyat = (int) $it['fiyat'];
+        $lotNo = ($it['lot'] ?? null) ?: ((Ilan::max('lot_no') ?? 0) + 1);
         Ilan::create([
             'baslik' => $it['baslik'],
+            'lot_no' => $lotNo,
             'alt_baslik' => ($it['alt'] ?? '') !== '' ? $it['alt'] : null,
             'aciklama' => ($it['aciklama'] ?? '') !== '' ? $it['aciklama'] : null,
             'gorsel_url' => $it['gorsel'] ?? null,
             'baslangic_fiyati' => $fiyat,
-            'saatlik_dusus' => max(1, (int) round($fiyat * 0.05)),
             'rezerv_fiyat' => (int) round($fiyat * 0.5),
-            'baslangic_zamani' => CarbonImmutable::now(),
             'ithal_kodu' => $kod,
         ]);
+    }
+
+    /** Tüm eserleri (ve tekliflerini) siler — yeni Excel yüklemesinden önce. */
+    public function tumEserleriSil(): RedirectResponse
+    {
+        $sayi = Ilan::count();
+        Ilan::query()->delete(); // teklifler cascade ile silinir
+
+        return back()->with('basari', "{$sayi} eser ve teklifleri silindi.");
+    }
+
+    /** Kademeli kapanış programı: ilk lot kapanışı + iki kademeli aralık. */
+    public function muzayede(): View
+    {
+        return view('yonetim.muzayede', [
+            'a' => Ayar::coklu(['muzayede_bitis', 'muzayede_esik_lot', 'muzayede_aralik1', 'muzayede_aralik2']),
+            'lotSayisi' => Ilan::count(),
+        ]);
+    }
+
+    public function muzayedeUygula(Request $request): RedirectResponse
+    {
+        $veri = $request->validate([
+            'muzayede_bitis' => ['required', 'date'],
+            'muzayede_esik_lot' => ['required', 'integer', 'min:0'],
+            'muzayede_aralik1' => ['required', 'integer', 'min:0'],
+            'muzayede_aralik2' => ['required', 'integer', 'min:0'],
+        ]);
+
+        Ayar::kaydet($veri);
+
+        $t0 = CarbonImmutable::parse($veri['muzayede_bitis']);
+        $esik = (int) $veri['muzayede_esik_lot'];
+        $a1 = (int) $veri['muzayede_aralik1'];
+        $a2 = (int) $veri['muzayede_aralik2'];
+
+        // Lot no'ya göre sıralı; ilk lot t0'da, sonrakiler kademeli aralıkla kapanır.
+        $lotlar = Ilan::orderByRaw('lot_no is null')->orderBy('lot_no')->orderBy('id')->get();
+        $kapanis = $t0;
+        foreach ($lotlar->values() as $i => $ilan) {
+            if ($i > 0) {
+                // i (0-tabanlı) → lot sırası (i+1). Bu lotun aralığı: sıra <= eşik ise a1, değilse a2.
+                $aralik = (($i + 1) <= $esik) ? $a1 : $a2;
+                $kapanis = $kapanis->addMinutes($aralik);
+            }
+            $ilan->update(['bitis_zamani' => $kapanis]);
+        }
+
+        return back()->with('basari', $lotlar->count() . ' lot için kapanış zamanları ayarlandı.');
     }
 
     /** Üye detayı: bilgileri, adresleri, teklifleri. */
@@ -294,8 +343,6 @@ class YonetimController extends Controller
             'gorsel_dosya' => ['nullable', 'image', 'max:10240'],
             'aciklama' => ['nullable', 'string', 'max:5000'],
             'baslangic_fiyati' => ['required', 'integer', 'min:1'],
-            'saatlik_dusus' => ['required', 'integer', 'min:1'],
-            'dusus_periyodu' => ['required', 'integer', 'in:30,60,300,900,1800,3600'],
             'rezerv_fiyat' => ['required', 'integer', 'min:0', 'lte:baslangic_fiyati'],
         ]);
 
@@ -304,10 +351,8 @@ class YonetimController extends Controller
             $veri['gorsel_url'] = $this->gorselYukle($request->file('gorsel_dosya'), 'eser');
         }
 
-        Ilan::create([
-            ...$veri,
-            'baslangic_zamani' => CarbonImmutable::now(),
-        ]);
+        $veri['lot_no'] = (Ilan::max('lot_no') ?? 0) + 1;
+        Ilan::create($veri);
 
         return redirect()->route('yonetim.eserler')->with('basari', 'Eser oluşturuldu: ' . $veri['baslik']);
     }
@@ -326,20 +371,12 @@ class YonetimController extends Controller
             'gorsel_dosya' => ['nullable', 'image', 'max:10240'],
             'aciklama' => ['nullable', 'string', 'max:5000'],
             'baslangic_fiyati' => ['required', 'integer', 'min:1'],
-            'saatlik_dusus' => ['required', 'integer', 'min:1'],
-            'dusus_periyodu' => ['required', 'integer', 'in:30,60,300,900,1800,3600'],
             'rezerv_fiyat' => ['required', 'integer', 'min:0', 'lte:baslangic_fiyati'],
         ]);
 
         unset($veri['gorsel_dosya']);
         if ($request->hasFile('gorsel_dosya')) {
             $veri['gorsel_url'] = $this->gorselYukle($request->file('gorsel_dosya'), 'eser-' . $ilan->id);
-        }
-
-        // Henüz teklif almamış (düşüş fazındaki) eser düzenlenince fiyat düşüşü baştan başlar
-        // (yeni periyot/fiyatla; aksi halde eski başlangıç zamanı yüzünden hemen tabana iner).
-        if ($ilan->ilk_teklif_zamani === null) {
-            $veri['baslangic_zamani'] = CarbonImmutable::now();
         }
 
         $ilan->update($veri);

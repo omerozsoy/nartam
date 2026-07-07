@@ -49,17 +49,9 @@ class Sunum
             ? (int) round(($baslangic - $fiyat) / $baslangic * 100)
             : 0;
 
-        // Düşüş fazında etiket periyodu belirtir: "Her Dakika Fiyat Düşüyor" vb.
+        // Teklifsiz + son 12 saat: fiyat düşüyor (tabana inince ayrı etiket).
         $durumEtiket = $durum === Durum::DUSUYOR
-            ? ($tabanaUlasti ? 'Taban Fiyata Ulaşıldı' : match ($ilan->periyot()) {
-                30 => 'Her 30 Saniyede Bir Fiyat Düşüyor',
-                60 => 'Her Dakika Fiyat Düşüyor',
-                300 => 'Her 5 Dakikada Bir Fiyat Düşüyor',
-                900 => 'Her 15 Dakikada Bir Fiyat Düşüyor',
-                1800 => 'Her 30 Dakikada Bir Fiyat Düşüyor',
-                3600 => 'Her Saat Fiyat Düşüyor',
-                default => 'Fiyat Düşüyor',
-            })
+            ? ($tabanaUlasti ? 'Taban Fiyata Ulaşıldı' : 'Son 12 Saat · Fiyat Düşüyor')
             : $durum->etiket();
 
         return [

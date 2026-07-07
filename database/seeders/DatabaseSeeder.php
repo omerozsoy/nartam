@@ -32,44 +32,45 @@ class DatabaseSeeder extends Seeder
 
         $now = CarbonImmutable::now();
 
-        // --- İlan 1: hâlâ düşüş fazında (3 saat önce başladı, 1000 -> 700) ---
-        Ilan::create([
-            'baslik' => 'Antika Porselen Vazo',
-            'alt_baslik' => 'Çin, el boyaması',
-            'baslangic_fiyati' => 1000,
-            'saatlik_dusus' => 100,
-            'rezerv_fiyat' => 500,
-            'baslangic_zamani' => $now->subHours(3),
-        ]);
-
-        // --- İlan 2: açık artırmada (düşüş sırasında teklif geldi, sayaç işliyor) ---
-        $t1 = $now->subMinutes(90); // fiyat 12000'ken Mehmet ilk teklifi verdi
-        $t2 = $now->subMinutes(40); // Ayşe üstüne çıktı
-
-        $ilan2 = Ilan::create([
+        // --- Lot 1: açık artırma, teklif almış (proxy) ---
+        $t1 = $now->subMinutes(90);
+        $t2 = $now->subMinutes(40);
+        $ilan1 = Ilan::create([
             'baslik' => 'Yağlı Boya Tablo',
             'lot_no' => 1,
             'alt_baslik' => 'Tuval üzerine, imzalı',
             'baslangic_fiyati' => 12000,
-            'saatlik_dusus' => 500,
             'rezerv_fiyat' => 8000,
-            'baslangic_zamani' => $now->subHours(2),
-            'ilk_teklif_zamani' => $t1,
-            'bitis_zamani' => $t1->addSeconds(Ilan::ACIK_ARTIRMA_SURESI),
-            // Proxy: Ayşe lider (gizli max 12500), görünen fiyat = Mehmet'in maksı + adım
+            'bitis_zamani' => $now->addDays(2),
             'guncel_teklif' => 12000 + Ilan::artirimAdimi(12000),
             'lider_id' => $ayse->id,
             'lider_max' => 12500,
             'son_teklif_sahibi' => 'Ayşe',
         ]);
-
-        $ilan2->teklifler()->createMany([
+        $ilan1->teklifler()->createMany([
             ['kullanici_id' => $mehmet->id, 'miktar' => 12000, 'zaman' => $t1],
             ['kullanici_id' => $ayse->id, 'miktar' => 12500, 'zaman' => $t2],
         ]);
 
-        // Düşüş fazında 5 örnek ürün daha
-        $this->call(DusenUrunlerSeeder::class);
+        // --- Lot 2: teklifsiz, kapanışa uzak (açık artırma, başlangıç fiyatından) ---
+        Ilan::create([
+            'baslik' => 'Antika Porselen Vazo',
+            'lot_no' => 2,
+            'alt_baslik' => 'Çin, el boyaması',
+            'baslangic_fiyati' => 1000,
+            'rezerv_fiyat' => 500,
+            'bitis_zamani' => $now->addDays(2),
+        ]);
+
+        // --- Lot 3: teklifsiz, kapanışa 6 saat (son 12 saat: fiyat düşüyor) ---
+        Ilan::create([
+            'baslik' => 'Gümüş Şamdan Takımı',
+            'lot_no' => 3,
+            'alt_baslik' => 'Osmanlı dönemi',
+            'baslangic_fiyati' => 20000,
+            'rezerv_fiyat' => 10000,
+            'bitis_zamani' => $now->addHours(6),
+        ]);
 
         // Ürünlere görsel ata (public/urunler/)
         $this->call(GorselAtaSeeder::class);

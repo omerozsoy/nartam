@@ -28,13 +28,17 @@ class TeklifServisi
         $now = CarbonImmutable::now();
         $durum = $ilan->durum($now);
 
+        // İlk teklif mi? (henüz lider yok) — düşüş fazında da açık artırmada da olabilir.
+        $ilkTeklif = ! $ilan->teklifAldi();
+
         // --- Doğrulama ---
         if ($durum === Durum::KAPANDI) {
-            throw $this->hata('İlan kapandı, teklif verilemez.');
+            throw $this->hata('Müzayede kapandı, teklif verilemez.');
         }
 
-        if ($durum === Durum::DUSUYOR) {
-            $taban = $ilan->dusenFiyat($now);
+        if ($ilkTeklif) {
+            // İlk teklif: o anki geçerli fiyattan (düşen fiyat ya da başlangıç) verilir.
+            $taban = $ilan->guncelFiyat($now);
             if ($miktar < $taban) {
                 throw $this->hata('Teklif en az ' . $this->para($taban) . ' olmalı.');
             }
@@ -52,17 +56,15 @@ class TeklifServisi
         }
 
         // --- Uygula ---
-        DB::transaction(function () use ($ilan, $kullanici, $miktar, $now, $durum) {
-            if ($durum === Durum::DUSUYOR) {
-                // İlk teklif: açık artırma başlar. Görünen fiyat = o anki düşmüş fiyat (taban).
-                $taban = $ilan->dusenFiyat($now);
-                $ilan->ilk_teklif_zamani = $now;
-                $ilan->bitis_zamani = $now->addSeconds(Ilan::ACIK_ARTIRMA_SURESI);
-                $ilan->lot_no = (Ilan::max('lot_no') ?? 0) + 1;
-                $ilan->guncel_teklif = $taban;
+        DB::transaction(function () use ($ilan, $kullanici, $miktar, $now, $ilkTeklif) {
+            if ($ilkTeklif) {
+                // İlk teklif: normal açık artırma başlar. Görünen fiyat = o anki geçerli fiyat.
+                // Bitiş zamanı SABİT kalır (24 saat başlatılmaz).
+                $ilan->guncel_teklif = $ilan->guncelFiyat($now);
                 $ilan->lider_id = $kullanici->id;
                 $ilan->lider_max = $miktar;
                 $ilan->son_teklif_sahibi = $kullanici->name;
+                $this->antiSnipe($ilan, $now);
             } elseif ((int) $ilan->lider_id === $kullanici->id) {
                 // Lider kendi maksimumunu yükseltir; görünen fiyat değişmez
                 $ilan->lider_max = $miktar;
@@ -81,11 +83,7 @@ class TeklifServisi
                     $ilan->guncel_teklif = min($Lmax, $miktar + Ilan::artirimAdimi($P));
                 }
 
-                // Anti-snipe
-                $kalan = $ilan->bitis_zamani->getTimestamp() - $now->getTimestamp();
-                if ($kalan < Ilan::ANTI_SNIPE_ESIK) {
-                    $ilan->bitis_zamani = $now->addSeconds(Ilan::ANTI_SNIPE_UZATMA);
-                }
+                $this->antiSnipe($ilan, $now);
             }
 
             $ilan->save();
@@ -98,6 +96,18 @@ class TeklifServisi
         });
 
         return $ilan;
+    }
+
+    /** Son dakikada gelen teklif kapanışı uzatır (anti-snipe). */
+    private function antiSnipe(Ilan $ilan, CarbonImmutable $now): void
+    {
+        if ($ilan->bitis_zamani === null) {
+            return;
+        }
+        $kalan = $ilan->bitis_zamani->getTimestamp() - $now->getTimestamp();
+        if ($kalan < Ilan::ANTI_SNIPE_ESIK) {
+            $ilan->bitis_zamani = $now->addSeconds(Ilan::ANTI_SNIPE_UZATMA);
+        }
     }
 
     private function hata(string $mesaj): ValidationException
