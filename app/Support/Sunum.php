@@ -30,6 +30,11 @@ class Sunum
                 $benimDurum = 'gecildi';
             }
         }
+        // Teklifi geçildiyse gizli maksimumu artık gösterme.
+        if ($benimDurum === 'gecildi') {
+            $benimMax = null;
+        }
+
         $bitis = $ilan->bitis_zamani;
         $sonrakiDusus = $ilan->sonrakiDususZamani($now);
         $fiyat = $ilan->guncelFiyat($now);
