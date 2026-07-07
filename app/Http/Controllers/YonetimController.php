@@ -253,6 +253,26 @@ class YonetimController extends Controller
         ]);
     }
 
+    public function uyeGuncelle(Request $request, User $user): RedirectResponse
+    {
+        $veri = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', \Illuminate\Validation\Rule::unique('users', 'email')->ignore($user->id)],
+            'telefon' => ['nullable', 'string', 'max:20'],
+            'sifre' => ['nullable', 'string', 'min:6'],
+        ]);
+
+        $user->name = $veri['name'];
+        $user->email = $veri['email'];
+        $user->telefon = $veri['telefon'] ?? null;
+        if (! empty($veri['sifre'])) {
+            $user->password = $veri['sifre']; // 'hashed' cast ile hash'lenir
+        }
+        $user->save();
+
+        return back()->with('basari', 'Üye bilgileri güncellendi.' . (! empty($veri['sifre']) ? ' Şifre değiştirildi.' : ''));
+    }
+
     public function uyeEngelle(User $user): RedirectResponse
     {
         if ($user->yonetici()) {

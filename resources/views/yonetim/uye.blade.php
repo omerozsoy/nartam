@@ -8,13 +8,31 @@
         <p class="alt-not" style="margin-bottom:1rem"><a href="{{ route('yonetim.uyeler') }}">‹ Üyeler</a></p>
 
         <section class="kart">
-            <table class="tablo">
-                <tr><th>E-posta</th><td>{{ $uye->email }}</td></tr>
-                <tr><th>Telefon</th><td>{{ $uye->telefon ?? '—' }}</td></tr>
+            <h2>Profil</h2>
+            <form method="post" action="{{ route('yonetim.uye.guncelle', $uye) }}" class="izgara-form">
+                @csrf
+                <label class="genis">Ad Soyad
+                    <input type="text" name="name" value="{{ old('name', $uye->name) }}" required>
+                </label>
+                <label>E-posta
+                    <input type="email" name="email" value="{{ old('email', $uye->email) }}" required>
+                </label>
+                <label>Cep Telefonu
+                    <input type="tel" name="telefon" value="{{ old('telefon', $uye->telefon) }}">
+                </label>
+                <label>Yeni Şifre <small>(boş bırakılırsa değişmez)</small>
+                    <input type="text" name="sifre" minlength="6" placeholder="Şifre vermek için yazın">
+                </label>
+                <button type="submit" class="btn btn-dolu">Kaydet</button>
+            </form>
+
+            <table class="tablo" style="margin-top:1.5rem">
                 <tr><th>Rol</th><td>{{ $uye->rol === 'yonetici' ? 'Yönetici' : 'Üye' }}</td></tr>
                 <tr><th>Teklif Sayısı</th><td>{{ $uye->teklifler_count }}</td></tr>
                 <tr><th>Kayıt</th><td>{{ $uye->created_at?->format('d.m.Y H:i') }}</td></tr>
+                <tr><th>Durum</th><td>{{ $uye->engelli ? 'Engelli' : 'Aktif' }}</td></tr>
             </table>
+
             @unless ($uye->yonetici())
                 <form method="post" action="{{ route('yonetim.uye.engelle', $uye) }}" style="margin-top:1rem"
                       onsubmit="return confirm('{{ $uye->engelli ? 'Engeli kaldır?' : 'Üyeyi engelle?' }}')">
