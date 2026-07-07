@@ -115,6 +115,11 @@ function ozetUygula(kalem, o) {
     if (sayacEtiketEl && o.durum === 'dusuyor') {
         sayacEtiketEl.style.display = o.tabanaUlasti ? 'none' : '';
     }
+    // Taban fiyata ulaşıldıysa +/- ayar kutusunu gizle (gizli miktar taban fiyatı gönderir)
+    const peyKutu = kalem.querySelector('.pey-kutu');
+    if (peyKutu) {
+        peyKutu.style.display = o.tabanaUlasti ? 'none' : '';
+    }
 
     // Yapı değişimi (faz/kapanış) olduğunda sayfayı tazele.
     if (o.durum === 'kapandi' || (oncekiDurum === 'dusuyor' && o.durum === 'acik_artirma')) {
