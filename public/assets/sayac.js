@@ -156,50 +156,89 @@ async function ilanlariCek() {
     }
 }
 
-// --- 3) AJAX teklif ---
-function teklifBagla() {
-    document.querySelectorAll('.teklif-form').forEach((form) => {
-        form.addEventListener('submit', async (olay) => {
-            olay.preventDefault();
-            const mesaj = form.querySelector('[data-alan="teklif-mesaj"]');
+// --- 3) AJAX teklif (modal onayı ile) ---
+let bekleyenForm = null;
 
-            // Onay penceresi
+async function teklifGonder(form) {
+    const mesaj = form.querySelector('[data-alan="teklif-mesaj"]');
+    try {
+        const yanit = await fetch('/teklif', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': CSRF,
+            },
+            body: new FormData(form),
+        });
+        const sonuc = await yanit.json();
+
+        if (yanit.ok && sonuc.ok) {
+            mesaj.textContent = '✓ Teklif alındı';
+            mesaj.className = 'teklif-mesaj basarili';
+            ozetUygula(form.closest('[data-id]'), sonuc.ilan);
+        } else {
+            const hata = sonuc.errors?.miktar?.[0] ?? sonuc.message ?? 'Teklif reddedildi';
+            mesaj.textContent = hata;
+            mesaj.className = 'teklif-mesaj hatali';
+        }
+    } catch (e) {
+        mesaj.textContent = 'Bağlantı hatası';
+        mesaj.className = 'teklif-mesaj hatali';
+    }
+}
+
+function modalKapat() {
+    bekleyenForm = null;
+    const modal = document.querySelector('[data-alan="teklif-modal"]');
+    if (modal) {
+        modal.hidden = true;
+    }
+}
+
+function teklifBagla() {
+    const modal = document.querySelector('[data-alan="teklif-modal"]');
+
+    document.querySelectorAll('.teklif-form').forEach((form) => {
+        form.addEventListener('submit', (olay) => {
+            olay.preventDefault();
             const tutar = Number(form.querySelector('[data-alan="miktar"]')?.value || 0);
-            const tutarBicim = new Intl.NumberFormat('tr-TR').format(tutar) + ' ₺';
-            if (!window.confirm(tutarBicim + ' teklif vermek istediğinize emin misiniz?')) {
+            if (tutar <= 0) {
                 return;
             }
-
-            const veri = new FormData(form);
-
-            try {
-                const yanit = await fetch('/teklif', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': CSRF,
-                    },
-                    body: veri,
-                });
-                const sonuc = await yanit.json();
-
-                if (yanit.ok && sonuc.ok) {
-                    mesaj.textContent = '✓ Teklif alındı';
-                    mesaj.className = 'teklif-mesaj basarili';
-                    ozetUygula(form.closest('[data-id]'), sonuc.ilan);
-                } else {
-                    // Laravel doğrulama hatası: { message, errors: { miktar: [...] } }
-                    const hata = sonuc.errors?.miktar?.[0] ?? sonuc.message ?? 'Teklif reddedildi';
-                    mesaj.textContent = hata;
-                    mesaj.className = 'teklif-mesaj hatali';
+            bekleyenForm = form;
+            if (modal) {
+                const tutarEl = modal.querySelector('[data-alan="modal-tutar"]');
+                if (tutarEl) {
+                    tutarEl.textContent = new Intl.NumberFormat('tr-TR').format(tutar) + ' ₺';
                 }
-            } catch (e) {
-                mesaj.textContent = 'Bağlantı hatası';
-                mesaj.className = 'teklif-mesaj hatali';
+                modal.hidden = false;
+            } else {
+                teklifGonder(form); // modal yoksa doğrudan gönder
             }
         });
     });
+
+    if (modal) {
+        modal.querySelector('[data-alan="modal-onayla"]')?.addEventListener('click', () => {
+            const f = bekleyenForm;
+            modalKapat();
+            if (f) {
+                teklifGonder(f);
+            }
+        });
+        modal.querySelector('[data-alan="modal-vazgec"]')?.addEventListener('click', modalKapat);
+        modal.addEventListener('click', (olay) => {
+            if (olay.target === modal) {
+                modalKapat();
+            }
+        });
+        document.addEventListener('keydown', (olay) => {
+            if (olay.key === 'Escape' && !modal.hidden) {
+                modalKapat();
+            }
+        });
+    }
 }
 
 // --- Kayan rakam (sliding digits) efekti ---
