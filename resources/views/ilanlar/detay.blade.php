@@ -72,7 +72,6 @@
                                 </button>
                                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
                             </form>
-                            <p class="alt-not" style="margin-top:.6rem">Girdiğiniz tutar <strong>gizli maksimumunuzdur</strong>; başkaları teklif verdikçe sistem, bu tutara kadar sizin adınıza otomatik pey verir.</p>
                         @else
                             <a class="btn btn-dolu" href="{{ route('giris') }}" style="margin-top:1rem">Teklif için giriş</a>
                         @endauth
