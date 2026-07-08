@@ -61,6 +61,7 @@ class Sunum
             'altBaslik' => $ilan->alt_baslik,
             'kategori' => $ilan->kategori,
             'carusel' => (bool) $ilan->carusel,
+            'caruselKonum' => $ilan->carusel_konum ?: 'sol-alt',
             'gorselUrl' => $ilan->gorsel_url,
             'durum' => $durum->value,
             'durumEtiket' => $durumEtiket,

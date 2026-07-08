@@ -3,7 +3,7 @@
         <div class="swiper hero-swiper">
             <div class="swiper-wrapper">
                 @foreach ($hero as $ilan)
-                    <div class="swiper-slide hero-slide">
+                    <div class="swiper-slide hero-slide konum-{{ $ilan['caruselKonum'] ?? 'sol-alt' }}">
                         @if ($ilan['gorselUrl'])
                             <div class="hero-bg" style="background-image:url('{{ $ilan['gorselUrl'] }}')"></div>
                         @endif

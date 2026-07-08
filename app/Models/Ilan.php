@@ -39,6 +39,8 @@ class Ilan extends Model
         'lot_no',
         'gorsel_url',
         'carusel',
+        'carusel_sira',
+        'carusel_konum',
         'alt_baslik',
         'kategori',
         'aciklama',

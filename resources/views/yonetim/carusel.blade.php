@@ -29,6 +29,16 @@
                             <strong>@if ($ilan->lot_no)Lot {{ $ilan->lot_no }} · @endif{{ $ilan->baslik }}</strong>
                             <small>{{ $ilan->alt_baslik }}</small>
                         </span>
+                        <input type="number" class="carusel-sira" name="sira[{{ $ilan->id }}]" min="1"
+                               value="{{ $ilan->carusel_sira }}" placeholder="Sıra" title="Sıra numarası"
+                               onclick="event.stopPropagation();">
+                        @php($k = $ilan->carusel_konum ?: 'sol-alt')
+                        <select class="carusel-konum" name="konum[{{ $ilan->id }}]" title="Yazı kutusu konumu" onclick="event.stopPropagation();">
+                            <option value="sol-alt" @selected($k==='sol-alt')>Sol Alt</option>
+                            <option value="sag-alt" @selected($k==='sag-alt')>Sağ Alt</option>
+                            <option value="sol-ust" @selected($k==='sol-ust')>Sol Üst</option>
+                            <option value="sag-ust" @selected($k==='sag-ust')>Sağ Üst</option>
+                        </select>
                     </label>
                 @endforeach
             </div>
@@ -38,7 +48,7 @@
         </form>
     </main>
     <script>
-        document.querySelectorAll('.carusel-secim input').forEach(function (cb) {
+        document.querySelectorAll('.carusel-secim input[type="checkbox"]').forEach(function (cb) {
             cb.addEventListener('change', function () {
                 cb.closest('.carusel-secim').classList.toggle('secili', cb.checked);
             });

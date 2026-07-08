@@ -268,8 +268,15 @@ class YonetimController extends Controller
     /** Carousel (ana sayfa hero) için lot seçme ekranı. */
     public function carusel(): View
     {
+        // Seçili olanlar (sıraya göre) üstte, diğerleri lot no'ya göre altta.
         return view('yonetim.carusel', [
-            'ilanlar' => Ilan::orderByRaw('lot_no is null')->orderBy('lot_no')->orderBy('id')->get(),
+            'ilanlar' => Ilan::orderByDesc('carusel')
+                ->orderByRaw('carusel_sira is null')
+                ->orderBy('carusel_sira')
+                ->orderByRaw('lot_no is null')
+                ->orderBy('lot_no')
+                ->orderBy('id')
+                ->get(),
             'secili' => Ilan::where('carusel', true)->count(),
         ]);
     }
@@ -277,10 +284,15 @@ class YonetimController extends Controller
     public function caruselKaydet(Request $request): RedirectResponse
     {
         $secilenler = array_map('intval', (array) $request->input('secili', []));
+        $siralar = (array) $request->input('sira', []);
+        $konumlar = (array) $request->input('konum', []);
+        $gecerliKonum = ['sol-alt', 'sag-alt', 'sol-ust', 'sag-ust'];
 
-        Ilan::query()->update(['carusel' => false]);
-        if ($secilenler !== []) {
-            Ilan::whereIn('id', $secilenler)->update(['carusel' => true]);
+        Ilan::query()->update(['carusel' => false, 'carusel_sira' => null]);
+        foreach ($secilenler as $id) {
+            $sira = isset($siralar[$id]) && $siralar[$id] !== '' ? (int) $siralar[$id] : null;
+            $konum = in_array($konumlar[$id] ?? '', $gecerliKonum, true) ? $konumlar[$id] : 'sol-alt';
+            Ilan::where('id', $id)->update(['carusel' => true, 'carusel_sira' => $sira, 'carusel_konum' => $konum]);
         }
 
         return back()->with('basari', count($secilenler) . ' lot carousel için seçildi.');

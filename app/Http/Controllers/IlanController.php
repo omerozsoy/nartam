@@ -22,6 +22,7 @@ class IlanController extends Controller
 
         // Hero: yönetimden seçilen lotlar (müzayededen bağımsız, doğrudan).
         $heroLotlar = Ilan::where('carusel', true)->with('muzayede')->withCount('teklifler')
+            ->orderByRaw('carusel_sira is null')->orderBy('carusel_sira')
             ->orderByRaw('lot_no is null')->orderBy('lot_no')->limit(8)->get()
             ->map(fn (Ilan $i) => Sunum::ilan($i, null, $benimId));
 
