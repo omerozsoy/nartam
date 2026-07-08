@@ -147,7 +147,9 @@ img { max-width: 100%; }
 .hero-swiper { width: 100%; }
 .hero-slide {
     position: relative;
-    height: 520px;
+    height: 78vh;
+    min-height: 620px;
+    max-height: 820px;
     overflow: hidden;
     background: #14100f;
 }
@@ -189,7 +191,7 @@ img { max-width: 100%; }
 .hero-swiper .swiper-pagination-bullet-active { opacity: 1; }
 
 @media (max-width: 720px) {
-    .hero-slide { height: 420px; }
+    .hero-slide { height: 70vh; min-height: 460px; }
     .hero-metin h2 { font-size: 1.9rem; }
     .hero-ic { padding: 0 1.2rem; }
     .hero-metin { padding-bottom: 2rem; }
