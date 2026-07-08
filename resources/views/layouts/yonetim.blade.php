@@ -40,22 +40,5 @@
     </div>
 </div>
 <script src="{{ asset('assets/lightbox.js') }}?v={{ filemtime(public_path('assets/lightbox.js')) }}"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (typeof flatpickr === 'undefined') { return; }
-        if (flatpickr.l10ns && flatpickr.l10ns.tr) { flatpickr.localize(flatpickr.l10ns.tr); }
-        flatpickr('.tarih-saat', {
-            enableTime: true,
-            time_24hr: true,
-            dateFormat: 'Y-m-d H:i',
-            altInput: true,
-            altFormat: 'd.m.Y H:i',
-            allowInput: true,
-        });
-    });
-</script>
 </body>
 </html>

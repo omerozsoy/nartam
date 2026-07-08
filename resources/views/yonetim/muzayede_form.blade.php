@@ -8,7 +8,12 @@
 
         <section class="kart">
             @php($rota = $muzayede->exists ? route('yonetim.muzayede.guncelle', $muzayede) : route('yonetim.muzayede.olustur'))
-            @php($fmt = fn ($d) => $d ? $d->format('Y-m-d H:i') : '')
+            @php($bd = old('baslangic_tarih', $muzayede->baslangic?->format('Y-m-d')))
+            @php($bs = old('baslangic_saat', $muzayede->baslangic?->format('H')))
+            @php($bm = old('baslangic_dk', $muzayede->baslangic?->format('i')))
+            @php($kd = old('bitis_tarih', $muzayede->bitis?->format('Y-m-d')))
+            @php($ks = old('bitis_saat', $muzayede->bitis?->format('H')))
+            @php($km = old('bitis_dk', $muzayede->bitis?->format('i')))
             <form method="post" action="{{ $rota }}" class="dikey-form">
                 @csrf
                 <div class="izgara-form">
@@ -19,16 +24,22 @@
                         <input type="text" name="ad" value="{{ old('ad', $muzayede->ad) }}" placeholder="Sanat & Antika" required>
                     </label>
                 </div>
-                <div class="izgara-form">
-                    <label>Başlangıç (teklifler açılır)
-                        <input type="text" name="baslangic" class="tarih-saat" autocomplete="off"
-                               value="{{ old('baslangic', $fmt($muzayede->baslangic)) }}" placeholder="GG.AA.YYYY SS:DD" required>
-                    </label>
-                    <label>İlk Lotun Kapanışı
-                        <input type="text" name="bitis" class="tarih-saat" autocomplete="off"
-                               value="{{ old('bitis', $fmt($muzayede->bitis)) }}" placeholder="GG.AA.YYYY SS:DD" required>
-                    </label>
-                </div>
+                <label>Başlangıç (teklifler açılır)
+                    <span class="tarih-grup">
+                        <input type="date" name="baslangic_tarih" value="{{ $bd }}" required>
+                        <input type="number" name="baslangic_saat" min="0" max="23" value="{{ $bs }}" placeholder="SS" required>
+                        <span class="tarih-ikinokta">:</span>
+                        <input type="number" name="baslangic_dk" min="0" max="59" value="{{ $bm }}" placeholder="DD" required>
+                    </span>
+                </label>
+                <label>İlk Lotun Kapanışı
+                    <span class="tarih-grup">
+                        <input type="date" name="bitis_tarih" value="{{ $kd }}" required>
+                        <input type="number" name="bitis_saat" min="0" max="23" value="{{ $ks }}" placeholder="SS" required>
+                        <span class="tarih-ikinokta">:</span>
+                        <input type="number" name="bitis_dk" min="0" max="59" value="{{ $km }}" placeholder="DD" required>
+                    </span>
+                </label>
                 <p class="alt-not" style="margin:0">Kademeli kapanış: ilk lot yukarıdaki anda; sonraki lotlar aşağıdaki aralıklarla kapanır.</p>
                 <div class="izgara-form">
                     <label>İlk kaç lot birinci aralıkla?

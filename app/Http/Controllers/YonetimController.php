@@ -305,15 +305,38 @@ class YonetimController extends Controller
 
     private function muzayedeVeri(Request $request): array
     {
-        return $request->validate([
+        $v = $request->validate([
             'no' => ['required', 'string', 'max:50'],
             'ad' => ['required', 'string', 'max:255'],
-            'baslangic' => ['required', 'date'],
-            'bitis' => ['required', 'date', 'after:baslangic'],
+            'baslangic_tarih' => ['required', 'date_format:Y-m-d'],
+            'baslangic_saat' => ['required', 'integer', 'between:0,23'],
+            'baslangic_dk' => ['required', 'integer', 'between:0,59'],
+            'bitis_tarih' => ['required', 'date_format:Y-m-d'],
+            'bitis_saat' => ['required', 'integer', 'between:0,23'],
+            'bitis_dk' => ['required', 'integer', 'between:0,59'],
             'esik_lot' => ['required', 'integer', 'min:0'],
             'aralik1' => ['required', 'integer', 'min:0'],
             'aralik2' => ['required', 'integer', 'min:0'],
         ]);
+
+        $baslangic = sprintf('%s %02d:%02d:00', $v['baslangic_tarih'], $v['baslangic_saat'], $v['baslangic_dk']);
+        $bitis = sprintf('%s %02d:%02d:00', $v['bitis_tarih'], $v['bitis_saat'], $v['bitis_dk']);
+
+        if (CarbonImmutable::parse($bitis)->lessThanOrEqualTo(CarbonImmutable::parse($baslangic))) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'bitis_tarih' => 'İlk lot kapanışı başlangıçtan sonra olmalı.',
+            ]);
+        }
+
+        return [
+            'no' => $v['no'],
+            'ad' => $v['ad'],
+            'baslangic' => $baslangic,
+            'bitis' => $bitis,
+            'esik_lot' => $v['esik_lot'],
+            'aralik1' => $v['aralik1'],
+            'aralik2' => $v['aralik2'],
+        ];
     }
 
     /** Bu müzayedeyi aktif yap (diğerlerini pasifleştir). */
