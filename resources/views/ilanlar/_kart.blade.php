@@ -18,7 +18,9 @@
         @endif
     </a>
 
-    <span class="rozet {{ $ilan['tabanaUlasti'] ? 'rozet-taban' : '' }}">{{ $ilan['durumEtiket'] }}</span>
+    @if ($ilan['durum'] !== 'acik_artirma')
+        <span class="rozet {{ $ilan['tabanaUlasti'] ? 'rozet-taban' : '' }}">{{ $ilan['durumEtiket'] }}</span>
+    @endif
 
     @if ($ilan['durum'] === 'yakinda')
         <p class="sayac-etiket">Başlangıca kalan</p>
