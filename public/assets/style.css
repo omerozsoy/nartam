@@ -149,9 +149,9 @@ img { max-width: 100%; }
 .hero-swiper { width: 100%; }
 .hero-slide {
     position: relative;
-    height: 78vh;
-    min-height: 620px;
-    max-height: 820px;
+    height: 88vh;
+    min-height: 720px;
+    max-height: 920px;
     overflow: hidden;
     background: #14100f;
 }
@@ -161,30 +161,22 @@ img { max-width: 100%; }
     background-size: cover;
     background-position: center;
 }
-.hero-ic {
-    position: relative;
-    z-index: 2;
-    max-width: 1600px;
-    height: 100%;
-    margin: 0 auto;
-    padding: 2.5rem;
-    display: flex;
-    align-items: flex-end;      /* varsayılan: alt */
-    justify-content: flex-start; /* varsayılan: sol */
-}
-/* Yazı kutusunun 4 köşe konumu */
-.konum-sol-alt .hero-ic { align-items: flex-end; justify-content: flex-start; }
-.konum-sag-alt .hero-ic { align-items: flex-end; justify-content: flex-end; }
-.konum-sol-ust .hero-ic { align-items: flex-start; justify-content: flex-start; }
-.konum-sag-ust .hero-ic { align-items: flex-start; justify-content: flex-end; }
+.hero-ic { position: absolute; inset: 0; z-index: 2; }
 .hero-kart {
+    position: absolute;
+    left: 2.5rem;      /* varsayılan: sol */
+    bottom: 2.5rem;    /* varsayılan: alt */
+    width: min(420px, calc(100% - 5rem));
     background: rgba(255, 255, 255, .85);
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
     color: var(--metin);
-    max-width: 420px;
     padding: 1.5rem 1.7rem 1.7rem;
 }
+/* Yazı kutusunun 4 köşe konumu */
+.konum-sag-alt .hero-kart { left: auto; right: 2.5rem; bottom: 2.5rem; top: auto; }
+.konum-sol-ust .hero-kart { left: 2.5rem; right: auto; top: 2.5rem; bottom: auto; }
+.konum-sag-ust .hero-kart { left: auto; right: 2.5rem; top: 2.5rem; bottom: auto; }
 .hero-etiket { font-size: 12px; letter-spacing: .06em; color: var(--soluk); }
 .hero-kart h2 {
     font-family: var(--sans);
@@ -206,9 +198,13 @@ img { max-width: 100%; }
 .hero-swiper .swiper-pagination-bullet-active { opacity: 1; }
 
 @media (max-width: 720px) {
-    .hero-slide { height: 70vh; min-height: 460px; }
-    .hero-ic { padding: 1.5rem 1.2rem; }
-    .hero-kart { max-width: none; width: 100%; }
+    .hero-slide { height: 80vh; min-height: 520px; }
+    .hero-kart,
+    .konum-sag-alt .hero-kart,
+    .konum-sol-ust .hero-kart,
+    .konum-sag-ust .hero-kart {
+        left: 1rem; right: 1rem; bottom: 1rem; top: auto; width: auto;
+    }
 }
 
 /* Ana sayfa: slider altı eylem */
