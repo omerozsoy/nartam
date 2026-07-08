@@ -23,8 +23,6 @@
         }
         if (document.querySelector('.hero-swiper')) {
             new Swiper('.hero-swiper', {
-                effect: 'fade',
-                fadeEffect: { crossFade: true },
                 loop: true,
                 autoplay: { delay: 5000, disableOnInteraction: false },
                 pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
