@@ -41,6 +41,7 @@ class Ilan extends Model
         'carusel',
         'carusel_sira',
         'carusel_konum',
+        'carusel_arka',
         'alt_baslik',
         'kategori',
         'aciklama',

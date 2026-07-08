@@ -144,84 +144,62 @@ img { max-width: 100%; }
 .carusel-bilgi strong { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .carusel-bilgi small { font-size: 11px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .carusel-sira { flex: none; width: 56px; text-align: center; padding: .35rem; font-size: 13px; border: 1px solid var(--cizgi); border-radius: 3px; }
-.carusel-konum { flex: none; width: 92px; padding: .35rem; font-size: 12px; border: 1px solid var(--cizgi); border-radius: 3px; }
+.carusel-konum { flex: none; width: 84px; padding: .35rem; font-size: 12px; border: 1px solid var(--cizgi); border-radius: 3px; }
+.carusel-arka { flex: none; width: 38px; height: 34px; padding: 2px; border: 1px solid var(--cizgi); border-radius: 3px; cursor: pointer; }
 
-/* ---------- Phillips tarzı tam genişlik hero ---------- */
+/* ---------- Christie's tarzı bölünmüş (split) hero ---------- */
 .hero { width: 100%; margin-bottom: 2rem; }
 .hero-swiper { width: 100%; }
 .hero-slide {
-    position: relative;
-    height: 88vh;
-    min-height: 720px;
-    max-height: 920px;
+    display: flex;
+    height: 82vh;
+    min-height: 640px;
+    max-height: 880px;
     overflow: hidden;
-    background: #14100f;
+    background: #efe9dd;
 }
-.hero-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
+.hero-slide.panel-sag { flex-direction: row-reverse; }
+.hero-panel {
+    flex: 0 0 42%;
+    display: flex;
+    align-items: center;
+    padding: 3rem clamp(2rem, 5vw, 5rem);
+    color: var(--metin);
+}
+.hero-metin { max-width: 460px; }
+.hero-etiket { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--soluk); }
+.hero-metin h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1.05;
+    margin: .5rem 0 .5rem;
+    color: var(--metin);
+}
+.hero-alt { font-size: 16px; font-style: italic; color: var(--soluk); margin-bottom: .7rem; }
+.hero-fiyat { font-size: 1.3rem; font-variant-numeric: tabular-nums; margin-bottom: 1.4rem; }
+.hero-panel .btn-dolu { background: var(--siyah); color: #fff; border-color: var(--siyah); }
+.hero-panel .btn-dolu:hover { background: #333; }
+.hero-gorsel {
+    flex: 1;
+    display: block;
     background-size: cover;
     background-position: center;
-    filter: blur(30px) brightness(.9);
-    transform: scale(1.2);
+    background-color: #ddd6c8;
 }
-.hero-on {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    margin: auto;
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
-.hero-ic { position: absolute; inset: 0; z-index: 2; }
-.hero-kart {
-    position: absolute;
-    left: 2.5rem;      /* varsayılan: sol */
-    bottom: 2.5rem;    /* varsayılan: alt */
-    width: min(420px, calc(100% - 5rem));
-    background: rgba(255, 255, 255, .85);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-    color: var(--metin);
-    padding: 1.5rem 1.7rem 1.7rem;
-}
-/* Yazı kutusunun 4 köşe konumu */
-.konum-sag-alt .hero-kart { left: auto; right: 2.5rem; bottom: 2.5rem; top: auto; }
-.konum-sol-ust .hero-kart { left: 2.5rem; right: auto; top: 2.5rem; bottom: auto; }
-.konum-sag-ust .hero-kart { left: auto; right: 2.5rem; top: 2.5rem; bottom: auto; }
-.hero-etiket { font-size: 12px; letter-spacing: .06em; color: var(--soluk); }
-.hero-kart h2 {
-    font-family: var(--sans);
-    font-weight: 700;
-    font-size: 1.5rem;
-    line-height: 1.2;
-    letter-spacing: .01em;
-    margin: .35rem 0 .35rem;
-    color: var(--metin);
-}
-.hero-alt { font-size: 15px; font-style: italic; color: var(--soluk); margin-bottom: .5rem; }
-.hero-fiyat { font-size: 1.2rem; font-variant-numeric: tabular-nums; margin-bottom: 1.1rem; }
-.hero-kart .btn-dolu { background: var(--siyah); color: #fff; border-color: var(--siyah); }
-.hero-kart .btn-dolu:hover { background: #333; }
 
 .hero-swiper .swiper-button-next,
-.hero-swiper .swiper-button-prev { color: #fff; text-shadow: 0 1px 4px rgba(0, 0, 0, .5); }
-.hero-swiper .swiper-pagination-bullet { background: #fff; opacity: .6; box-shadow: 0 1px 3px rgba(0, 0, 0, .4); }
+.hero-swiper .swiper-button-prev { color: var(--metin); }
+.hero-swiper .swiper-pagination { text-align: left; padding-left: clamp(2rem, 5vw, 5rem); }
+.hero-swiper .swiper-pagination-bullet { background: var(--metin); opacity: .35; }
 .hero-swiper .swiper-pagination-bullet-active { opacity: 1; }
 
 @media (max-width: 720px) {
-    .hero-slide { height: 80vh; min-height: 520px; }
-    .hero-kart,
-    .konum-sag-alt .hero-kart,
-    .konum-sol-ust .hero-kart,
-    .konum-sag-ust .hero-kart {
-        left: 1rem; right: 1rem; bottom: 1rem; top: auto; width: auto;
-    }
+    .hero-slide, .hero-slide.panel-sag { flex-direction: column; height: auto; max-height: none; min-height: 0; }
+    .hero-gorsel { height: 46vh; order: -1; }
+    .hero-panel { flex: none; padding: 2rem 1.4rem 2.5rem; }
+    .hero-metin h2 { font-size: 2.1rem; }
+    .hero-swiper .swiper-pagination { padding-left: 1.4rem; }
 }
 
 /* Ana sayfa: slider altı eylem */

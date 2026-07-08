@@ -32,13 +32,14 @@
                         <input type="number" class="carusel-sira" name="sira[{{ $ilan->id }}]" min="1"
                                value="{{ $ilan->carusel_sira }}" placeholder="Sıra" title="Sıra numarası"
                                onclick="event.stopPropagation();">
-                        @php($k = $ilan->carusel_konum ?: 'sol-alt')
-                        <select class="carusel-konum" name="konum[{{ $ilan->id }}]" title="Yazı kutusu konumu" onclick="event.stopPropagation();">
-                            <option value="sol-alt" @selected($k==='sol-alt')>Sol Alt</option>
-                            <option value="sag-alt" @selected($k==='sag-alt')>Sağ Alt</option>
-                            <option value="sol-ust" @selected($k==='sol-ust')>Sol Üst</option>
-                            <option value="sag-ust" @selected($k==='sag-ust')>Sağ Üst</option>
+                        @php($sag = str_contains($ilan->carusel_konum ?? 'sol', 'sag'))
+                        <select class="carusel-konum" name="konum[{{ $ilan->id }}]" title="Metin paneli tarafı" onclick="event.stopPropagation();">
+                            <option value="sol" @selected(! $sag)>Metin Sol</option>
+                            <option value="sag" @selected($sag)>Metin Sağ</option>
                         </select>
+                        <input type="color" class="carusel-arka" name="arka[{{ $ilan->id }}]"
+                               value="{{ $ilan->carusel_arka ?: '#efe9dd' }}" title="Panel arka plan rengi"
+                               onclick="event.stopPropagation();">
                     </label>
                 @endforeach
             </div>

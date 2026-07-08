@@ -286,13 +286,16 @@ class YonetimController extends Controller
         $secilenler = array_map('intval', (array) $request->input('secili', []));
         $siralar = (array) $request->input('sira', []);
         $konumlar = (array) $request->input('konum', []);
-        $gecerliKonum = ['sol-alt', 'sag-alt', 'sol-ust', 'sag-ust'];
+        $arkalar = (array) $request->input('arka', []);
 
         Ilan::query()->update(['carusel' => false, 'carusel_sira' => null]);
         foreach ($secilenler as $id) {
             $sira = isset($siralar[$id]) && $siralar[$id] !== '' ? (int) $siralar[$id] : null;
-            $konum = in_array($konumlar[$id] ?? '', $gecerliKonum, true) ? $konumlar[$id] : 'sol-alt';
-            Ilan::where('id', $id)->update(['carusel' => true, 'carusel_sira' => $sira, 'carusel_konum' => $konum]);
+            $konum = ($konumlar[$id] ?? '') === 'sag' ? 'sag' : 'sol';
+            $arka = preg_match('/^#[0-9a-fA-F]{6}$/', $arkalar[$id] ?? '') ? $arkalar[$id] : '#efe9dd';
+            Ilan::where('id', $id)->update([
+                'carusel' => true, 'carusel_sira' => $sira, 'carusel_konum' => $konum, 'carusel_arka' => $arka,
+            ]);
         }
 
         return back()->with('basari', count($secilenler) . ' lot carousel için seçildi.');

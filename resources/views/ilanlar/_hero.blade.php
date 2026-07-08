@@ -3,13 +3,10 @@
         <div class="swiper hero-swiper">
             <div class="swiper-wrapper">
                 @foreach ($hero as $ilan)
-                    <div class="swiper-slide hero-slide konum-{{ $ilan['caruselKonum'] ?? 'sol-alt' }}">
-                        @if ($ilan['gorselUrl'])
-                            <div class="hero-bg" style="background-image:url('{{ $ilan['gorselUrl'] }}')"></div>
-                            <img class="hero-on" src="{{ $ilan['gorselUrl'] }}" alt="{{ $ilan['baslik'] }}">
-                        @endif
-                        <div class="hero-ic">
-                            <div class="hero-kart">
+                    @php($sag = str_contains($ilan['caruselKonum'] ?? 'sol', 'sag'))
+                    <div class="swiper-slide hero-slide {{ $sag ? 'panel-sag' : 'panel-sol' }}">
+                        <div class="hero-panel" style="background:{{ $ilan['caruselArka'] ?? '#efe9dd' }}">
+                            <div class="hero-metin">
                                 <span class="hero-etiket">{{ $ilan['durumEtiket'] }}@if ($ilan['lotNo']) · Lot {{ $ilan['lotNo'] }}@endif</span>
                                 <h2>{{ $ilan['baslik'] }}</h2>
                                 @if ($ilan['altBaslik'])<div class="hero-alt">{{ $ilan['altBaslik'] }}</div>@endif
@@ -17,6 +14,8 @@
                                 <a class="btn btn-dolu" href="{{ route('ilan.goster', $ilan['id']) }}">İncele</a>
                             </div>
                         </div>
+                        <a class="hero-gorsel {{ $ilan['gorselUrl'] ? '' : 'bos' }}" href="{{ route('ilan.goster', $ilan['id']) }}"
+                           @if ($ilan['gorselUrl']) style="background-image:url('{{ $ilan['gorselUrl'] }}')" @endif></a>
                     </div>
                 @endforeach
             </div>
