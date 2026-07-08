@@ -71,14 +71,16 @@ img { max-width: 100%; }
     text-transform: uppercase;
     line-height: 1;
 }
+.marka:hover { text-decoration: none; color: inherit; }
 .marka-kutu { display: flex; flex-direction: column; gap: .28rem; }
 .marka-slogan { font-size: 11px; letter-spacing: .01em; color: var(--soluk); text-transform: none; }
 @media (max-width: 620px) { .marka-slogan { display: none; } }
 
 .ust-nav {
     display: flex;
-    gap: 1.4rem;
+    gap: 1.6rem;
     flex: 1;
+    margin-left: 2.5rem;
 }
 
 .ust-nav a {
