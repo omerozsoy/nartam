@@ -169,6 +169,8 @@ img { max-width: 100%; }
     margin: 0 auto;
     padding: 2.5rem;
     display: flex;
+    align-items: flex-end;      /* varsayılan: alt */
+    justify-content: flex-start; /* varsayılan: sol */
 }
 /* Yazı kutusunun 4 köşe konumu */
 .konum-sol-alt .hero-ic { align-items: flex-end; justify-content: flex-start; }
