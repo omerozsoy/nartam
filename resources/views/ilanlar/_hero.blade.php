@@ -6,6 +6,7 @@
                     <div class="swiper-slide hero-slide konum-{{ $ilan['caruselKonum'] ?? 'sol-alt' }}">
                         @if ($ilan['gorselUrl'])
                             <div class="hero-bg" style="background-image:url('{{ $ilan['gorselUrl'] }}')"></div>
+                            <img class="hero-on" src="{{ $ilan['gorselUrl'] }}" alt="{{ $ilan['baslik'] }}">
                         @endif
                         <div class="hero-ic">
                             <div class="hero-kart">
