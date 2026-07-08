@@ -4,7 +4,17 @@
 
 @section('content')
     <div class="kap">
-        @include('ilanlar._vitrin', ['vitrin' => ($gruplar['acik_artirma'] ?? collect())->take(10)])
+        @if (!empty($muzayede))
+            <div class="muzayede-baslik">
+                <span class="muzayede-no">{{ $muzayede->no }}. Müzayede</span>
+                <h1>{{ $muzayede->ad }}</h1>
+                <div class="muzayede-tarih">Başlangıç: {{ $muzayede->baslangic->format('d.m.Y H:i') }}</div>
+            </div>
+        @endif
+
+        @if ($vitrinGoster ?? true)
+            @include('ilanlar._vitrin', ['vitrin' => ($gruplar['acik_artirma'] ?? collect())->take(10)])
+        @endif
 
         <main id="lotlar">
             @php($bolumler = ['acik_artirma' => 'Açık Artırma', 'dusuyor' => 'Fiyatı Düşenler', 'yakinda' => 'Yakında', 'kapandi' => 'Kapandı'])

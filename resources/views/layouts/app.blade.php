@@ -34,13 +34,12 @@
 <header class="ust-bar">
     <div class="marka-kutu">
         <a class="marka" href="{{ route('ilanlar.liste') }}">Yeni Müzayede</a>
-        <span class="marka-slogan">Fiyat hep düşer, ilk teklifle 24 saatlik açık artırma başlar</span>
     </div>
     <input type="checkbox" id="mobil-menu" class="mobil-anahtar" hidden>
     <label for="mobil-menu" class="hamburger" aria-label="Menü"><span></span><span></span><span></span></label>
     <nav class="ust-nav">
         <a href="{{ route('ilanlar.liste') }}" class="{{ request()->routeIs('ilanlar.liste') ? 'aktif' : '' }}">Ana Sayfa</a>
-        <a href="{{ route('acik.artirma') }}" class="{{ request()->routeIs('acik.artirma') ? 'aktif' : '' }}">Açık Artırma</a>
+        <a href="{{ route('muzayedeler') }}" class="{{ request()->routeIs('muzayedeler') || request()->routeIs('muzayede.goster') ? 'aktif' : '' }}">Müzayedeler</a>
         <a href="{{ route('ekspertiz') }}" class="{{ request()->routeIs('ekspertiz') ? 'aktif' : '' }}">Ekspertiz</a>
         <a href="{{ route('iletisim') }}" class="{{ request()->routeIs('iletisim') ? 'aktif' : '' }}">İletişim</a>
     </nav>

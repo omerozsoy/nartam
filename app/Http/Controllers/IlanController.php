@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Ilan;
+use App\Models\Muzayede;
 use App\Models\Teklif;
 use App\Support\Sunum;
 use Illuminate\Http\JsonResponse;
@@ -17,16 +18,28 @@ class IlanController extends Controller
 {
     public function index(): View
     {
-        return view('ilanlar.liste', ['gruplar' => $this->siraliOzetler()->groupBy('durum')]);
+        return view('ilanlar.liste', [
+            'gruplar' => $this->siraliOzetler()->groupBy('durum'),
+            'muzayede' => Muzayede::aktif(),
+            'vitrinGoster' => true,
+        ]);
     }
 
-    /** Açık Artırma — yalnızca yükselen açık artırmalar. */
-    public function acikArtirma(): View
+    /** Müzayedeler listesi (herkese açık). */
+    public function muzayedeler(): View
     {
-        return view('ilanlar.tekbolum', [
-            'baslik' => 'Açık Artırma',
-            'aciklama' => 'İlk teklifle başlayan, 24 saat süren yükselen açık artırmalar',
-            'ilanlar' => $this->siraliOzetler()->where('durum', 'acik_artirma')->values(),
+        return view('muzayede.liste', [
+            'muzayedeler' => Muzayede::withCount('ilanlar')->orderByDesc('baslangic')->get(),
+        ]);
+    }
+
+    /** Bir müzayedenin lotları (herkese açık). */
+    public function muzayedeGoster(Muzayede $muzayede): View
+    {
+        return view('ilanlar.liste', [
+            'gruplar' => $this->siraliOzetler($muzayede)->groupBy('durum'),
+            'muzayede' => $muzayede,
+            'vitrinGoster' => false,
         ]);
     }
 
@@ -91,7 +104,7 @@ class IlanController extends Controller
      * İlanları duruma göre sıralar: açık artırmalar üstte, düşen fiyatlar altta,
      * kapananlar en sonda. Aynı grup içinde id'ye göre.
      */
-    private function siraliOzetler(): Collection
+    private function siraliOzetler(?Muzayede $muzayede = null): Collection
     {
         $oncelik = ['acik_artirma' => 0, 'dusuyor' => 1, 'yakinda' => 2, 'kapandi' => 3];
         $benimId = Auth::id();
@@ -102,11 +115,11 @@ class IlanController extends Controller
                 ->pluck('maks', 'ilan_id')
             : collect();
 
-        // Aktif müzayede varsa yalnızca onun lotları; yoksa müzayedesiz (eski) lotlar.
-        $aktif = \App\Models\Muzayede::aktif();
+        // Belirli müzayede verildiyse onun lotları; yoksa aktif müzayedenin lotları.
+        $hedef = $muzayede ?? Muzayede::aktif();
 
         return Ilan::withCount('teklifler')->with('muzayede')
-            ->when($aktif, fn ($q) => $q->where('muzayede_id', $aktif->id))
+            ->when($hedef, fn ($q) => $q->where('muzayede_id', $hedef->id))
             ->orderBy('id')->get()
             ->map(function (Ilan $i) use ($benimId, $benimMaxlar) {
                 $m = $benimMaxlar->get($i->id);

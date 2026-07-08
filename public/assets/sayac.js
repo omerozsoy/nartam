@@ -13,6 +13,11 @@ function ikiHane(n) {
 
 function bicimleHHMMSS(sn) {
     sn = Math.max(0, sn);
+    const gun = Math.floor(sn / 86400);
+    if (gun >= 1) {
+        const saat = Math.floor((sn % 86400) / 3600);
+        return gun + ' gün ' + saat + ' saat';
+    }
     return ikiHane(Math.floor(sn / 3600)) + ':' + ikiHane(Math.floor((sn % 3600) / 60)) + ':' + ikiHane(sn % 60);
 }
 

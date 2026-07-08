@@ -119,6 +119,33 @@ img { max-width: 100%; }
     cursor: pointer;
 }
 
+/* ---------- Müzayede listesi / başlığı ---------- */
+.sayfa-baslik { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2rem; margin: 2rem 0 1.4rem; }
+.muzayede-baslik { text-align: center; margin: 2rem 0 1.5rem; }
+.muzayede-baslik h1 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2.2rem; margin: .2rem 0; }
+.muzayede-baslik .muzayede-no { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--soluk); }
+.muzayede-baslik .muzayede-tarih { font-size: 13px; color: var(--soluk); }
+
+.muzayede-kart {
+    display: block;
+    position: relative;
+    border: 1px solid var(--cizgi);
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--metin);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.muzayede-kart:hover { text-decoration: none; border-color: var(--metin); box-shadow: 0 8px 24px rgba(0, 0, 0, .06); }
+.muzayede-kart .muzayede-no { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--soluk); }
+.muzayede-kart .muzayede-ad { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.5rem; margin: .2rem 0; }
+.muzayede-kart .muzayede-tarih { font-size: 13px; color: var(--soluk); }
+.muzayede-durum {
+    position: absolute; top: 1.6rem; right: 1.8rem;
+    font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+    padding: .3rem .6rem; border: 1px solid var(--cizgi); color: var(--soluk);
+}
+.muzayede-durum.aktif { border-color: #16a34a; color: #16a34a; }
+
 /* ---------- Genel kap ---------- */
 .kap {
     max-width: 1600px;
