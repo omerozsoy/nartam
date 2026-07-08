@@ -305,6 +305,13 @@ class YonetimController extends Controller
 
     private function muzayedeVeri(Request $request): array
     {
+        // Baştaki sıfırlı ("00", "08") saat/dakika değerlerini tam sayıya çevir.
+        foreach (['baslangic_saat', 'baslangic_dk', 'bitis_saat', 'bitis_dk'] as $alan) {
+            if ($request->filled($alan) || $request->input($alan) === '0' || $request->input($alan) === 0) {
+                $request->merge([$alan => (int) $request->input($alan)]);
+            }
+        }
+
         $v = $request->validate([
             'no' => ['required', 'string', 'max:50'],
             'ad' => ['required', 'string', 'max:255'],
