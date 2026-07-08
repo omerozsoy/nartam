@@ -61,6 +61,10 @@
 
         // Sayfadaki listeyi de canlı filtrele (varsa)
         function izgaraFiltrele(q) {
+            // Müzayede sayfasında kendi filtre çubuğu varsa grid filtresini ona bırak
+            if (document.querySelector('[data-alan="filtre"]')) {
+                return;
+            }
             const aktif = q.length >= 2;
             const kucuk = q.toLowerCase();
             let gorunen = 0;

@@ -121,6 +121,43 @@ img { max-width: 100%; }
 
 /* ---------- Müzayede listesi / başlığı ---------- */
 .sayfa-baslik { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2rem; margin: 2rem 0 1.4rem; }
+/* Müzayede sayfası başlık + meta + filtre çubuğu */
+.muzayede-ust {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem 1.5rem;
+    flex-wrap: wrap;
+    margin: 1.8rem 0 1rem;
+}
+.muzayede-ad-baslik {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 1.7rem;
+    line-height: 1.15;
+    margin: 0;
+    color: #6a2c4d;
+}
+.muzayede-meta { font-size: 13px; letter-spacing: .02em; color: var(--metin); font-weight: 600; white-space: nowrap; }
+.muzayede-filtre {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1.5fr 1.5fr;
+    gap: .8rem;
+    margin-bottom: 2rem;
+}
+.filtre-girdi {
+    padding: .7rem .9rem;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--metin);
+    background: #fff;
+    border: 1px solid var(--cizgi);
+    border-radius: 2px;
+}
+.filtre-girdi:focus { outline: none; border-color: var(--metin); }
+.filtre-girdi::placeholder { color: var(--soluk); }
+@media (max-width: 720px) { .muzayede-filtre { grid-template-columns: 1fr 1fr; } }
+
 .muzayede-baslik { text-align: center; margin: 2rem 0 1.5rem; }
 .muzayede-baslik h1 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2.2rem; margin: .2rem 0; }
 .muzayede-baslik .muzayede-no { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--soluk); }

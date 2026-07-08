@@ -59,6 +59,7 @@ class Sunum
             'lotNo' => $ilan->lot_no,
             'baslik' => $ilan->baslik,
             'altBaslik' => $ilan->alt_baslik,
+            'kategori' => $ilan->kategori,
             'gorselUrl' => $ilan->gorsel_url,
             'durum' => $durum->value,
             'durumEtiket' => $durumEtiket,

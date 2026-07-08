@@ -191,6 +191,7 @@ class YonetimController extends Controller
         }
         $iProv = $bul(['provenance', 'literature', 'not']);
         $iLot = $bul(['lot']);
+        $iKategori = $bul(['kategori', 'bölüm', 'bolum', 'tür', 'tur', 'grup']);
         $al = static fn (array $r, ?int $i): string => $i !== null ? trim((string) ($r[$i] ?? '')) : '';
         $sayi = static function (array $r, ?int $i): int {
             $ham = $i !== null ? ($r[$i] ?? null) : null;
@@ -230,6 +231,7 @@ class YonetimController extends Controller
             $items[] = [
                 'baslik' => $baslik,
                 'alt' => $eser,
+                'kategori' => $al($r, $iKategori),
                 'aciklama' => $aciklama,
                 'fiyat' => $fiyat,
                 'rezerv' => $rezerv > 0 ? $rezerv : null,
@@ -254,6 +256,7 @@ class YonetimController extends Controller
             'baslik' => $it['baslik'],
             'lot_no' => $lotNo,
             'alt_baslik' => ($it['alt'] ?? '') !== '' ? $it['alt'] : null,
+            'kategori' => ($it['kategori'] ?? '') !== '' ? $it['kategori'] : null,
             'aciklama' => ($it['aciklama'] ?? '') !== '' ? $it['aciklama'] : null,
             'gorsel_url' => $it['gorsel'] ?? null,
             'baslangic_fiyati' => $fiyat,

@@ -7,7 +7,10 @@
     @if ($ilan['sonrakiDususTs']) data-sonraki-dusus="{{ $ilan['sonrakiDususTs'] }}" @endif
     @if ($ilan['baslangicTs']) data-baslangic="{{ $ilan['baslangicTs'] }}" @endif
     data-min="{{ $ilan['minTeklif'] }}"
-    data-ara="{{ mb_strtolower(trim(($ilan['baslik'] ?? '') . ' ' . ($ilan['altBaslik'] ?? '') . ' ' . ($ilan['lotNo'] ? 'lot ' . $ilan['lotNo'] : '') . ' ' . $ilan['id'])) }}"
+    data-sanatci="{{ mb_strtolower($ilan['baslik'] ?? '') }}"
+    data-lot="{{ $ilan['lotNo'] }}"
+    data-kategori="{{ mb_strtolower($ilan['kategori'] ?? '') }}"
+    data-ara="{{ mb_strtolower(trim(($ilan['baslik'] ?? '') . ' ' . ($ilan['altBaslik'] ?? '') . ' ' . ($ilan['kategori'] ?? '') . ' ' . ($ilan['lotNo'] ? 'lot ' . $ilan['lotNo'] : '') . ' ' . $ilan['id'])) }}"
 >
     <a href="{{ $detayUrl }}" class="lot-gorsel {{ $ilan['gorselUrl'] ? '' : 'bos' }}">
         @if ($ilan['gorselUrl'])

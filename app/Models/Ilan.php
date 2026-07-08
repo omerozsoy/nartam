@@ -39,6 +39,7 @@ class Ilan extends Model
         'lot_no',
         'gorsel_url',
         'alt_baslik',
+        'kategori',
         'aciklama',
         'baslangic_fiyati',
         'rezerv_fiyat',
