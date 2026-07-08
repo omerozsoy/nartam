@@ -150,6 +150,8 @@ img { max-width: 100%; }
 /* ---------- Christie's tarzı bölünmüş (split) hero ---------- */
 .hero { width: 100%; margin-bottom: 2rem; }
 .hero-swiper { width: 100%; height: 82vh; min-height: 640px; max-height: 880px; }
+.hero-swiper .swiper-wrapper { height: 100%; }
+.hero-swiper .swiper-slide { height: 100%; }
 .hero-slide {
     display: flex;
     height: 100%;
@@ -194,6 +196,7 @@ img { max-width: 100%; }
 
 @media (max-width: 720px) {
     .hero-swiper { height: auto; min-height: 0; max-height: none; }
+    .hero-swiper .swiper-slide { height: auto; }
     .hero-slide, .hero-slide.panel-sag { flex-direction: column; height: auto; }
     .hero-gorsel { height: 46vh; order: -1; }
     .hero-panel { flex: none; padding: 2rem 1.4rem 2.5rem; }
