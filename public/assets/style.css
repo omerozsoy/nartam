@@ -158,8 +158,6 @@ img { max-width: 100%; }
     inset: 0;
     background-size: cover;
     background-position: center;
-    filter: brightness(.62);
-    transform: scale(1.02);
 }
 .hero-ic {
     position: relative;
@@ -171,30 +169,39 @@ img { max-width: 100%; }
     display: flex;
     align-items: flex-end;
 }
-.hero-metin { color: #fff; max-width: 560px; padding-bottom: 3rem; }
-.hero-etiket { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
-.hero-metin h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-weight: 400;
-    font-size: 2.6rem;
-    line-height: 1.1;
-    margin: .5rem 0 .3rem;
+.hero-kart {
+    background: rgba(255, 255, 255, .85);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    color: var(--metin);
+    max-width: 420px;
+    padding: 1.5rem 1.7rem 1.7rem;
+    margin-bottom: 3rem;
 }
-.hero-alt { font-size: 16px; font-style: italic; opacity: .9; margin-bottom: .6rem; }
-.hero-fiyat { font-size: 1.4rem; font-variant-numeric: tabular-nums; margin-bottom: 1.2rem; }
-.hero-metin .btn-dolu { background: #fff; color: #14100f; border-color: #fff; }
-.hero-metin .btn-dolu:hover { background: #eee; }
+.hero-etiket { font-size: 12px; letter-spacing: .06em; color: var(--soluk); }
+.hero-kart h2 {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: .01em;
+    margin: .35rem 0 .35rem;
+    color: var(--metin);
+}
+.hero-alt { font-size: 15px; font-style: italic; color: var(--soluk); margin-bottom: .5rem; }
+.hero-fiyat { font-size: 1.2rem; font-variant-numeric: tabular-nums; margin-bottom: 1.1rem; }
+.hero-kart .btn-dolu { background: var(--siyah); color: #fff; border-color: var(--siyah); }
+.hero-kart .btn-dolu:hover { background: #333; }
 
 .hero-swiper .swiper-button-next,
-.hero-swiper .swiper-button-prev { color: #fff; }
-.hero-swiper .swiper-pagination-bullet { background: #fff; opacity: .5; }
+.hero-swiper .swiper-button-prev { color: #fff; text-shadow: 0 1px 4px rgba(0, 0, 0, .5); }
+.hero-swiper .swiper-pagination-bullet { background: #fff; opacity: .6; box-shadow: 0 1px 3px rgba(0, 0, 0, .4); }
 .hero-swiper .swiper-pagination-bullet-active { opacity: 1; }
 
 @media (max-width: 720px) {
     .hero-slide { height: 70vh; min-height: 460px; }
-    .hero-metin h2 { font-size: 1.9rem; }
     .hero-ic { padding: 0 1.2rem; }
-    .hero-metin { padding-bottom: 2rem; }
+    .hero-kart { max-width: none; width: 100%; margin-bottom: 1.5rem; }
 }
 
 /* Ana sayfa: slider altı eylem */

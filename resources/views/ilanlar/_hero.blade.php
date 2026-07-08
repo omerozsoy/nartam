@@ -8,7 +8,7 @@
                             <div class="hero-bg" style="background-image:url('{{ $ilan['gorselUrl'] }}')"></div>
                         @endif
                         <div class="hero-ic">
-                            <div class="hero-metin">
+                            <div class="hero-kart">
                                 <span class="hero-etiket">{{ $ilan['durumEtiket'] }}@if ($ilan['lotNo']) · Lot {{ $ilan['lotNo'] }}@endif</span>
                                 <h2>{{ $ilan['baslik'] }}</h2>
                                 @if ($ilan['altBaslik'])<div class="hero-alt">{{ $ilan['altBaslik'] }}</div>@endif
