@@ -149,12 +149,12 @@ img { max-width: 100%; }
 
 /* ---------- Christie's tarzı bölünmüş (split) hero ---------- */
 .hero { width: 100%; margin-bottom: 2rem; }
-.hero-swiper { width: 100%; height: 82vh; min-height: 640px; max-height: 880px; }
-.hero-swiper .swiper-wrapper { height: 100%; }
-.hero-swiper .swiper-slide { height: 100%; }
+.hero-swiper { width: 100%; }
 .hero-slide {
-    display: flex;
-    height: 100%;
+    display: flex !important;
+    height: 82vh !important;
+    min-height: 640px;
+    max-height: 880px;
     overflow: hidden;
     background: #efe9dd;
 }
@@ -183,10 +183,10 @@ img { max-width: 100%; }
 .hero-gorsel {
     flex: 1;
     display: block;
-    background-size: cover;
-    background-position: center;
+    overflow: hidden;
     background-color: #ddd6c8;
 }
+.hero-gorsel img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .hero-swiper .swiper-button-next,
 .hero-swiper .swiper-button-prev { color: var(--metin); }
@@ -195,9 +195,7 @@ img { max-width: 100%; }
 .hero-swiper .swiper-pagination-bullet-active { opacity: 1; }
 
 @media (max-width: 720px) {
-    .hero-swiper { height: auto; min-height: 0; max-height: none; }
-    .hero-swiper .swiper-slide { height: auto; }
-    .hero-slide, .hero-slide.panel-sag { flex-direction: column; height: auto; }
+    .hero-slide, .hero-slide.panel-sag { flex-direction: column; height: auto !important; min-height: 0; max-height: none; }
     .hero-gorsel { height: 46vh; order: -1; }
     .hero-panel { flex: none; padding: 2rem 1.4rem 2.5rem; }
     .hero-metin h2 { font-size: 2.1rem; }

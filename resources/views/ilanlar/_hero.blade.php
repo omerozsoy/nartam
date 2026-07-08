@@ -14,8 +14,9 @@
                                 <a class="btn btn-dolu" href="{{ route('ilan.goster', $ilan['id']) }}">İncele</a>
                             </div>
                         </div>
-                        <a class="hero-gorsel {{ $ilan['gorselUrl'] ? '' : 'bos' }}" href="{{ route('ilan.goster', $ilan['id']) }}"
-                           @if ($ilan['gorselUrl']) style="background-image:url('{{ $ilan['gorselUrl'] }}')" @endif></a>
+                        <a class="hero-gorsel {{ $ilan['gorselUrl'] ? '' : 'bos' }}" href="{{ route('ilan.goster', $ilan['id']) }}">
+                            @if ($ilan['gorselUrl'])<img src="{{ $ilan['gorselUrl'] }}" alt="{{ $ilan['baslik'] }}">@endif
+                        </a>
                     </div>
                 @endforeach
             </div>
