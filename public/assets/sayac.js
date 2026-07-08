@@ -53,6 +53,12 @@ function sayaclariGuncelle() {
             if (kalan <= 0) {
                 yenilemeGerekli = true;
             }
+        } else if (durum === 'yakinda' && kalem.dataset.baslangic) {
+            const kalan = Number(kalem.dataset.baslangic) - simdi;
+            sayac.textContent = bicimleHHMMSS(kalan);
+            if (kalan <= 0) {
+                yenilemeGerekli = true; // müzayede başladı → poll yeni durumu getirir, sayfa tazelenir
+            }
         }
     });
 
@@ -138,8 +144,10 @@ function ozetUygula(kalem, o) {
         peyKutu.style.display = o.durum === 'dusuyor' ? 'none' : '';
     }
 
-    // Yapı değişimi (faz/kapanış) olduğunda sayfayı tazele.
-    if (o.durum === 'kapandi' || (oncekiDurum === 'dusuyor' && o.durum === 'acik_artirma')) {
+    // Yapı değişimi (faz/kapanış/başlangıç) olduğunda sayfayı tazele.
+    if (o.durum === 'kapandi'
+        || (oncekiDurum === 'dusuyor' && o.durum === 'acik_artirma')
+        || (oncekiDurum === 'yakinda' && o.durum !== 'yakinda')) {
         window.location.reload();
         return;
     }

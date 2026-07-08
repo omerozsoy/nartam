@@ -11,6 +11,7 @@
              data-durum="{{ $ozet['durum'] }}"
              @if ($ozet['bitisTs']) data-bitis="{{ $ozet['bitisTs'] }}" @endif
              @if ($ozet['sonrakiDususTs']) data-sonraki-dusus="{{ $ozet['sonrakiDususTs'] }}" @endif
+             @if ($ozet['baslangicTs']) data-baslangic="{{ $ozet['baslangicTs'] }}" @endif
              data-min="{{ $ozet['minTeklif'] }}">
 
             <div class="detay-gorsel {{ $ozet['gorselUrl'] ? '' : 'lot-gorsel bos' }}">
@@ -55,8 +56,9 @@
                     @endif
 
                     @if ($ozet['durum'] === 'yakinda')
-                        <p class="sayac-etiket">Müzayede başlangıcı</p>
-                        <p class="yakinda-not" style="font-size:1.1rem">{{ $ozet['baslangicBicim'] }}</p>
+                        <p class="sayac-etiket">Başlangıca kalan</p>
+                        <p class="sayac" role="timer" data-alan="sayac">--:--</p>
+                        <p class="yakinda-not">{{ $ozet['baslangicBicim'] }}</p>
                         <p class="alt-not" style="margin-top:.6rem">Teklifler başlangıçta açılacaktır.</p>
                     @elseif ($ozet['durum'] !== 'kapandi')
                         <p class="sayac-etiket" data-alan="sayac-etiket" @if($ozet['tabanaUlasti']) style="display:none" @endif>

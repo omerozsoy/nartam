@@ -5,6 +5,7 @@
     data-durum="{{ $ilan['durum'] }}"
     @if ($ilan['bitisTs']) data-bitis="{{ $ilan['bitisTs'] }}" @endif
     @if ($ilan['sonrakiDususTs']) data-sonraki-dusus="{{ $ilan['sonrakiDususTs'] }}" @endif
+    @if ($ilan['baslangicTs']) data-baslangic="{{ $ilan['baslangicTs'] }}" @endif
     data-min="{{ $ilan['minTeklif'] }}"
     data-ara="{{ mb_strtolower(trim(($ilan['baslik'] ?? '') . ' ' . ($ilan['altBaslik'] ?? '') . ' ' . ($ilan['lotNo'] ? 'lot ' . $ilan['lotNo'] : '') . ' ' . $ilan['id'])) }}"
 >
@@ -20,7 +21,9 @@
     <span class="rozet {{ $ilan['tabanaUlasti'] ? 'rozet-taban' : '' }}">{{ $ilan['durumEtiket'] }}</span>
 
     @if ($ilan['durum'] === 'yakinda')
-        <p class="yakinda-not">Başlangıç: {{ $ilan['baslangicBicim'] }}</p>
+        <p class="sayac-etiket">Başlangıca kalan</p>
+        <p class="sayac" role="timer" data-alan="sayac">--:--</p>
+        <p class="yakinda-not">{{ $ilan['baslangicBicim'] }}</p>
     @elseif ($ilan['durum'] !== 'kapandi')
         <p class="sayac" role="timer" data-alan="sayac" @if($ilan['tabanaUlasti']) style="display:none" @endif>--:--</p>
     @endif
