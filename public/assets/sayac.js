@@ -196,7 +196,7 @@ function ozetUygula(kalem, o) {
         }
     }
 
-    // Yeni teklif geldiyse (min yükseldiyse) sayacı kırmızı yanıp söndür (fade in/out)
+    // Yeni teklif geldiyse (min yükseldiyse) sayacı VE fiyatı kırmızı yanıp söndür
     if (oncekiMin > 0 && o.minTeklif > oncekiMin) {
         const sayac = kalem.querySelector('[data-alan="sayac"]');
         if (sayac) {
@@ -204,6 +204,14 @@ function ozetUygula(kalem, o) {
             void sayac.offsetWidth; // animasyonu yeniden tetikle
             sayac.classList.add('yeni-teklif');
             setTimeout(() => sayac.classList.remove('yeni-teklif'), 20000);
+        }
+        // Fiyat değeri değişmese bile (proxy) teklif gelince fiyat da kırmızı nabız
+        const fiyatEl = kalem.querySelector('[data-alan="fiyat"]');
+        if (fiyatEl) {
+            fiyatEl.classList.remove('dustu', 'yukseldi');
+            void fiyatEl.offsetWidth;
+            fiyatEl.classList.add('yukseldi');
+            setTimeout(() => fiyatEl.classList.remove('yukseldi'), 20000);
         }
     }
 }
