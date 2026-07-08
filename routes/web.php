@@ -53,6 +53,8 @@ Route::middleware(['auth', 'yonetici'])->prefix('yonetim')->group(function () {
     Route::get('/', [YonetimController::class, 'index'])->name('yonetim');
     Route::get('/eserler', [YonetimController::class, 'eserler'])->name('yonetim.eserler');
     Route::post('/eserler/sil-hepsi', [YonetimController::class, 'tumEserleriSil'])->name('yonetim.eserler.sil-hepsi');
+    Route::get('/carusel', [YonetimController::class, 'carusel'])->name('yonetim.carusel');
+    Route::post('/carusel', [YonetimController::class, 'caruselKaydet'])->name('yonetim.carusel.kaydet');
     Route::get('/muzayedeler', [YonetimController::class, 'muzayedeler'])->name('yonetim.muzayedeler');
     Route::get('/muzayede/yeni', [YonetimController::class, 'muzayedeYeni'])->name('yonetim.muzayede.yeni');
     Route::post('/muzayede', [YonetimController::class, 'muzayedeOlustur'])->name('yonetim.muzayede.olustur');

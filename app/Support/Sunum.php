@@ -60,6 +60,7 @@ class Sunum
             'baslik' => $ilan->baslik,
             'altBaslik' => $ilan->alt_baslik,
             'kategori' => $ilan->kategori,
+            'carusel' => (bool) $ilan->carusel,
             'gorselUrl' => $ilan->gorsel_url,
             'durum' => $durum->value,
             'durumEtiket' => $durumEtiket,

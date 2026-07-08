@@ -18,8 +18,11 @@ class IlanController extends Controller
 {
     public function index(): View
     {
+        $ozetler = $this->siraliOzetler();
+
         return view('ilanlar.anasayfa', [
-            'vitrin' => $this->siraliOzetler()->where('durum', 'acik_artirma')->take(12)->values(),
+            'hero' => $ozetler->where('carusel', true)->take(8)->values(),
+            'vitrin' => $ozetler->where('durum', 'acik_artirma')->take(12)->values(),
             'muzayede' => Muzayede::aktif(),
         ]);
     }

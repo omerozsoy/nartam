@@ -121,6 +121,80 @@ img { max-width: 100%; }
 
 /* ---------- Müzayede listesi / başlığı ---------- */
 .sayfa-baslik { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2rem; margin: 2rem 0 1.4rem; }
+/* ---------- Yönetim: Carousel lot seçimi ---------- */
+.carusel-izgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: .8rem; }
+.carusel-secim {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .5rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 3px;
+    cursor: pointer;
+    background: #fff;
+    transition: border-color .12s ease, box-shadow .12s ease;
+}
+.carusel-secim.secili { border-color: #16a34a; box-shadow: 0 0 0 1px #16a34a inset; }
+.carusel-secim input { flex: none; width: 18px; height: 18px; }
+.carusel-gorsel { flex: none; width: 46px; height: 46px; background: #f2f1ee; overflow: hidden; display: block; }
+.carusel-gorsel img { width: 100%; height: 100%; object-fit: cover; }
+.carusel-bilgi { display: flex; flex-direction: column; min-width: 0; }
+.carusel-bilgi strong { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.carusel-bilgi small { font-size: 11px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- Phillips tarzı tam genişlik hero ---------- */
+.hero { width: 100%; margin-bottom: 2rem; }
+.hero-swiper { width: 100%; }
+.hero-slide {
+    position: relative;
+    height: 520px;
+    overflow: hidden;
+    background: #14100f;
+}
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(.62);
+    transform: scale(1.02);
+}
+.hero-ic {
+    position: relative;
+    z-index: 2;
+    max-width: 1600px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    display: flex;
+    align-items: flex-end;
+}
+.hero-metin { color: #fff; max-width: 560px; padding-bottom: 3rem; }
+.hero-etiket { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+.hero-metin h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 2.6rem;
+    line-height: 1.1;
+    margin: .5rem 0 .3rem;
+}
+.hero-alt { font-size: 16px; font-style: italic; opacity: .9; margin-bottom: .6rem; }
+.hero-fiyat { font-size: 1.4rem; font-variant-numeric: tabular-nums; margin-bottom: 1.2rem; }
+.hero-metin .btn-dolu { background: #fff; color: #14100f; border-color: #fff; }
+.hero-metin .btn-dolu:hover { background: #eee; }
+
+.hero-swiper .swiper-button-next,
+.hero-swiper .swiper-button-prev { color: #fff; }
+.hero-swiper .swiper-pagination-bullet { background: #fff; opacity: .5; }
+.hero-swiper .swiper-pagination-bullet-active { opacity: 1; }
+
+@media (max-width: 720px) {
+    .hero-slide { height: 420px; }
+    .hero-metin h2 { font-size: 1.9rem; }
+    .hero-ic { padding: 0 1.2rem; }
+    .hero-metin { padding-bottom: 2rem; }
+}
+
 /* Ana sayfa: slider altı eylem */
 .anasayfa-eylem { text-align: center; margin: 1.5rem 0 3.5rem; }
 .anasayfa-muzayede { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.3rem; color: #6a2c4d; margin-bottom: 1rem; }

@@ -38,6 +38,7 @@ class Ilan extends Model
         'baslik',
         'lot_no',
         'gorsel_url',
+        'carusel',
         'alt_baslik',
         'kategori',
         'aciklama',
@@ -62,6 +63,7 @@ class Ilan extends Model
             'lider_id' => 'integer',
             'lider_max' => 'integer',
             'bildirildi' => 'boolean',
+            'carusel' => 'boolean',
         ];
     }
 

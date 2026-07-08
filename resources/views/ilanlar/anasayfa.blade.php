@@ -3,6 +3,8 @@
 @section('baslik', 'Yeni Müzayede')
 
 @section('content')
+    @include('ilanlar._hero', ['hero' => $hero])
+
     <div class="kap">
         @include('ilanlar._vitrin', ['vitrin' => $vitrin])
 

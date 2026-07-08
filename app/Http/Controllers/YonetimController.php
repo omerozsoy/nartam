@@ -265,6 +265,27 @@ class YonetimController extends Controller
         ]);
     }
 
+    /** Carousel (ana sayfa hero) için lot seçme ekranı. */
+    public function carusel(): View
+    {
+        return view('yonetim.carusel', [
+            'ilanlar' => Ilan::orderByRaw('lot_no is null')->orderBy('lot_no')->orderBy('id')->get(),
+            'secili' => Ilan::where('carusel', true)->count(),
+        ]);
+    }
+
+    public function caruselKaydet(Request $request): RedirectResponse
+    {
+        $secilenler = array_map('intval', (array) $request->input('secili', []));
+
+        Ilan::query()->update(['carusel' => false]);
+        if ($secilenler !== []) {
+            Ilan::whereIn('id', $secilenler)->update(['carusel' => true]);
+        }
+
+        return back()->with('basari', count($secilenler) . ' lot carousel için seçildi.');
+    }
+
     /** Tüm eserleri (ve tekliflerini) siler — yeni Excel yüklemesinden önce. */
     public function tumEserleriSil(): RedirectResponse
     {
