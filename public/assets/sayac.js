@@ -16,7 +16,8 @@ function bicimleHHMMSS(sn) {
     const gun = Math.floor(sn / 86400);
     if (gun >= 1) {
         const saat = Math.floor((sn % 86400) / 3600);
-        return gun + ' gün ' + saat + ' saat';
+        const dk = Math.floor((sn % 3600) / 60);
+        return gun + ' gün ' + saat + ' saat ' + dk + ' dakika';
     }
     return ikiHane(Math.floor(sn / 3600)) + ':' + ikiHane(Math.floor((sn % 3600) / 60)) + ':' + ikiHane(sn % 60);
 }

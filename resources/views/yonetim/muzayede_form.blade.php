@@ -8,7 +8,7 @@
 
         <section class="kart">
             @php($rota = $muzayede->exists ? route('yonetim.muzayede.guncelle', $muzayede) : route('yonetim.muzayede.olustur'))
-            @php($fmt = fn ($d) => $d ? $d->format('Y-m-d\TH:i') : '')
+            @php($fmt = fn ($d) => $d ? $d->format('Y-m-d H:i') : '')
             <form method="post" action="{{ $rota }}" class="dikey-form">
                 @csrf
                 <div class="izgara-form">
@@ -21,10 +21,12 @@
                 </div>
                 <div class="izgara-form">
                     <label>Başlangıç (teklifler açılır)
-                        <input type="datetime-local" name="baslangic" value="{{ old('baslangic', $fmt($muzayede->baslangic)) }}" required>
+                        <input type="text" name="baslangic" class="tarih-saat" autocomplete="off"
+                               value="{{ old('baslangic', $fmt($muzayede->baslangic)) }}" placeholder="GG.AA.YYYY SS:DD" required>
                     </label>
                     <label>İlk Lotun Kapanışı
-                        <input type="datetime-local" name="bitis" value="{{ old('bitis', $fmt($muzayede->bitis)) }}" required>
+                        <input type="text" name="bitis" class="tarih-saat" autocomplete="off"
+                               value="{{ old('bitis', $fmt($muzayede->bitis)) }}" placeholder="GG.AA.YYYY SS:DD" required>
                     </label>
                 </div>
                 <p class="alt-not" style="margin:0">Kademeli kapanış: ilk lot yukarıdaki anda; sonraki lotlar aşağıdaki aralıklarla kapanır.</p>
