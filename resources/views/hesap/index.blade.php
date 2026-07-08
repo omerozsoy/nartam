@@ -66,6 +66,33 @@
                 </tbody>
             </table>
         @endif
+
+        {{-- Takip Ettiklerim --}}
+        @if ($takipEttiklerim->isNotEmpty())
+            <h1 class="hesap-baslik">Takip Ettiklerim</h1>
+            <table class="hesap-tablo">
+                <tbody>
+                @foreach ($takipEttiklerim as $s)
+                    <tr>
+                        <td class="h-gorsel">
+                            @if ($s['gorselUrl'])<img src="{{ $s['gorselUrl'] }}" alt="{{ $s['baslik'] }}">@else<span class="h-bos">{{ mb_strtoupper(mb_substr($s['baslik'], 0, 1)) }}</span>@endif
+                        </td>
+                        <td>
+                            @if ($s['lotNo'])<div class="lot-no">LOT {{ $s['lotNo'] }}</div>@endif
+                            <div class="h-ad">{{ $s['baslik'] }}</div>
+                            @if ($s['altBaslik'])<div class="lot-alt">{{ $s['altBaslik'] }}</div>@endif
+                        </td>
+                        <td><span class="durum-etiket">{{ $s['durumEtiket'] }}</span></td>
+                        <td class="h-tutar">{{ $s['guncelFiyatBicim'] }}</td>
+                        <td style="white-space:nowrap">
+                            <a class="btn" href="{{ route('ilan.goster', $s['id']) }}">İncele</a>
+                            <button type="button" class="btn takip-btn takip-aktif" data-alan="takip" data-id="{{ $s['id'] }}">Takip Ediliyor</button>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @endif
     </div>
 @endsection
 

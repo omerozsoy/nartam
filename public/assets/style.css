@@ -692,10 +692,8 @@ body.lightbox-acik { overflow: hidden; }
     font-weight: 400;
     line-height: 1.12;
     letter-spacing: .01em;
-    text-transform: uppercase;
-    margin: .35rem 0 .2rem;
-    /* Her kartta tam 2 satır: kısa başlık yer rezerve eder, uzun başlık 2'ye kırpılır */
-    min-height: 2.24em;
+    margin: .35rem 0 .15rem;
+    /* Uzun başlık en fazla 2 satır; kısa başlıkta boşluk bırakmadan alt başlık hemen altında */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -705,7 +703,7 @@ body.lightbox-acik { overflow: hidden; }
 .lot-baslik a:hover { text-decoration: none; color: var(--soluk); }
 
 .lot-alt {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--soluk);
     margin-bottom: .8rem;
     min-height: 1.05em;         /* alt başlık yoksa da yer rezerve et */
@@ -883,6 +881,8 @@ body.lightbox-acik { overflow: hidden; }
 .teklif-form .tek-dugme { flex: 1 1 100%; padding: .8rem; }
 
 .lot-butonlar { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .8rem; }
+.takip-btn.takip-aktif { background: var(--siyah); color: #fff; border-color: var(--siyah); }
+.takip-btn.takip-aktif:hover { background: #333; }
 
 /* Kayan rakam (sliding digits) */
 .fiyat.rakam { display: inline-flex; align-items: flex-start; }
@@ -963,8 +963,8 @@ body.lightbox-acik { overflow: hidden; }
 .detay-gorsel img { max-height: 560px; object-fit: contain; }
 .geri-bag { display: inline-block; margin: 1.5rem 0 0; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--soluk); }
 
-.detay-bilgi h1 { font-family: var(--serif); font-weight: 500; font-size: 1.8rem; line-height: 1.15; letter-spacing: .01em; text-transform: uppercase; margin: .3rem 0 .2rem; }
-.detay-bilgi .alt { color: var(--soluk); font-size: 15px; margin-bottom: 1.5rem; }
+.detay-bilgi h1 { font-family: var(--serif); font-weight: 500; font-size: 1.8rem; line-height: 1.15; letter-spacing: .01em; margin: .3rem 0 .2rem; }
+.detay-bilgi .alt { color: var(--soluk); font-size: 17px; margin-bottom: 1.5rem; }
 .detay-kutu { border: 1px solid var(--cizgi); padding: 1.4rem; margin: 1.5rem 0; }
 .detay-kutu .fiyat { font-size: 1.6rem; }
 .detay-aciklama { margin-top: 2rem; color: #333; line-height: 1.7; }

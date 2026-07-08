@@ -14,12 +14,12 @@ function ikiHane(n) {
 function bicimleHHMMSS(sn) {
     sn = Math.max(0, sn);
     const gun = Math.floor(sn / 86400);
+    const kalan = sn % 86400;
+    const saatDakSan = ikiHane(Math.floor(kalan / 3600)) + ':' + ikiHane(Math.floor((kalan % 3600) / 60)) + ':' + ikiHane(kalan % 60);
     if (gun >= 1) {
-        const saat = Math.floor((sn % 86400) / 3600);
-        const dk = Math.floor((sn % 3600) / 60);
-        return gun + ' gün ' + saat + ' saat ' + dk + ' dakika';
+        return gun + ' gün ' + saatDakSan;
     }
-    return ikiHane(Math.floor(sn / 3600)) + ':' + ikiHane(Math.floor((sn % 3600) / 60)) + ':' + ikiHane(sn % 60);
+    return saatDakSan;
 }
 
 function bicimleMMSS(sn) {

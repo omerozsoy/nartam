@@ -132,6 +132,7 @@
     })();
 </script>
 <script src="{{ asset('assets/ticker.js') }}?v={{ filemtime(public_path('assets/ticker.js')) }}"></script>
+<script src="{{ asset('assets/takip.js') }}?v={{ filemtime(public_path('assets/takip.js')) }}"></script>
 <script src="{{ asset('assets/arama.js') }}?v={{ filemtime(public_path('assets/arama.js')) }}"></script>
 <script src="{{ asset('assets/lightbox.js') }}?v={{ filemtime(public_path('assets/lightbox.js')) }}"></script>
 @stack('scripts')

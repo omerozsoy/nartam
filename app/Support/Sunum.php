@@ -15,7 +15,7 @@ use Carbon\CarbonImmutable;
  */
 class Sunum
 {
-    public static function ilan(Ilan $ilan, ?CarbonImmutable $now = null, ?int $benimId = null, bool $teklifVerdim = false, ?int $benimMax = null): array
+    public static function ilan(Ilan $ilan, ?CarbonImmutable $now = null, ?int $benimId = null, bool $teklifVerdim = false, ?int $benimMax = null, bool $takipEdiliyor = false): array
     {
         $now ??= CarbonImmutable::now();
 
@@ -73,6 +73,7 @@ class Sunum
             'dususYuzde' => $dususYuzde,
             'baslangicTs' => $ilan->muzayede?->baslangic?->getTimestamp(),
             'baslangicBicim' => $ilan->muzayede?->baslangic?->format('d.m.Y H:i'),
+            'takipEdiliyor' => $takipEdiliyor,
             'sonTeklifSahibi' => Ad::gizle($ilan->son_teklif_sahibi),
             'liderId' => $ilan->lider_id,
             'benimDurum' => $benimDurum,

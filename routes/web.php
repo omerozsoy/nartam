@@ -34,6 +34,7 @@ Route::post('/cikis', [KimlikController::class, 'cikis'])->name('cikis')->middle
 
 // Teklif verme (giriş zorunlu)
 Route::post('/teklif', [TeklifController::class, 'store'])->name('teklif')->middleware('auth');
+Route::post('/takip/{ilan}', [App\Http\Controllers\TakipController::class, 'toggle'])->name('takip')->middleware('auth');
 
 // Üye paneli — pey verilen eserler
 Route::middleware('auth')->group(function () {

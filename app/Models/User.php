@@ -43,6 +43,11 @@ class User extends Authenticatable
         return $this->hasMany(Adres::class, 'user_id');
     }
 
+    public function takipler(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Ilan::class, 'takipler', 'user_id', 'ilan_id')->withTimestamps();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

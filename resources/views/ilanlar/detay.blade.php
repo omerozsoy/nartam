@@ -60,6 +60,12 @@
                         <p class="sayac" role="timer" data-alan="sayac">--:--</p>
                         <p class="yakinda-not">{{ $ozet['baslangicBicim'] }}</p>
                         <p class="alt-not" style="margin-top:.6rem">Teklifler başlangıçta açılacaktır.</p>
+                        @auth
+                            <button type="button" class="btn takip-btn {{ $ozet['takipEdiliyor'] ? 'takip-aktif' : '' }}" style="margin-top:.6rem"
+                                    data-alan="takip" data-id="{{ $ozet['id'] }}" aria-pressed="{{ $ozet['takipEdiliyor'] ? 'true' : 'false' }}">
+                                {{ $ozet['takipEdiliyor'] ? 'Takip Ediliyor' : 'Takip Et' }}
+                            </button>
+                        @endauth
                     @elseif ($ozet['durum'] !== 'kapandi')
                         <p class="sayac-etiket" data-alan="sayac-etiket" @if($ozet['tabanaUlasti']) style="display:none" @endif>
                             {{ $ozet['durum'] === 'dusuyor' ? 'Sonraki düşüşe' : 'Bitişe kalan' }}
@@ -79,9 +85,15 @@
                                            data-alan="miktar" required title="+ / − ile ayarlayın">
                                     <button type="button" class="pey-btn" data-alan="pey-arti" tabindex="-1" aria-label="Artır">+</button>
                                 </div>
-                                <button type="submit" class="btn btn-dolu">
-                                    {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyattan Teklif Ver' : 'Teklif Ver' }}
-                                </button>
+                                <div class="lot-butonlar">
+                                    <button type="submit" class="btn">
+                                        {{ $ozet['durum'] === 'dusuyor' ? 'Bu Fiyattan Teklif Ver' : 'Teklif Ver' }}
+                                    </button>
+                                    <button type="button" class="btn takip-btn {{ $ozet['takipEdiliyor'] ? 'takip-aktif' : '' }}"
+                                            data-alan="takip" data-id="{{ $ozet['id'] }}" aria-pressed="{{ $ozet['takipEdiliyor'] ? 'true' : 'false' }}">
+                                        {{ $ozet['takipEdiliyor'] ? 'Takip Ediliyor' : 'Takip Et' }}
+                                    </button>
+                                </div>
                                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
                             </form>
                         @else

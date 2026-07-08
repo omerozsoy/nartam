@@ -52,10 +52,12 @@ class IlanController extends Controller
 
         $benimId = Auth::id();
         $benimMax = $benimId ? $ilan->teklifler()->where('kullanici_id', $benimId)->max('miktar') : null;
+        $takip = $benimId && \Illuminate\Support\Facades\DB::table('takipler')
+            ->where('user_id', $benimId)->where('ilan_id', $ilan->id)->exists();
 
         return view('ilanlar.detay', [
             'ilan' => $ilan,
-            'ozet' => Sunum::ilan($ilan, null, $benimId, $benimMax !== null, $benimMax !== null ? (int) $benimMax : null),
+            'ozet' => Sunum::ilan($ilan, null, $benimId, $benimMax !== null, $benimMax !== null ? (int) $benimMax : null, $takip),
             'teklifler' => $teklifler,
         ]);
     }
@@ -114,6 +116,9 @@ class IlanController extends Controller
                 ->groupBy('ilan_id')
                 ->pluck('maks', 'ilan_id')
             : collect();
+        $takipSet = $benimId
+            ? array_flip(\Illuminate\Support\Facades\DB::table('takipler')->where('user_id', $benimId)->pluck('ilan_id')->all())
+            : [];
 
         // Belirli müzayede verildiyse onun lotları; yoksa aktif müzayedenin lotları.
         $hedef = $muzayede ?? Muzayede::aktif();
@@ -121,10 +126,10 @@ class IlanController extends Controller
         return Ilan::withCount('teklifler')->with('muzayede')
             ->when($hedef, fn ($q) => $q->where('muzayede_id', $hedef->id))
             ->orderBy('id')->get()
-            ->map(function (Ilan $i) use ($benimId, $benimMaxlar) {
+            ->map(function (Ilan $i) use ($benimId, $benimMaxlar, $takipSet) {
                 $m = $benimMaxlar->get($i->id);
 
-                return Sunum::ilan($i, null, $benimId, $m !== null, $m !== null ? (int) $m : null);
+                return Sunum::ilan($i, null, $benimId, $m !== null, $m !== null ? (int) $m : null, isset($takipSet[$i->id]));
             })
             // Grup önceliği; grup içinde: lot no'su olanlar (açık artırma) lot no'ya göre 1,2,3…
             ->sortBy(fn (array $o) => sprintf('%d-%08d', $oncelik[$o['durum']] ?? 9, $o['lotNo'] ?? $o['id']))

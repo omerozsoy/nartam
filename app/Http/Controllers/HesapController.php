@@ -20,9 +20,13 @@ class HesapController extends Controller
     {
         $satirlar = $this->satirlar($request->user());
 
+        $takip = $request->user()->takipler()->with('muzayede')->withCount('teklifler')->orderByPivot('created_at', 'desc')->get()
+            ->map(fn (Ilan $i) => Sunum::ilan($i, null, $request->user()->id, false, null, true));
+
         return view('hesap.index', [
             'kazandiklarim' => $satirlar->where('durumum', 'kazandi')->values(),
             'diger' => $satirlar->where('durumum', '!=', 'kazandi')->values(),
+            'takipEttiklerim' => $takip,
         ]);
     }
 

@@ -62,13 +62,28 @@
                            data-alan="miktar" required title="+ / − ile ayarlayın">
                     <button type="button" class="pey-btn" data-alan="pey-arti" tabindex="-1" aria-label="Artır">+</button>
                 </div>
-                <button type="submit" class="btn btn-dolu">
-                    {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyattan Teklif Ver' : 'Teklif Ver' }}
-                </button>
+                <div class="lot-butonlar">
+                    <button type="submit" class="btn">
+                        {{ $ilan['durum'] === 'dusuyor' ? 'Bu Fiyattan Teklif Ver' : 'Teklif Ver' }}
+                    </button>
+                    <button type="button" class="btn takip-btn {{ $ilan['takipEdiliyor'] ? 'takip-aktif' : '' }}"
+                            data-alan="takip" data-id="{{ $ilan['id'] }}" aria-pressed="{{ $ilan['takipEdiliyor'] ? 'true' : 'false' }}">
+                        {{ $ilan['takipEdiliyor'] ? 'Takip Ediliyor' : 'Takip Et' }}
+                    </button>
+                </div>
                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
             </form>
         @else
             <a class="btn btn-dolu" href="{{ route('giris') }}">Teklif için giriş</a>
+        @endauth
+    @elseif ($ilan['durum'] === 'yakinda')
+        @auth
+            <button type="button" class="btn takip-btn {{ $ilan['takipEdiliyor'] ? 'takip-aktif' : '' }}"
+                    data-alan="takip" data-id="{{ $ilan['id'] }}" aria-pressed="{{ $ilan['takipEdiliyor'] ? 'true' : 'false' }}">
+                {{ $ilan['takipEdiliyor'] ? 'Takip Ediliyor' : 'Takip Et' }}
+            </button>
+        @else
+            <a class="btn" href="{{ route('giris') }}">Takip için giriş</a>
         @endauth
     @endif
 
