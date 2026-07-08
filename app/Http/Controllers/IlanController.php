@@ -18,10 +18,9 @@ class IlanController extends Controller
 {
     public function index(): View
     {
-        return view('ilanlar.liste', [
-            'gruplar' => $this->siraliOzetler()->groupBy('durum'),
+        return view('ilanlar.anasayfa', [
+            'vitrin' => $this->siraliOzetler()->where('durum', 'acik_artirma')->take(12)->values(),
             'muzayede' => Muzayede::aktif(),
-            'vitrinGoster' => true,
         ]);
     }
 

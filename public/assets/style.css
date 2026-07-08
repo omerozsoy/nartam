@@ -121,6 +121,10 @@ img { max-width: 100%; }
 
 /* ---------- Müzayede listesi / başlığı ---------- */
 .sayfa-baslik { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2rem; margin: 2rem 0 1.4rem; }
+/* Ana sayfa: slider altı eylem */
+.anasayfa-eylem { text-align: center; margin: 1.5rem 0 3.5rem; }
+.anasayfa-muzayede { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.3rem; color: #6a2c4d; margin-bottom: 1rem; }
+
 /* Müzayede sayfası başlık + meta + filtre çubuğu */
 .muzayede-ust {
     display: flex;
