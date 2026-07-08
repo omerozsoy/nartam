@@ -52,7 +52,7 @@
                     @if ($ozet['durum'] === 'dusuyor')<span class="dususok" aria-hidden="true"><i></i><i></i><i></i></span>@endif
 
                     @if ($ozet['durum'] === 'acik_artirma')
-                        <div class="etiket" style="margin-top:.4rem">{{ $ozet['teklifSayisi'] }} teklif</div>
+                        <div class="etiket" style="margin-top:.4rem"><span data-alan="teklif-sayisi">{{ $ozet['teklifSayisi'] }}</span> teklif</div>
                     @endif
 
                     @if ($ozet['durum'] === 'yakinda')

@@ -129,6 +129,12 @@ function ozetUygula(kalem, o) {
         bSatir.hidden = !(o.dususYuzde > 0);
     }
 
+    // Teklif sayısı (kendi teklifinden sonra ve poll'da güncellenir)
+    const teklifSayiEl = kalem.querySelector('[data-alan="teklif-sayisi"]');
+    if (teklifSayiEl && o.teklifSayisi != null) {
+        teklifSayiEl.textContent = o.teklifSayisi;
+    }
+
     // Taban fiyata ulaşıldıysa geri sayımı gizle
     const sayacKutu = kalem.querySelector('[data-alan="sayac"]');
     if (sayacKutu) {

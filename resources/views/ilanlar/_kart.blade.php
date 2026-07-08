@@ -88,7 +88,7 @@
     @endif
 
     @if ($ilan['durum'] === 'acik_artirma')
-        <div class="teklif-sayisi">Teklifler: {{ $ilan['teklifSayisi'] }}</div>
+        <div class="teklif-sayisi">Teklifler: <span data-alan="teklif-sayisi">{{ $ilan['teklifSayisi'] }}</span></div>
     @elseif ($ilan['durum'] === 'kapandi')
         <div class="teklif-sayisi">Kazanan: {{ $ilan['sonTeklifSahibi'] ?? '—' }}</div>
     @endif
