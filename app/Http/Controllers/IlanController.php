@@ -18,11 +18,16 @@ class IlanController extends Controller
 {
     public function index(): View
     {
-        $ozetler = $this->siraliOzetler();
+        $benimId = Auth::id();
+
+        // Hero: yönetimden seçilen lotlar (müzayededen bağımsız, doğrudan).
+        $heroLotlar = Ilan::where('carusel', true)->with('muzayede')->withCount('teklifler')
+            ->orderByRaw('lot_no is null')->orderBy('lot_no')->limit(8)->get()
+            ->map(fn (Ilan $i) => Sunum::ilan($i, null, $benimId));
 
         return view('ilanlar.anasayfa', [
-            'hero' => $ozetler->where('carusel', true)->take(8)->values(),
-            'vitrin' => $ozetler->where('durum', 'acik_artirma')->take(12)->values(),
+            'hero' => $heroLotlar,
+            'vitrin' => $this->siraliOzetler()->where('durum', 'acik_artirma')->take(12)->values(),
             'muzayede' => Muzayede::aktif(),
         ]);
     }
