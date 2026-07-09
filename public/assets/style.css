@@ -309,30 +309,35 @@ img { max-width: 100%; }
 @media (max-width: 900px) { .urun-kartlar { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { .urun-kartlar { grid-template-columns: 1fr; } }
 
-/* ---------- Eşit yükseklikli hizmet kartları (flexbox) ---------- */
-.hizmet-kartlar { display: flex; gap: 1.6rem; margin: 3rem 0 4rem; align-items: stretch; }
-.hizmet-kart {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--cizgi);
-    background: #fff;
-    padding: 2rem 1.7rem;
-    border-top: 3px solid var(--siyah);
-    transition: box-shadow .18s ease, transform .18s ease;
+/* ---------- Hesabım: sol menü + sekmeler ---------- */
+.hesap-duzen { display: grid; grid-template-columns: 230px 1fr; gap: 2.5rem; margin: 2rem auto 3.5rem; align-items: start; }
+.hesap-kenar { border-right: 1px solid var(--cizgi); padding-right: 1rem; }
+.hesap-ad { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 1.6rem; margin: 0 0 1rem; }
+.hesap-menu { display: flex; flex-direction: column; gap: .15rem; }
+.hesap-menu form { margin: 0; }
+.hesap-menu-oge {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: .7rem .85rem;
+    background: none;
+    border: 0;
+    border-left: 2px solid transparent;
+    font: inherit;
+    font-size: 14px;
+    color: var(--metin);
+    cursor: pointer;
 }
-.hizmet-kart:hover { box-shadow: 0 14px 34px rgba(0, 0, 0, .08); transform: translateY(-4px); }
-.hk-govde { flex: 1; }               /* metni büyütür → buton hep altta hizalanır */
-.hk-etiket { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--soluk); }
-.hizmet-kart h3 {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-weight: 400;
-    font-size: 1.6rem;
-    margin: .3rem 0 .6rem;
+.hesap-menu-oge:hover { background: #f6f5f2; text-decoration: none; }
+.hesap-menu-oge.aktif { border-left-color: var(--siyah); font-weight: 600; background: #f6f5f2; }
+.hesap-cikis { color: var(--kritik); }
+@media (max-width: 720px) {
+    .hesap-duzen { grid-template-columns: 1fr; gap: 1rem; }
+    .hesap-kenar { border-right: 0; border-bottom: 1px solid var(--cizgi); padding: 0 0 .5rem; }
+    .hesap-menu { flex-direction: row; flex-wrap: wrap; gap: .3rem; }
+    .hesap-menu-oge { width: auto; border-left: 0; border-bottom: 2px solid transparent; }
+    .hesap-menu-oge.aktif { border-left: 0; border-bottom-color: var(--siyah); }
 }
-.hizmet-kart p { font-size: 14px; line-height: 1.65; color: var(--soluk); margin: 0 0 1.4rem; }
-.hizmet-kart .btn { align-self: flex-start; }
-@media (max-width: 720px) { .hizmet-kartlar { flex-direction: column; } }
 
 /* Müzayede sayfası başlık + meta + filtre çubuğu */
 .muzayede-ust {
