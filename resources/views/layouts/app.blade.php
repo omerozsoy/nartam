@@ -42,10 +42,11 @@
         <a href="{{ route('ekspertiz') }}" class="{{ request()->routeIs('ekspertiz') ? 'aktif' : '' }}">Ekspertiz</a>
         <a href="{{ route('iletisim') }}" class="{{ request()->routeIs('iletisim') ? 'aktif' : '' }}">İletişim</a>
     </nav>
-    <div class="arama arama-ust" data-alan="arama">
+    {{-- Arama şimdilik kapalı --}}
+    {{-- <div class="arama arama-ust" data-alan="arama">
         <input type="search" class="arama-girdi" data-alan="arama-girdi" placeholder="Ara…" autocomplete="off" spellcheck="false" aria-label="Ara">
         <ul class="arama-oneri" data-alan="arama-oneri" hidden></ul>
-    </div>
+    </div> --}}
 </header>
 
 <div class="ticker-wrap" data-alan="ticker" hidden>
