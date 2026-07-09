@@ -332,7 +332,7 @@ img { max-width: 100%; }
 }
 
 /* ---------- Hesabım: sol menü + sekmeler ---------- */
-.hesap-duzen { display: grid; grid-template-columns: 230px 1fr; gap: 2.5rem; margin: 3.5rem auto 4rem; align-items: start; }
+.hesap-duzen { display: grid; grid-template-columns: 230px 1fr; gap: 2.5rem; margin: 5rem auto 4rem; align-items: start; }
 .hesap-kenar { border-right: 1px solid var(--cizgi); padding-right: 1rem; }
 .hesap-ad { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 1.6rem; margin: 0 0 1rem; }
 .hesap-menu { display: flex; flex-direction: column; gap: .15rem; }
