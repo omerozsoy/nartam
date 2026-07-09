@@ -15,10 +15,6 @@
         @endif
 
         @include('ilanlar._vitrin', ['vitrin' => $vitrin])
-
-        <div class="anasayfa-eylem">
-            <a class="btn btn-dolu" href="{{ !empty($muzayede) ? route('muzayede.goster', $muzayede) : route('muzayedeler') }}">Müzayedeye Git</a>
-        </div>
     </div>
 @endsection
 
