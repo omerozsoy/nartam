@@ -309,6 +309,31 @@ img { max-width: 100%; }
 @media (max-width: 900px) { .urun-kartlar { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { .urun-kartlar { grid-template-columns: 1fr; } }
 
+/* ---------- Eşit yükseklikli hizmet kartları (flexbox) ---------- */
+.hizmet-kartlar { display: flex; gap: 1.6rem; margin: 3rem 0 4rem; align-items: stretch; }
+.hizmet-kart {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--cizgi);
+    background: #fff;
+    padding: 2rem 1.7rem;
+    border-top: 3px solid var(--siyah);
+    transition: box-shadow .18s ease, transform .18s ease;
+}
+.hizmet-kart:hover { box-shadow: 0 14px 34px rgba(0, 0, 0, .08); transform: translateY(-4px); }
+.hk-govde { flex: 1; }               /* metni büyütür → buton hep altta hizalanır */
+.hk-etiket { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--soluk); }
+.hizmet-kart h3 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    margin: .3rem 0 .6rem;
+}
+.hizmet-kart p { font-size: 14px; line-height: 1.65; color: var(--soluk); margin: 0 0 1.4rem; }
+.hizmet-kart .btn { align-self: flex-start; }
+@media (max-width: 720px) { .hizmet-kartlar { flex-direction: column; } }
+
 /* Müzayede sayfası başlık + meta + filtre çubuğu */
 .muzayede-ust {
     display: flex;

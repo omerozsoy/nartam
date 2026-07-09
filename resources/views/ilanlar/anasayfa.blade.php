@@ -39,6 +39,33 @@
                 @endforeach
             </div>
         @endif
+
+        <div class="hizmet-kartlar">
+            <div class="hizmet-kart">
+                <div class="hk-govde">
+                    <span class="hk-etiket">Değerleme</span>
+                    <h3>Ekspertiz</h3>
+                    <p>Eserlerinizin değerini alanında uzman ekibimizle öğrenin. Satış öncesi ücretsiz ön değerlendirme ile koleksiyonunuzu güvenle yönetin.</p>
+                </div>
+                <a class="btn" href="{{ route('ekspertiz') }}">Daha Fazla</a>
+            </div>
+            <div class="hizmet-kart">
+                <div class="hk-govde">
+                    <span class="hk-etiket">Katalog</span>
+                    <h3>Müzayedeler</h3>
+                    <p>Güncel ve geçmiş müzayedelerimizi keşfedin; modern ve çağdaş sanatın seçkin eserlerine teklif verin.</p>
+                </div>
+                <a class="btn" href="{{ route('muzayedeler') }}">Müzayedeye Git</a>
+            </div>
+            <div class="hizmet-kart">
+                <div class="hk-govde">
+                    <span class="hk-etiket">Bize Ulaşın</span>
+                    <h3>İletişim</h3>
+                    <p>Sorularınız, satış ve alım talepleriniz için ekibimizle iletişime geçin.</p>
+                </div>
+                <a class="btn" href="{{ route('iletisim') }}">İletişim</a>
+            </div>
+        </div>
     </div>
 @endsection
 
