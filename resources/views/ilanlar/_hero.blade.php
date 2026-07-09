@@ -7,7 +7,7 @@
                     <div class="swiper-slide hero-slide {{ $sag ? 'panel-sag' : 'panel-sol' }}">
                         <div class="hero-panel" style="background:{{ $ilan['caruselArka'] ?? '#efe9dd' }}">
                             <div class="hero-metin">
-                                <span class="hero-etiket">{{ $ilan['durumEtiket'] }}@if ($ilan['lotNo']) · Lot {{ $ilan['lotNo'] }}@endif</span>
+                                @if ($ilan['lotNo'])<span class="hero-etiket">Lot {{ $ilan['lotNo'] }}</span>@endif
                                 <h2>{{ $ilan['baslik'] }}</h2>
                                 @if ($ilan['altBaslik'])<div class="hero-alt">{{ $ilan['altBaslik'] }}</div>@endif
                                 <div class="hero-fiyat">{{ $ilan['guncelFiyatBicim'] }}</div>
