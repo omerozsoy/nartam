@@ -12,7 +12,7 @@
         </div>
 
         <p class="alt-not" style="margin-bottom:1rem">
-            Ana sayfanın en altında görünecek <strong>4 ürün kartı</strong> için lot seç (sıraya göre ilk 4'ü gösterilir).
+            Ana sayfanın en altında görünecek ürün kartları için lot seç (sıraya göre, satır başına 4'erli dizilir).
             Şu an <strong>{{ $secili }}</strong> lot seçili. Hiç seçmezsen bu bölüm gizli kalır.
         </p>
 

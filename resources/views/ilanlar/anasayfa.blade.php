@@ -17,6 +17,7 @@
         @include('ilanlar._vitrin', ['vitrin' => $vitrin])
 
         @if (($kartlar ?? collect())->isNotEmpty())
+            <h2 class="anasayfa-secki">Öne Çıkan Eserler</h2>
             <div class="urun-kartlar">
                 @foreach ($kartlar as $ilan)
                     <a class="urun-kart" href="{{ route('ilan.goster', $ilan['id']) }}">

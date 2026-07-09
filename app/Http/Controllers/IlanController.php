@@ -35,10 +35,10 @@ class IlanController extends Controller
             $coverflow = $this->siraliOzetler()->where('durum', 'acik_artirma')->take(12)->values();
         }
 
-        // Alt ÜRÜN KARTLARI: yönetimden seçilen ilk 4 lot.
+        // Alt ÜRÜN KARTLARI: yönetimden seçilen lotlar (satır satır, 4'erli).
         $kartlar = Ilan::where('kart', true)->with('muzayede')->withCount('teklifler')
             ->orderByRaw('kart_sira is null')->orderBy('kart_sira')
-            ->orderByRaw('lot_no is null')->orderBy('lot_no')->limit(4)->get()
+            ->orderByRaw('lot_no is null')->orderBy('lot_no')->limit(24)->get()
             ->map(fn (Ilan $i) => Sunum::ilan($i, null, $benimId));
 
         return view('ilanlar.anasayfa', [
