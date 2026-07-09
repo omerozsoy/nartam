@@ -20,15 +20,24 @@ class IlanController extends Controller
     {
         $benimId = Auth::id();
 
-        // Hero: yönetimden seçilen lotlar (müzayededen bağımsız, doğrudan).
+        // Üst SLIDER (hero): yönetimden seçilen lotlar.
         $heroLotlar = Ilan::where('carusel', true)->with('muzayede')->withCount('teklifler')
             ->orderByRaw('carusel_sira is null')->orderBy('carusel_sira')
             ->orderByRaw('lot_no is null')->orderBy('lot_no')->limit(8)->get()
             ->map(fn (Ilan $i) => Sunum::ilan($i, null, $benimId));
 
+        // Alt CARUSEL (coverflow): yönetimden seçilen lotlar; yoksa Açık Artırma otomatik.
+        $coverflow = Ilan::where('coverflow', true)->with('muzayede')->withCount('teklifler')
+            ->orderByRaw('coverflow_sira is null')->orderBy('coverflow_sira')
+            ->orderByRaw('lot_no is null')->orderBy('lot_no')->limit(12)->get()
+            ->map(fn (Ilan $i) => Sunum::ilan($i, null, $benimId));
+        if ($coverflow->isEmpty()) {
+            $coverflow = $this->siraliOzetler()->where('durum', 'acik_artirma')->take(12)->values();
+        }
+
         return view('ilanlar.anasayfa', [
             'hero' => $heroLotlar,
-            'vitrin' => $this->siraliOzetler()->where('durum', 'acik_artirma')->take(12)->values(),
+            'vitrin' => $coverflow,
             'muzayede' => Muzayede::aktif(),
         ]);
     }

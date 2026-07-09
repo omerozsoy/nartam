@@ -265,23 +265,19 @@ class YonetimController extends Controller
         ]);
     }
 
-    /** Carousel (ana sayfa hero) için lot seçme ekranı. */
-    public function carusel(): View
+    /** Üstteki SLIDER (hero) için lot seçme ekranı. */
+    public function slider(): View
     {
-        // Seçili olanlar (sıraya göre) üstte, diğerleri lot no'ya göre altta.
-        return view('yonetim.carusel', [
+        return view('yonetim.slider', [
             'ilanlar' => Ilan::orderByDesc('carusel')
-                ->orderByRaw('carusel_sira is null')
-                ->orderBy('carusel_sira')
-                ->orderByRaw('lot_no is null')
-                ->orderBy('lot_no')
-                ->orderBy('id')
+                ->orderByRaw('carusel_sira is null')->orderBy('carusel_sira')
+                ->orderByRaw('lot_no is null')->orderBy('lot_no')->orderBy('id')
                 ->get(),
             'secili' => Ilan::where('carusel', true)->count(),
         ]);
     }
 
-    public function caruselKaydet(Request $request): RedirectResponse
+    public function sliderKaydet(Request $request): RedirectResponse
     {
         $secilenler = array_map('intval', (array) $request->input('secili', []));
         $siralar = (array) $request->input('sira', []);
@@ -298,7 +294,33 @@ class YonetimController extends Controller
             ]);
         }
 
-        return back()->with('basari', count($secilenler) . ' lot carousel için seçildi.');
+        return back()->with('basari', count($secilenler) . ' lot slider için seçildi.');
+    }
+
+    /** Alttaki CARUSEL (coverflow) için lot seçme ekranı. */
+    public function carusel(): View
+    {
+        return view('yonetim.carusel', [
+            'ilanlar' => Ilan::orderByDesc('coverflow')
+                ->orderByRaw('coverflow_sira is null')->orderBy('coverflow_sira')
+                ->orderByRaw('lot_no is null')->orderBy('lot_no')->orderBy('id')
+                ->get(),
+            'secili' => Ilan::where('coverflow', true)->count(),
+        ]);
+    }
+
+    public function caruselKaydet(Request $request): RedirectResponse
+    {
+        $secilenler = array_map('intval', (array) $request->input('secili', []));
+        $siralar = (array) $request->input('sira', []);
+
+        Ilan::query()->update(['coverflow' => false, 'coverflow_sira' => null]);
+        foreach ($secilenler as $id) {
+            $sira = isset($siralar[$id]) && $siralar[$id] !== '' ? (int) $siralar[$id] : null;
+            Ilan::where('id', $id)->update(['coverflow' => true, 'coverflow_sira' => $sira]);
+        }
+
+        return back()->with('basari', count($secilenler) . ' lot carusel için seçildi.');
     }
 
     /** Tüm eserleri (ve tekliflerini) siler — yeni Excel yüklemesinden önce. */

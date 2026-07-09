@@ -1,27 +1,27 @@
 @extends('layouts.yonetim')
 
-@section('baslik', 'Carousel')
+@section('baslik', 'Carusel')
 
 @section('content')
     <main class="yonetim">
         <div class="yonetim-ust">
-            <h1>Carousel — Ana Sayfa Hero</h1>
+            <h1>Carusel — Ana Sayfa Alt (Coverflow)</h1>
             <div class="yonetim-eylem">
                 <button type="submit" form="carusel-form" class="btn btn-dolu">Kaydet</button>
             </div>
         </div>
 
         <p class="alt-not" style="margin-bottom:1rem">
-            Ana sayfanın üstündeki büyük hero slider'ında görünecek lotları seç.
-            Şu an <strong>{{ $secili }}</strong> lot seçili. Hiç seçmezsen hero gizli kalır.
+            Ana sayfanın altındaki 3B kayan carusel'de görünecek lotları seç. Sıra numarası ile diz.
+            Şu an <strong>{{ $secili }}</strong> lot seçili. Hiç seçmezsen aktif müzayedenin Açık Artırma lotları otomatik gösterilir.
         </p>
 
         <form method="post" action="{{ route('yonetim.carusel.kaydet') }}" id="carusel-form">
             @csrf
             <div class="carusel-izgara">
                 @foreach ($ilanlar as $ilan)
-                    <label class="carusel-secim {{ $ilan->carusel ? 'secili' : '' }}">
-                        <input type="checkbox" name="secili[]" value="{{ $ilan->id }}" @checked($ilan->carusel)>
+                    <label class="carusel-secim {{ $ilan->coverflow ? 'secili' : '' }}">
+                        <input type="checkbox" name="secili[]" value="{{ $ilan->id }}" @checked($ilan->coverflow)>
                         <span class="carusel-gorsel">
                             @if ($ilan->gorsel_url)<img src="{{ $ilan->gorsel_url }}" alt="" loading="lazy">@endif
                         </span>
@@ -30,15 +30,7 @@
                             <small>{{ $ilan->alt_baslik }}</small>
                         </span>
                         <input type="number" class="carusel-sira" name="sira[{{ $ilan->id }}]" min="1"
-                               value="{{ $ilan->carusel_sira }}" placeholder="Sıra" title="Sıra numarası"
-                               onclick="event.stopPropagation();">
-                        @php($sag = str_contains($ilan->carusel_konum ?? 'sol', 'sag'))
-                        <select class="carusel-konum" name="konum[{{ $ilan->id }}]" title="Metin paneli tarafı" onclick="event.stopPropagation();">
-                            <option value="sol" @selected(! $sag)>Metin Sol</option>
-                            <option value="sag" @selected($sag)>Metin Sağ</option>
-                        </select>
-                        <input type="color" class="carusel-arka" name="arka[{{ $ilan->id }}]"
-                               value="{{ $ilan->carusel_arka ?: '#efe9dd' }}" title="Panel arka plan rengi"
+                               value="{{ $ilan->coverflow_sira }}" placeholder="Sıra" title="Sıra numarası"
                                onclick="event.stopPropagation();">
                     </label>
                 @endforeach
