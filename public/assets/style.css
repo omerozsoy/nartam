@@ -213,7 +213,7 @@ img { max-width: 100%; }
 .anasayfa-muzayede-ust {
     display: block;
     margin: 0 0 .5rem;
-    color: #6a2c4d;
+    color: var(--soluk);
 }
 .anasayfa-muzayede-ust:hover { text-decoration: none; }
 .anasayfa-muzayede-ust .am-baslik {
