@@ -171,8 +171,8 @@ img { max-width: 100%; }
 .hero-metin h2 {
     font-family: 'DM Serif Display', Georgia, serif;
     font-weight: 400;
-    font-size: 3rem;
-    line-height: 1.05;
+    font-size: 2.4rem;
+    line-height: 1.1;
     margin: .5rem 0 .5rem;
     color: var(--metin);
 }
