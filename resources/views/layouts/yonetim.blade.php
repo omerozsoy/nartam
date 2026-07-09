@@ -21,6 +21,7 @@
             <a href="{{ route('yonetim.muzayedeler') }}" class="{{ request()->routeIs('yonetim.muzayede*') ? 'aktif' : '' }}">Müzayedeler</a>
             <a href="{{ route('yonetim.slider') }}" class="{{ request()->routeIs('yonetim.slider') ? 'aktif' : '' }}">Slider</a>
             <a href="{{ route('yonetim.carusel') }}" class="{{ request()->routeIs('yonetim.carusel') ? 'aktif' : '' }}">Carusel</a>
+            <a href="{{ route('yonetim.kartlar') }}" class="{{ request()->routeIs('yonetim.kartlar') ? 'aktif' : '' }}">Ürün Kartları</a>
             <a href="{{ route('yonetim.pey') }}" class="{{ request()->routeIs('yonetim.pey') ? 'aktif' : '' }}">Pey Adımları</a>
             <a href="{{ route('yonetim.uyeler') }}" class="{{ request()->routeIs('yonetim.uyeler') || request()->routeIs('yonetim.uye') ? 'aktif' : '' }}">Üyeler</a>
             <a href="{{ route('yonetim.iletisim') }}" class="{{ request()->routeIs('yonetim.iletisim') ? 'aktif' : '' }}">İletişim</a>

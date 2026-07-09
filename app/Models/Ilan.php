@@ -44,6 +44,8 @@ class Ilan extends Model
         'carusel_arka',
         'coverflow',
         'coverflow_sira',
+        'kart',
+        'kart_sira',
         'alt_baslik',
         'kategori',
         'aciklama',
@@ -70,6 +72,7 @@ class Ilan extends Model
             'bildirildi' => 'boolean',
             'carusel' => 'boolean',
             'coverflow' => 'boolean',
+            'kart' => 'boolean',
         ];
     }
 

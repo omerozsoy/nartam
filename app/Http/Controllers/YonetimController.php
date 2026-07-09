@@ -323,6 +323,32 @@ class YonetimController extends Controller
         return back()->with('basari', count($secilenler) . ' lot carusel için seçildi.');
     }
 
+    /** Ana sayfa altındaki 4 ÜRÜN KARTI için lot seçme ekranı. */
+    public function kartlar(): View
+    {
+        return view('yonetim.kartlar', [
+            'ilanlar' => Ilan::orderByDesc('kart')
+                ->orderByRaw('kart_sira is null')->orderBy('kart_sira')
+                ->orderByRaw('lot_no is null')->orderBy('lot_no')->orderBy('id')
+                ->get(),
+            'secili' => Ilan::where('kart', true)->count(),
+        ]);
+    }
+
+    public function kartlarKaydet(Request $request): RedirectResponse
+    {
+        $secilenler = array_map('intval', (array) $request->input('secili', []));
+        $siralar = (array) $request->input('sira', []);
+
+        Ilan::query()->update(['kart' => false, 'kart_sira' => null]);
+        foreach ($secilenler as $id) {
+            $sira = isset($siralar[$id]) && $siralar[$id] !== '' ? (int) $siralar[$id] : null;
+            Ilan::where('id', $id)->update(['kart' => true, 'kart_sira' => $sira]);
+        }
+
+        return back()->with('basari', count($secilenler) . ' lot ürün kartları için seçildi.');
+    }
+
     /** Tüm eserleri (ve tekliflerini) siler — yeni Excel yüklemesinden önce. */
     public function tumEserleriSil(): RedirectResponse
     {

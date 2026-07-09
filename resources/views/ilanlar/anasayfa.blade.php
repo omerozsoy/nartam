@@ -15,6 +15,29 @@
         @endif
 
         @include('ilanlar._vitrin', ['vitrin' => $vitrin])
+
+        @if (($kartlar ?? collect())->isNotEmpty())
+            <div class="urun-kartlar">
+                @foreach ($kartlar as $ilan)
+                    <a class="urun-kart" href="{{ route('ilan.goster', $ilan['id']) }}">
+                        <div class="urun-kart-foto {{ $ilan['gorselUrl'] ? '' : 'bos' }}">
+                            @if ($ilan['gorselUrl'])
+                                <img src="{{ $ilan['gorselUrl'] }}" alt="{{ $ilan['baslik'] }}" loading="lazy">
+                            @else
+                                {{ mb_strtoupper(mb_substr($ilan['baslik'], 0, 1)) }}
+                            @endif
+                        </div>
+                        <div class="urun-kart-bilgi">
+                            @if ($ilan['lotNo'])<span class="uk-lot">Lot {{ $ilan['lotNo'] }}</span>@endif
+                            <h3>{{ $ilan['baslik'] }}</h3>
+                            @if ($ilan['altBaslik'])<div class="uk-alt">{{ $ilan['altBaslik'] }}</div>@endif
+                            <div class="uk-fiyat">{{ $ilan['guncelFiyatBicim'] }}</div>
+                            <span class="uk-buton">İncele</span>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        @endif
     </div>
 @endsection
 
