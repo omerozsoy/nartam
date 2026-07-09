@@ -17,6 +17,10 @@
                 <label>Şifre
                     <input type="password" name="password" required>
                 </label>
+                <label class="beni-hatirla">
+                    <input type="checkbox" name="beni_hatirla" value="1" {{ old('beni_hatirla', true) ? 'checked' : '' }}>
+                    <span>Beni hatırla (bir sonraki girişte şifre sorulmasın)</span>
+                </label>
                 <button type="submit" class="btn btn-dolu giris-btn">Giriş Yap</button>
             </form>
 
