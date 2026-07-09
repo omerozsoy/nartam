@@ -3,10 +3,11 @@
 @section('baslik', 'Adreslerim')
 
 @section('content')
-    <div class="kap hesap">
-        <h1 class="hesap-baslik">Adreslerim</h1>
-        @include('hesap._nav')
+    <div class="kap hesap-duzen">
+        @include('hesap._kenar')
 
+        <div class="hesap-icerik">
+        <h2 class="hesap-baslik">Adreslerim</h2>
         <div class="adres-izgara">
             <section class="kart">
                 <h2>Yeni Adres</h2>
@@ -60,6 +61,7 @@
                     <p class="hesap-bos">Henüz adres eklemediniz.</p>
                 @endforelse
             </section>
+        </div>
         </div>
     </div>
 @endsection

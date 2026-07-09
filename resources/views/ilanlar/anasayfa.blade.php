@@ -40,6 +40,18 @@
             </div>
         @endif
     </div>
+
+    <section class="satis-banner">
+        <div class="sb-panel">
+            <div class="sb-ic">
+                <h2>Eserinizi Satın</h2>
+                <p>Elinizdeki eserin yaklaşan müzayedelerimize uygun olup olmadığını merak mı ediyorsunuz?
+                   Bilgi ve görselleri paylaşarak hemen çevrimiçi ekspertiz talep edin.</p>
+                <a class="btn btn-dolu" href="{{ route('ekspertiz') }}">Ekspertiz Talep Et</a>
+            </div>
+        </div>
+        <div class="sb-gorsel" @if (!empty($satisGorsel)) style="background-image:url('{{ $satisGorsel }}')" @endif></div>
+    </section>
 @endsection
 
 @push('scripts')

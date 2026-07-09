@@ -41,10 +41,13 @@ class IlanController extends Controller
             ->orderByRaw('lot_no is null')->orderBy('lot_no')->limit(24)->get()
             ->map(fn (Ilan $i) => Sunum::ilan($i, null, $benimId));
 
+        $satisGorsel = $heroLotlar->first()['gorselUrl'] ?? ($coverflow->first()['gorselUrl'] ?? null);
+
         return view('ilanlar.anasayfa', [
             'hero' => $heroLotlar,
             'vitrin' => $coverflow,
             'kartlar' => $kartlar,
+            'satisGorsel' => $satisGorsel,
             'muzayede' => Muzayede::aktif(),
         ]);
     }

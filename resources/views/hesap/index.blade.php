@@ -8,21 +8,7 @@
 
 @section('content')
     <div class="kap hesap-duzen" id="hesap-panel">
-        <aside class="hesap-kenar">
-            <h1 class="hesap-ad">Hesabım</h1>
-            <nav class="hesap-menu">
-                <button type="button" class="hesap-menu-oge aktif" data-tab="pey">Pey Verdiklerim</button>
-                <button type="button" class="hesap-menu-oge" data-tab="takip">Takip Ettiklerim</button>
-                @if ($kazandiklarim->isNotEmpty())
-                    <button type="button" class="hesap-menu-oge" data-tab="kazandi">Kazandıklarım</button>
-                @endif
-                <a class="hesap-menu-oge" href="{{ route('adresler') }}">Adreslerim</a>
-                <form method="post" action="{{ route('cikis') }}">
-                    @csrf
-                    <button type="submit" class="hesap-menu-oge hesap-cikis">Çıkış</button>
-                </form>
-            </nav>
-        </aside>
+        @include('hesap._kenar')
 
         <div class="hesap-icerik">
             {{-- Pey Verdiklerim --}}
@@ -89,9 +75,11 @@
             </section>
 
             {{-- Kazandıklarım --}}
-            @if ($kazandiklarim->isNotEmpty())
-                <section data-panel="kazandi" hidden>
-                    <h2 class="hesap-baslik">Kazandıklarım</h2>
+            <section data-panel="kazandi" hidden>
+                <h2 class="hesap-baslik">Kazandıklarım</h2>
+                @if ($kazandiklarim->isEmpty())
+                    <p class="hesap-bos">Henüz kazandığınız eser yok.</p>
+                @else
                     <table class="hesap-tablo">
                         <tbody>
                         @foreach ($kazandiklarim as $s)
@@ -110,8 +98,8 @@
                         @endforeach
                         </tbody>
                     </table>
-                </section>
-            @endif
+                @endif
+            </section>
         </div>
     </div>
 @endsection
@@ -122,13 +110,20 @@
         (function () {
             const menu = document.querySelectorAll('.hesap-menu-oge[data-tab]');
             const paneller = document.querySelectorAll('.hesap-icerik [data-panel]');
+            function goster(tab) {
+                let bulundu = false;
+                paneller.forEach(function (p) { const m = p.dataset.panel === tab; p.hidden = !m; if (m) bulundu = true; });
+                if (!bulundu) { tab = 'pey'; paneller.forEach(function (p) { p.hidden = p.dataset.panel !== 'pey'; }); }
+                menu.forEach(function (b) { b.classList.toggle('aktif', b.dataset.tab === tab); });
+            }
             menu.forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    const hedef = btn.dataset.tab;
-                    menu.forEach(function (b) { b.classList.toggle('aktif', b === btn); });
-                    paneller.forEach(function (p) { p.hidden = p.dataset.panel !== hedef; });
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    goster(btn.dataset.tab);
+                    history.replaceState(null, '', btn.getAttribute('href'));
                 });
             });
+            goster(new URLSearchParams(location.search).get('tab') || 'pey');
         })();
     </script>
 @endpush
