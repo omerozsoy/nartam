@@ -202,9 +202,22 @@ img { max-width: 100%; }
     .hero-swiper .swiper-pagination { padding-left: 1.4rem; }
 }
 
-/* Ana sayfa: slider altı eylem */
-.anasayfa-eylem { text-align: center; margin: 1.5rem 0 3.5rem; }
-.anasayfa-muzayede { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.3rem; color: #6a2c4d; margin-bottom: 1rem; }
+/* Ana sayfa: carousel üstü müzayede başlığı + altı eylem */
+.anasayfa-muzayede-ust {
+    display: block;
+    margin: 1.8rem 0 .5rem;
+    color: #6a2c4d;
+}
+.anasayfa-muzayede-ust:hover { text-decoration: none; }
+.anasayfa-muzayede-ust .am-baslik {
+    display: block;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.7rem;
+    line-height: 1.15;
+}
+.anasayfa-muzayede-ust:hover .am-baslik { text-decoration: underline; }
+.anasayfa-muzayede-ust .am-tarih { display: block; font-size: 13px; color: var(--soluk); margin-top: .2rem; }
+.anasayfa-eylem { text-align: center; margin: 1rem 0 3.5rem; }
 
 /* Müzayede sayfası başlık + meta + filtre çubuğu */
 .muzayede-ust {
