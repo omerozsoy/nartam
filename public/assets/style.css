@@ -54,6 +54,8 @@ img { max-width: 100%; }
 .ust-serit-ad { color: var(--metin); font-weight: 500; }
 .ust-serit-ic a.ust-serit-ad:hover { color: var(--soluk); }
 .ust-serit form { display: inline; }
+.cikis-ikon { display: inline-flex; align-items: center; padding: 0; color: var(--metin); vertical-align: middle; }
+.cikis-ikon:hover { color: var(--soluk); }
 
 /* ---------- Üst bar ---------- */
 .ust-bar {
