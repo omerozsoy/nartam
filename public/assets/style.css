@@ -203,9 +203,16 @@ img { max-width: 100%; }
 }
 
 /* Ana sayfa: carousel üstü müzayede başlığı + altı eylem */
+.anasayfa-secki {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-size: 2.1rem;
+    margin: 2rem 0 .3rem;
+    color: var(--metin);
+}
 .anasayfa-muzayede-ust {
     display: block;
-    margin: 1.8rem 0 .5rem;
+    margin: 0 0 .5rem;
     color: #6a2c4d;
 }
 .anasayfa-muzayede-ust:hover { text-decoration: none; }
