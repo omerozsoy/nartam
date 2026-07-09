@@ -124,41 +124,47 @@ img { max-width: 100%; }
 /* ---------- Müzayede listesi / başlığı ---------- */
 .sayfa-baslik { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 2rem; margin: 2rem 0 1.4rem; }
 /* ---------- Yönetim: Carousel lot seçimi ---------- */
-.carusel-izgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: .8rem; }
+.carusel-izgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem; }
 .carusel-secim {
+    position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: .7rem;
-    padding: .5rem;
-    border: 1px solid var(--cizgi);
-    border-radius: 3px;
-    cursor: pointer;
+    text-align: center;
+    gap: .45rem;
+    padding: 2.1rem .8rem 1rem;
+    border: 2px solid var(--cizgi);
+    border-radius: 5px;
+    cursor: grab;
     background: #fff;
     transition: border-color .12s ease, box-shadow .12s ease;
 }
+.carusel-secim:active { cursor: grabbing; }
 .carusel-secim.secili { border-color: #16a34a; box-shadow: 0 0 0 1px #16a34a inset; }
-.carusel-secim input { flex: none; width: 18px; height: 18px; }
-.carusel-gorsel { flex: none; width: 54px; height: 54px; background: #efeded; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.carusel-secim > input[type="checkbox"] { position: absolute; top: .7rem; left: .7rem; width: 22px; height: 22px; margin: 0; cursor: pointer; }
+.carusel-secim.secili::after { content: '≡ sürükle'; position: absolute; top: .8rem; right: .7rem; font-size: 10px; color: var(--soluk); }
+.carusel-gorsel { flex: none; width: 96px; height: 96px; background: #efeded; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .carusel-gorsel img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.carusel-bilgi { display: flex; flex-direction: column; min-width: 0; flex: 1; }
-.carusel-bilgi strong { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.carusel-bilgi small { font-size: 11px; color: var(--soluk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.carusel-bilgi { display: flex; flex-direction: column; align-items: center; min-width: 0; max-width: 100%; }
+.carusel-bilgi strong { font-size: 12px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.carusel-bilgi small { font-size: 11px; color: var(--soluk); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .carusel-sira {
-    flex: none;
-    width: 60px;
-    height: 42px;
+    width: 100%;
+    max-width: 130px;
+    height: 46px;
     text-align: center;
     padding: .4rem;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     border: 2px solid var(--metin);
-    border-radius: 4px;
+    border-radius: 5px;
     background: #fff;
     color: var(--metin);
+    margin-top: .3rem;
 }
-.carusel-sira::placeholder { font-weight: 400; font-size: 11px; color: var(--soluk); }
-.carusel-konum { flex: none; width: 92px; height: 42px; padding: .4rem; font-size: 13px; border: 1px solid var(--cizgi); border-radius: 4px; }
-.carusel-arka { flex: none; width: 42px; height: 42px; padding: 2px; border: 1px solid var(--cizgi); border-radius: 4px; cursor: pointer; }
+.carusel-sira::placeholder { font-weight: 400; font-size: 12px; color: var(--soluk); }
+.carusel-konum { width: 100%; max-width: 150px; height: 40px; padding: .4rem; font-size: 13px; border: 1px solid var(--cizgi); border-radius: 5px; }
+.carusel-arka { width: 100%; max-width: 150px; height: 40px; padding: 2px; border: 1px solid var(--cizgi); border-radius: 5px; cursor: pointer; }
 
 /* ---------- Christie's tarzı bölünmüş (split) hero ---------- */
 .hero { width: 100%; margin-bottom: 2rem; }

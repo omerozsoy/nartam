@@ -40,11 +40,5 @@
             </div>
         </form>
     </main>
-    <script>
-        document.querySelectorAll('.carusel-secim input[type="checkbox"]').forEach(function (cb) {
-            cb.addEventListener('change', function () {
-                cb.closest('.carusel-secim').classList.toggle('secili', cb.checked);
-            });
-        });
-    </script>
+    @include('yonetim._secim_script')
 @endsection
