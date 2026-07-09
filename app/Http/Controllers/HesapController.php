@@ -9,8 +9,11 @@ use App\Models\Ilan;
 use App\Models\User;
 use App\Support\Sunum;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class HesapController extends Controller
@@ -34,6 +37,40 @@ class HesapController extends Controller
     public function api(Request $request): JsonResponse
     {
         return response()->json($this->satirlar($request->user()));
+    }
+
+    /** Kişisel bilgiler formu. */
+    public function bilgiler(Request $request): View
+    {
+        return view('hesap.bilgiler', ['kullanici' => $request->user()]);
+    }
+
+    /** Kişisel bilgileri günceller (ad, e-posta, telefon, şifre). */
+    public function bilgilerGuncelle(Request $request): RedirectResponse
+    {
+        $kullanici = $request->user();
+
+        $veri = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($kullanici->id)],
+            'telefon' => ['nullable', 'string', 'max:30'],
+            'password' => ['nullable', 'confirmed', 'min:8'],
+        ], [], [
+            'name' => 'ad soyad',
+            'email' => 'e-posta',
+            'telefon' => 'telefon',
+            'password' => 'şifre',
+        ]);
+
+        $kullanici->name = $veri['name'];
+        $kullanici->email = $veri['email'];
+        $kullanici->telefon = $veri['telefon'] ?? null;
+        if (! empty($veri['password'])) {
+            $kullanici->password = Hash::make($veri['password']);
+        }
+        $kullanici->save();
+
+        return back()->with('basari', 'Bilgileriniz güncellendi.');
     }
 
     /** @return Collection<int, array> */

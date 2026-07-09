@@ -6,6 +6,7 @@
         <a class="hesap-menu-oge {{ $aktifTab === 'takip' ? 'aktif' : '' }}" href="{{ route('hesabim', ['tab' => 'takip']) }}" data-tab="takip">Takip Ettiklerim</a>
         <a class="hesap-menu-oge {{ $aktifTab === 'kazandi' ? 'aktif' : '' }}" href="{{ route('hesabim', ['tab' => 'kazandi']) }}" data-tab="kazandi">Kazandıklarım</a>
         <a class="hesap-menu-oge {{ request()->routeIs('adresler') ? 'aktif' : '' }}" href="{{ route('adresler') }}">Adreslerim</a>
+        <a class="hesap-menu-oge {{ request()->routeIs('bilgiler') ? 'aktif' : '' }}" href="{{ route('bilgiler') }}">Kişisel Bilgilerim</a>
         <form method="post" action="{{ route('cikis') }}">
             @csrf
             <button type="submit" class="hesap-menu-oge hesap-cikis">Çıkış</button>

@@ -40,6 +40,8 @@ Route::post('/takip/{ilan}', [App\Http\Controllers\TakipController::class, 'togg
 Route::middleware('auth')->group(function () {
     Route::get('/hesabim', [HesapController::class, 'index'])->name('hesabim');
     Route::get('/api/hesabim', [HesapController::class, 'api'])->name('hesabim.api');
+    Route::get('/hesabim/bilgilerim', [HesapController::class, 'bilgiler'])->name('bilgiler');
+    Route::post('/hesabim/bilgilerim', [HesapController::class, 'bilgilerGuncelle'])->name('bilgiler.guncelle');
     Route::get('/odeme/{ilan}', [OdemeController::class, 'goster'])->name('odeme');
 
     // Adreslerim
