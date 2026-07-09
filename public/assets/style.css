@@ -51,7 +51,8 @@ img { max-width: 100%; }
 }
 .ust-serit-ic a, .ust-serit-ic .baglanti-buton { color: var(--metin); }
 .ust-serit-ic a:hover, .ust-serit-ic .baglanti-buton:hover { color: var(--soluk); text-decoration: none; }
-.ust-serit-ad { color: var(--soluk); }
+.ust-serit-ad { color: var(--metin); font-weight: 500; }
+.ust-serit-ic a.ust-serit-ad:hover { color: var(--soluk); }
 .ust-serit form { display: inline; }
 
 /* ---------- Üst bar ---------- */

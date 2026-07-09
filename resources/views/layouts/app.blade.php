@@ -16,11 +16,10 @@
 <div class="ust-serit">
     <div class="ust-serit-ic">
         @auth
-            <a href="{{ route('hesabim') }}">Hesabım</a>
             @if (auth()->user()->yonetici())
                 <a href="{{ route('yonetim') }}">Yönetim</a>
             @endif
-            <span class="ust-serit-ad">{{ auth()->user()->name }}</span>
+            <a href="{{ route('hesabim') }}" class="ust-serit-ad">{{ auth()->user()->name }}</a>
             <form method="post" action="{{ route('cikis') }}">
                 @csrf
                 <button type="submit" class="baglanti-buton">Çıkış</button>
