@@ -1334,6 +1334,8 @@ input:focus, textarea:focus { outline: none; border-color: var(--siyah); }
 /* ---------- Hesap paneli ---------- */
 .hesap { padding: 2rem 0 4rem; }
 .hesap-baslik { font-family: var(--serif); font-weight: 400; font-size: 2rem; text-transform: uppercase; letter-spacing: .01em; margin: .5rem 0 1.5rem; }
+.hesap-grup-baslik { font-family: var(--serif); font-weight: 400; font-size: 1.15rem; letter-spacing: .02em; color: var(--metin); margin: 2rem 0 .75rem; padding-bottom: .5rem; border-bottom: 1px solid var(--cizgi); }
+.hesap-grup-baslik:first-of-type { margin-top: 0; }
 .hesap-bos { color: var(--soluk); }
 
 .hesap-tablo { width: 100%; border-collapse: collapse; }

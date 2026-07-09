@@ -17,29 +17,32 @@
                 @if ($diger->isEmpty())
                     <p class="hesap-bos">Henüz devam eden peyiniz yok. <a href="{{ route('ilanlar.liste') }}">Eserlere göz atın →</a></p>
                 @else
-                    <table class="hesap-tablo">
-                        <thead>
-                        <tr><th></th><th>Eser</th><th>Durum</th><th>Benim Teklifim</th><th>Güncel Fiyat</th><th></th></tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($diger as $s)
-                            <tr data-id="{{ $s['id'] }}" data-durumum="{{ $s['durumum'] }}">
-                                <td class="h-gorsel">
-                                    @if ($s['gorselUrl'])<img src="{{ $s['gorselUrl'] }}" alt="{{ $s['baslik'] }}">@else<span class="h-bos">{{ mb_strtoupper(mb_substr($s['baslik'], 0, 1)) }}</span>@endif
-                                </td>
-                                <td>
-                                    @if ($s['lotNo'])<div class="lot-no">LOT {{ $s['lotNo'] }}</div>@endif
-                                    <div class="h-ad">{{ $s['baslik'] }}</div>
-                                    @if ($s['altBaslik'])<div class="lot-alt">{{ $s['altBaslik'] }}</div>@endif
-                                </td>
-                                <td><span class="durum-etiket d-{{ $s['durumum'] }}" data-alan="h-durum">{{ $etiketler[$s['durumum']] }}</span></td>
-                                <td class="h-tutar">{{ $s['benimTeklifimBicim'] }}</td>
-                                <td class="h-tutar" data-alan="h-fiyat">{{ $s['guncelFiyatBicim'] }}</td>
-                                <td><a class="btn" href="{{ route('ilan.goster', $s['id']) }}">İncele</a></td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                    @foreach ($diger->groupBy('muzayedeId') as $grup)
+                        <h3 class="hesap-grup-baslik">{{ $grup->first()['muzayedeBaslik'] }}</h3>
+                        <table class="hesap-tablo">
+                            <thead>
+                            <tr><th></th><th>Eser</th><th>Durum</th><th>Benim Teklifim</th><th>Güncel Fiyat</th><th></th></tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($grup as $s)
+                                <tr data-id="{{ $s['id'] }}" data-durumum="{{ $s['durumum'] }}">
+                                    <td class="h-gorsel">
+                                        @if ($s['gorselUrl'])<img src="{{ $s['gorselUrl'] }}" alt="{{ $s['baslik'] }}">@else<span class="h-bos">{{ mb_strtoupper(mb_substr($s['baslik'], 0, 1)) }}</span>@endif
+                                    </td>
+                                    <td>
+                                        @if ($s['lotNo'])<div class="lot-no">LOT {{ $s['lotNo'] }}</div>@endif
+                                        <div class="h-ad">{{ $s['baslik'] }}</div>
+                                        @if ($s['altBaslik'])<div class="lot-alt">{{ $s['altBaslik'] }}</div>@endif
+                                    </td>
+                                    <td><span class="durum-etiket d-{{ $s['durumum'] }}" data-alan="h-durum">{{ $etiketler[$s['durumum']] }}</span></td>
+                                    <td class="h-tutar">{{ $s['benimTeklifimBicim'] }}</td>
+                                    <td class="h-tutar" data-alan="h-fiyat">{{ $s['guncelFiyatBicim'] }}</td>
+                                    <td><a class="btn" href="{{ route('ilan.goster', $s['id']) }}">İncele</a></td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endforeach
                 @endif
             </section>
 

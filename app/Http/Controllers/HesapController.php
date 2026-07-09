@@ -43,11 +43,17 @@ class HesapController extends Controller
 
         return Ilan::whereIn('id', $ilanIdleri)
             ->withCount('teklifler')
+            ->with('muzayede')
             ->get()
             ->map(function (Ilan $ilan) use ($kullanici) {
                 $ozet = Sunum::ilan($ilan);
                 $durum = $ilan->durum();
                 $onde = $ilan->son_teklif_sahibi === $kullanici->name;
+
+                $ozet['muzayedeId'] = $ilan->muzayede_id;
+                $ozet['muzayedeBaslik'] = $ilan->muzayede
+                    ? $ilan->muzayede->no . '. Müzayede · ' . $ilan->muzayede->ad
+                    : 'Müzayede';
 
                 $benim = (int) $kullanici->teklifler()->where('ilan_id', $ilan->id)->max('miktar');
                 $ozet['benimTeklifim'] = $benim;
