@@ -79,7 +79,7 @@
                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
             </form>
         @else
-            <a class="btn btn-dolu" href="{{ route('giris') }}">Teklif için giriş</a>
+            <a class="btn btn-dolu" href="{{ route('giris') }}">Teklif için lütfen giriş yapınız</a>
         @endauth
     @elseif ($ilan['durum'] === 'yakinda')
         @auth

@@ -97,7 +97,7 @@
                                 <span class="teklif-mesaj" data-alan="teklif-mesaj"></span>
                             </form>
                         @else
-                            <a class="btn btn-dolu" href="{{ route('giris') }}" style="margin-top:1rem">Teklif için giriş</a>
+                            <a class="btn btn-dolu" href="{{ route('giris') }}" style="margin-top:1rem">Teklif için lütfen giriş yapınız</a>
                         @endauth
                     @else
                         <p class="sayac-etiket">Kazanan: {{ $ozet['sonTeklifSahibi'] ?? '—' }}</p>
